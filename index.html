@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pemberani Jersey Tracker</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+  :root{
+    --court: #0F3D2E;
+    --court-light: #16543F;
+    --chalk: #F7F5EF;
+    --ink: #16211C;
+    --ink-soft: #5C6B62;
+    --shuttle: #FFC94D;
+    --paid: #2E8B57;
+    --paid-bg: #E7F5EC;
+    --unpaid: #C0392B;
+    --unpaid-bg: #FBEAE8;
+    --line: #DCD7C8;
+    --radius: 14px;
+  }
+  *{ box-sizing: border-box; }
+  body{
+    margin:0;
+    font-family:'Inter', sans-serif;
+    background: var(--chalk);
+    color: var(--ink);
+    padding-bottom: 60px;
+  }
+
+  header{
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 38px, rgba(255,255,255,0.035) 38px, rgba(255,255,255,0.035) 39px),
+      radial-gradient(circle at 85% -10%, rgba(255,201,77,0.16), transparent 55%),
+      var(--court);
+    color: var(--chalk);
+    padding: 30px 20px 24px;
+    position: relative;
+  }
+  .brand-row{ display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+  .shuttle-mark{
+    width:30px; height:30px; border-radius:50%;
+    background: var(--shuttle); display:flex; align-items:center; justify-content:center;
+    font-size:15px; font-weight:800; color: var(--court); font-family:'Space Grotesk',sans-serif;
+  }
+  .brand-text{ font-size:12px; letter-spacing:0.1em; text-transform:uppercase; color: rgba(247,245,239,0.75); font-weight:600; }
+  h1{
+    font-family:'Space Grotesk', sans-serif;
+    font-size: 27px; margin: 0 0 4px; font-weight:700; line-height:1.15;
+  }
+  .sub{ font-size:13px; color: rgba(247,245,239,0.65); display:flex; align-items:center; gap:8px; }
+  .dot{ width:8px; height:8px; border-radius:50%; background:#4CD97B; display:inline-block; }
+  .dot.err{ background:#E0665A; }
+
+  .summary{
+    display:grid; grid-template-columns: 1fr 1fr; gap:10px;
+    padding: 16px 20px 4px; margin-top:-4px;
+  }
+  .card{
+    background:#fff; border:1px solid var(--line); border-radius: var(--radius);
+    padding:14px;
+  }
+  .card .label{ font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:var(--ink-soft); font-weight:600; }
+  .card .value{ font-family:'Space Grotesk',sans-serif; font-size:22px; font-weight:700; margin-top:4px; }
+  .card.total{ grid-column: span 2; background: var(--court); color: var(--chalk); }
+  .card.total .label{ color: rgba(247,245,239,0.65); }
+  .card.total .value{ font-size:26px; color: var(--shuttle); }
+  .card.total .bar-track{ height:6px; background:rgba(255,255,255,0.15); border-radius:99px; margin-top:10px; overflow:hidden; }
+  .card.total .bar-fill{ height:100%; background: var(--shuttle); border-radius:99px; transition: width .3s; }
+  .card.paid .value{ color: var(--paid); }
+  .card.unpaid .value{ color: var(--unpaid); }
+
+  .section-title{ display:flex; align-items:center; justify-content:space-between; padding: 22px 20px 8px; }
+  .section-title h2{ font-family:'Space Grotesk',sans-serif; font-size:15px; margin:0; font-weight:700; }
+  .filters{ display:flex; gap:6px; }
+  .filter-btn{ border:1px solid var(--line); background:#fff; border-radius:999px; font-size:12px; padding:6px 12px; font-weight:600; color:var(--ink-soft); cursor:pointer; }
+  .filter-btn.active{ background: var(--court); color:var(--chalk); border-color:var(--court); }
+
+  #list{ padding: 0 20px; display:flex; flex-direction:column; gap:8px; }
+  .entry{ background:#fff; border:1px solid var(--line); border-radius: var(--radius); padding: 12px 14px; display:flex; align-items:center; gap:12px; }
+  .entry .info{ flex:1; min-width:0; }
+  .entry .name{ font-weight:600; font-size:14px; }
+  .entry .meta{ font-size:12px; color:var(--ink-soft); margin-top:2px; }
+  .entry .amount{ font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:15px; margin-right:8px; white-space:nowrap; }
+  .status-pill{ border:none; border-radius:999px; padding:7px 12px; font-size:12px; font-weight:700; cursor:pointer; white-space:nowrap; }
+  .status-pill.paid{ background: var(--paid-bg); color: var(--paid); }
+  .status-pill.unpaid{ background: var(--unpaid-bg); color: var(--unpaid); }
+  .del-btn{ background:none; border:none; color:#C7C2B4; font-size:18px; cursor:pointer; padding:0 2px; }
+
+  .fab{ position:fixed; bottom:22px; right:20px; width:56px; height:56px; border-radius:50%; background: var(--shuttle); color: var(--court); border:none; font-size:28px; font-weight:700; box-shadow: 0 6px 18px rgba(0,0,0,0.25); cursor:pointer; display:flex; align-items:center; justify-content:center; z-index: 50; }
+
+  .sheet-backdrop{ position:fixed; inset:0; background:rgba(15,61,46,0.45); display:none; align-items:flex-end; justify-content:center; z-index:100; }
+  .sheet-backdrop.open{ display:flex; }
+  .sheet{ background: var(--chalk); width:100%; max-width:480px; border-radius: 18px 18px 0 0; padding: 18px 20px 26px; max-height: 88vh; overflow-y:auto; }
+  .sheet h3{ font-family:'Space Grotesk',sans-serif; margin:0 0 14px; font-size:18px; }
+  .field{ margin-bottom:12px; }
+  .field label{ font-size:12px; font-weight:600; color:var(--ink-soft); display:block; margin-bottom:5px; }
+  .field input, .field select{ width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--line); font-size:14px; font-family:'Inter',sans-serif; background:#fff; color:var(--ink); }
+  .toggle-row{ display:flex; gap:8px; margin-top:4px; }
+  .toggle-opt{ flex:1; text-align:center; padding:9px; border-radius:10px; border:1px solid var(--line); font-size:13px; font-weight:600; color:var(--ink-soft); cursor:pointer; background:#fff; }
+  .toggle-opt.active{ background:var(--court); color:var(--chalk); border-color:var(--court); }
+  .price-preview{ background:#fff; border:1px dashed var(--line); border-radius:10px; padding:10px 12px; font-size:13px; color:var(--ink-soft); margin: 10px 0 16px; }
+  .price-preview b{ color:var(--ink); font-family:'Space Grotesk',sans-serif; font-size:16px; }
+  .sheet-actions{ display:flex; gap:10px; }
+  .btn{ flex:1; padding:13px; border-radius:12px; border:none; font-weight:700; font-size:14px; cursor:pointer; }
+  .btn.primary{ background: var(--court); color: var(--chalk); }
+  .btn.ghost{ background:#fff; color: var(--ink-soft); border:1px solid var(--line); }
+
+  .empty, .loading{ text-align:center; padding: 30px 10px; color: var(--ink-soft); font-size:13px; }
+  #configWarning{ display:none; margin:16px 20px; background:#FBEAE8; border:1px solid #E0665A; color:#9A3226; border-radius:10px; padding:12px 14px; font-size:12.5px; line-height:1.5; }
+  #configWarning code{ background:rgba(0,0,0,0.06); padding:1px 5px; border-radius:5px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand-row">
+    <div class="shuttle-mark">P</div>
+    <div class="brand-text">Pemberani Badminton Club</div>
+  </div>
+  <h1>Jersey Payment Tracker</h1>
+  <div class="sub"><span class="dot" id="statusDot"></span><span id="statusText">Connecting…</span></div>
+</header>
+
+<div id="configWarning">
+  <b>Firebase isn't connected yet.</b> Open this file and paste your Firebase project config into the <code>firebaseConfig</code> object near the top of the script, then re-upload to GitHub. See the setup guide for the exact steps.
+</div>
+
+<div class="summary">
+  <div class="card paid"><div class="label">Paid</div><div class="value" id="paidCount">–</div></div>
+  <div class="card unpaid"><div class="label">Not Paid</div><div class="value" id="unpaidCount">–</div></div>
+  <div class="card total">
+    <div class="label">Collected So Far</div>
+    <div class="value" id="grandTotal">RM –</div>
+    <div class="bar-track"><div class="bar-fill" id="barFill" style="width:0%"></div></div>
+  </div>
+</div>
+
+<div class="section-title">
+  <h2>All Entries</h2>
+  <div class="filters">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="paid">Paid</button>
+    <button class="filter-btn" data-filter="unpaid">Not Paid</button>
+  </div>
+</div>
+
+<div id="list"><div class="loading">Loading roster…</div></div>
+
+<button class="fab" id="addBtn" aria-label="Add jersey order">+</button>
+
+<div class="sheet-backdrop" id="backdrop">
+  <div class="sheet">
+    <h3>Add Jersey Order</h3>
+    <div class="field"><label>Full Name</label><input id="f_fullname" type="text" placeholder="e.g. Ahmad Rafizan bin Mat Rudi"></div>
+    <div class="field"><label>Jersey Name</label><input id="f_jerseyname" type="text" placeholder="e.g. Pok"></div>
+    <div class="field">
+      <label>Category</label>
+      <div class="toggle-row" id="typeToggle">
+        <div class="toggle-opt active" data-val="adult">Adult</div>
+        <div class="toggle-opt" data-val="kid">Kid</div>
+      </div>
+    </div>
+    <div class="field" id="sleeveField">
+      <label>Sleeve</label>
+      <div class="toggle-row" id="sleeveToggle">
+        <div class="toggle-opt active" data-val="short">Short</div>
+        <div class="toggle-opt" data-val="long">Long</div>
+      </div>
+    </div>
+    <div class="field"><label>Size</label><select id="f_size"></select></div>
+    <div class="price-preview">Price: <b id="pricePreview">RM31.00</b></div>
+    <div class="field">
+      <label>Payment Status</label>
+      <div class="toggle-row" id="paidToggle">
+        <div class="toggle-opt" data-val="unpaid">Not Paid</div>
+        <div class="toggle-opt active" data-val="paid">Paid</div>
+      </div>
+    </div>
+    <div class="sheet-actions">
+      <button class="btn ghost" id="cancelBtn">Cancel</button>
+      <button class="btn primary" id="saveBtn">Add Entry</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getFirestore, collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc, getDocs, writeBatch
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// ============================================================
+// 1) PASTE YOUR FIREBASE CONFIG HERE (see setup guide)
+// ============================================================
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+// ============================================================
+
+const SURCHARGE_SIZES = ['2XL','3XL','4XL','5XL','6XL'];
+const ADULT_SIZES = ['2XS','XS','S','M','L','XL','2XL','3XL','4XL','5XL'];
+const KID_SIZES = ['20','22','24','26','28','30','32'];
+const COLLECTION_NAME = 'jerseyOrders';
+
+const seedData = [
+  {fullName:"Saiful Muhammad", jerseyName:"CARLOS", type:"adult", sleeve:"short", size:"L", paid:true},
+  {fullName:"Mohd Nizam bin Kadir", jerseyName:"Nizam", type:"adult", sleeve:"short", size:"3XL", paid:false},
+  {fullName:"Mohamad Azlan", jerseyName:"Aslan", type:"adult", sleeve:"short", size:"2XL", paid:true},
+  {fullName:"Ahmad Rafizan bin Mat Rudi", jerseyName:"Pok", type:"adult", sleeve:"short", size:"M", paid:true},
+  {fullName:"Ahmad Rafizan bin Mat Rudi", jerseyName:"Qayyum", type:"adult", sleeve:"short", size:"M", paid:true},
+  {fullName:"Are Wie", jerseyName:"Are Wie", type:"adult", sleeve:"short", size:"M", paid:true},
+  {fullName:"Paul Unggau anak Lagan", jerseyName:"PAPAUL", type:"adult", sleeve:"short", size:"M", paid:true},
+  {fullName:"Azzam", jerseyName:"Wanie", type:"adult", sleeve:"long", size:"L", paid:false},
+  {fullName:"Azzam", jerseyName:"Qaisar", type:"kid", sleeve:"short", size:"28", paid:false},
+  {fullName:"Azzam", jerseyName:"Yusuf", type:"kid", sleeve:"short", size:"22", paid:false},
+  {fullName:"Azzam", jerseyName:"Azzam", type:"adult", sleeve:"short", size:"2XL", paid:false},
+  {fullName:"Abdel Rantisi bin Abdul Arrahmannia", jerseyName:"ABDEL", type:"adult", sleeve:"short", size:"2XL", paid:false},
+  {fullName:"Rasheed Ali", jerseyName:"RASHEED", type:"adult", sleeve:"short", size:"XL", paid:false},
+  {fullName:"Rasheed Ali", jerseyName:"GEETA", type:"adult", sleeve:"short", size:"XL", paid:true},
+  {fullName:"Herman", jerseyName:"McMan", type:"adult", sleeve:"short", size:"M", paid:true},
+  {fullName:"Sulkipli bin Sudirman", jerseyName:"SOUL", type:"adult", sleeve:"short", size:"M", paid:true},
+  {fullName:"Karina binti Kapper", jerseyName:"NINZ", type:"adult", sleeve:"short", size:"M", paid:true},
+  {fullName:"Herman", jerseyName:"(no name)", type:"adult", sleeve:"long", size:"S", paid:true},
+  {fullName:"Khalish Ruzain bin Sulkipli", jerseyName:"RUZAIN", type:"kid", sleeve:"short", size:"26", paid:true},
+  {fullName:"Syahrun Nidzam bin Rebi", jerseyName:"SyahHima", type:"adult", sleeve:"short", size:"S", paid:false},
+  {fullName:"Nik Mohd Khairul Anuar bin Mohamed Ali", jerseyName:"POKNIK", type:"adult", sleeve:"short", size:"XL", paid:false},
+  {fullName:"Mohamad Huzaini bin Ab Samad", jerseyName:"M.H", type:"adult", sleeve:"short", size:"M", paid:true},
+  {fullName:"Muhamad Taufik bin Abu Shaari", jerseyName:"TAUFIK", type:"adult", sleeve:"short", size:"5XL", paid:true},
+  {fullName:"Mohd Firdaus bin Mohd Rafiee", jerseyName:"Daus", type:"adult", sleeve:"short", size:"L", paid:false},
+  {fullName:"Abg Nizam", jerseyName:"Nizam", type:"adult", sleeve:"short", size:"2XL", paid:true},
+  {fullName:"Mohd Aizat bin Khamil", jerseyName:"JF", type:"adult", sleeve:"short", size:"XL", paid:false},
+  {fullName:"Aizat", jerseyName:"Aizat", type:"adult", sleeve:"short", size:"XL", paid:false},
+  {fullName:"Aizat", jerseyName:"Alias", type:"adult", sleeve:"short", size:"L", paid:false},
+  {fullName:"Aizat", jerseyName:"Iqbal", type:"adult", sleeve:"short", size:"M", paid:false},
+  {fullName:"Aizat", jerseyName:"Ijat", type:"adult", sleeve:"short", size:"2XS", paid:false},
+  {fullName:"Aizat", jerseyName:"Zura", type:"adult", sleeve:"long", size:"L", paid:false},
+  {fullName:"Aizat", jerseyName:"Shah", type:"adult", sleeve:"short", size:"XL", paid:false},
+  {fullName:"Aizat", jerseyName:"Feiza", type:"adult", sleeve:"long", size:"L", paid:false},
+  {fullName:"Aizat", jerseyName:"Sue", type:"adult", sleeve:"long", size:"L", paid:false},
+  {fullName:"Muhammad Faizal", jerseyName:"Ical", type:"adult", sleeve:"short", size:"M", paid:true},
+  {fullName:"Charley bin Mat Salleh", jerseyName:"Chalie", type:"adult", sleeve:"short", size:"2XL", paid:false},
+  {fullName:"Mohd Fhayrul Husayni", jerseyName:"Rymie", type:"adult", sleeve:"short", size:"L", paid:false},
+  {fullName:"Salini Kamarzaman", jerseyName:"Sally", type:"adult", sleeve:"long", size:"2XL", paid:false},
+  {fullName:"Mohd Fareez Izhwan", jerseyName:"Fareez", type:"adult", sleeve:"short", size:"XL", paid:false},
+  {fullName:"Mohd Fareez Izhwan", jerseyName:"Ayiq", type:"kid", sleeve:"short", size:"22", paid:false},
+  {fullName:"Mohd Fareez Izhwan", jerseyName:"Shazirah", type:"adult", sleeve:"short", size:"L", paid:false},
+  {fullName:"Abdul Haziq bin Abdullah Sani", jerseyName:"Haziq S.", type:"adult", sleeve:"short", size:"S", paid:false},
+  {fullName:"Fauzi", jerseyName:"Pojie", type:"adult", sleeve:"short", size:"L", paid:true},
+];
+
+let data = [];
+let currentFilter = 'all';
+let sheetOpen = false;
+let db, colRef;
+
+function price(type, sleeve, size){
+  let p = 31;
+  if(type === 'adult'){
+    if(sleeve === 'long') p += 4;
+    if(SURCHARGE_SIZES.includes(size)) p += 5;
+  } else { p += 1.5; }
+  return p;
+}
+function fmt(n){ return 'RM' + n.toFixed(2); }
+function escapeHtml(s){ const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+function setStatus(ok, text){
+  document.getElementById('statusDot').classList.toggle('err', !ok);
+  document.getElementById('statusText').textContent = text;
+}
+
+function render(){
+  if(sheetOpen) return;
+  const paidEntries = data.filter(e=>e.paid);
+  const unpaidEntries = data.filter(e=>!e.paid);
+  const paidTotal = paidEntries.reduce((s,e)=>s+price(e.type,e.sleeve,e.size),0);
+  const unpaidTotal = unpaidEntries.reduce((s,e)=>s+price(e.type,e.sleeve,e.size),0);
+  const grand = paidTotal + unpaidTotal;
+
+  document.getElementById('paidCount').textContent = paidEntries.length + ' — ' + fmt(paidTotal);
+  document.getElementById('unpaidCount').textContent = unpaidEntries.length + ' — ' + fmt(unpaidTotal);
+  document.getElementById('grandTotal').textContent = fmt(paidTotal) + ' of ' + fmt(grand);
+  document.getElementById('barFill').style.width = (grand ? (paidTotal/grand*100) : 0) + '%';
+
+  const list = document.getElementById('list');
+  let entries = data;
+  if(currentFilter === 'paid') entries = data.filter(e=>e.paid);
+  if(currentFilter === 'unpaid') entries = data.filter(e=>!e.paid);
+
+  if(entries.length === 0){ list.innerHTML = '<div class="empty">No entries here yet.</div>'; return; }
+
+  list.innerHTML = entries.map(e=>{
+    const amt = price(e.type, e.sleeve, e.size);
+    const sizeLabel = e.type === 'kid' ? (e.size+' (kid)') : e.size;
+    const sleeveLabel = e.type === 'adult' ? (e.sleeve === 'long' ? 'Long sleeve' : 'Short sleeve') : 'Kid';
+    return `
+      <div class="entry">
+        <div class="info">
+          <div class="name">${escapeHtml(e.fullName)}</div>
+          <div class="meta">${escapeHtml(e.jerseyName)} · ${sleeveLabel} · Size ${sizeLabel}</div>
+        </div>
+        <div class="amount">${fmt(amt)}</div>
+        <button class="status-pill ${e.paid ? 'paid':'unpaid'}" data-id="${e.id}" data-action="toggle">${e.paid ? 'Paid' : 'Not Paid'}</button>
+        <button class="del-btn" data-id="${e.id}" data-action="delete" aria-label="Remove">✕</button>
+      </div>`;
+  }).join('');
+}
+
+document.getElementById('list').addEventListener('click', async (e)=>{
+  const btn = e.target.closest('button[data-action]');
+  if(!btn) return;
+  const id = btn.dataset.id;
+  if(btn.dataset.action === 'toggle'){
+    const entry = data.find(x=>x.id===id);
+    try{ await updateDoc(doc(db, COLLECTION_NAME, id), { paid: !entry.paid }); }
+    catch(err){ console.error(err); alert("Couldn't update — check your connection."); }
+  } else if(btn.dataset.action === 'delete'){
+    if(!confirm('Remove this jersey order?')) return;
+    try{ await deleteDoc(doc(db, COLLECTION_NAME, id)); }
+    catch(err){ console.error(err); alert("Couldn't delete — check your connection."); }
+  }
+});
+
+document.querySelectorAll('.filter-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = btn.dataset.filter;
+    render();
+  });
+});
+
+// --- Add entry sheet ---
+const backdrop = document.getElementById('backdrop');
+const addBtn = document.getElementById('addBtn');
+const cancelBtn = document.getElementById('cancelBtn');
+const saveBtn = document.getElementById('saveBtn');
+const sleeveField = document.getElementById('sleeveField');
+const sizeSelect = document.getElementById('f_size');
+let formState = { type:'adult', sleeve:'short', paid:true };
+
+function populateSizes(){
+  const sizes = formState.type === 'adult' ? ADULT_SIZES : KID_SIZES;
+  sizeSelect.innerHTML = sizes.map(s=>`<option value="${s}">${s}</option>`).join('');
+  updatePricePreview();
+}
+function updatePricePreview(){
+  document.getElementById('pricePreview').textContent = fmt(price(formState.type, formState.sleeve, sizeSelect.value));
+}
+function wireToggle(containerId, key, onChange){
+  const container = document.getElementById(containerId);
+  container.querySelectorAll('.toggle-opt').forEach(opt=>{
+    opt.addEventListener('click', ()=>{
+      container.querySelectorAll('.toggle-opt').forEach(o=>o.classList.remove('active'));
+      opt.classList.add('active');
+      formState[key] = opt.dataset.val;
+      if(onChange) onChange();
+    });
+  });
+}
+wireToggle('typeToggle','type', ()=>{
+  sleeveField.style.display = formState.type === 'adult' ? 'block' : 'none';
+  populateSizes();
+});
+wireToggle('sleeveToggle','sleeve', updatePricePreview);
+wireToggle('paidToggle','paid');
+sizeSelect.addEventListener('change', updatePricePreview);
+
+addBtn.addEventListener('click', ()=>{
+  document.getElementById('f_fullname').value = '';
+  document.getElementById('f_jerseyname').value = '';
+  formState = { type:'adult', sleeve:'short', paid:true };
+  document.querySelectorAll('#typeToggle .toggle-opt').forEach(o=>o.classList.toggle('active', o.dataset.val==='adult'));
+  document.querySelectorAll('#sleeveToggle .toggle-opt').forEach(o=>o.classList.toggle('active', o.dataset.val==='short'));
+  document.querySelectorAll('#paidToggle .toggle-opt').forEach(o=>o.classList.toggle('active', o.dataset.val==='paid'));
+  sleeveField.style.display = 'block';
+  populateSizes();
+  backdrop.classList.add('open');
+  sheetOpen = true;
+});
+cancelBtn.addEventListener('click', ()=>{ backdrop.classList.remove('open'); sheetOpen = false; render(); });
+backdrop.addEventListener('click', (e)=>{ if(e.target === backdrop){ backdrop.classList.remove('open'); sheetOpen = false; render(); } });
+
+saveBtn.addEventListener('click', async ()=>{
+  const fullName = document.getElementById('f_fullname').value.trim();
+  const jerseyName = document.getElementById('f_jerseyname').value.trim();
+  if(!fullName || !jerseyName){ alert('Please fill in both name fields.'); return; }
+  const newEntry = {
+    fullName, jerseyName,
+    type: formState.type, sleeve: formState.sleeve, size: sizeSelect.value,
+    paid: formState.paid === 'paid'
+  };
+  try{
+    await addDoc(colRef, newEntry);
+    backdrop.classList.remove('open');
+    sheetOpen = false;
+    render();
+  }catch(err){
+    console.error(err);
+    alert("Couldn't save this entry — check your connection and try again.");
+  }
+});
+
+// --- Firebase init + real-time listener ---
+async function boot(){
+  if(firebaseConfig.apiKey === "YOUR_API_KEY"){
+    document.getElementById('configWarning').style.display = 'block';
+    setStatus(false, 'Firebase not configured');
+    data = seedData.map((e,i)=>({id:'seed-'+i, ...e}));
+    render();
+    return;
+  }
+  try{
+    const app = initializeApp(firebaseConfig);
+    db = getFirestore(app);
+    colRef = collection(db, COLLECTION_NAME);
+
+    const snap = await getDocs(colRef);
+    if(snap.empty){
+      const batch = writeBatch(db);
+      seedData.forEach(entry=>{ batch.set(doc(colRef), entry); });
+      await batch.commit();
+    }
+
+    onSnapshot(colRef, (snapshot)=>{
+      data = snapshot.docs.map(d=>({ id: d.id, ...d.data() }));
+      setStatus(true, 'Live — synced with the committee');
+      render();
+    }, (err)=>{
+      console.error(err);
+      setStatus(false, 'Connection issue — check Firestore rules');
+    });
+  }catch(err){
+    console.error(err);
+    setStatus(false, 'Could not connect to Firebase');
+  }
+}
+boot();
+</script>
+</body>
+</html>
