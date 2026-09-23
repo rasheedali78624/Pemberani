@@ -7,7 +7,7 @@
 // kept in this browser only — handy for practising scoring).
 
 export const firebaseConfig = {
-  apiKey: 'AIzaSya9NZSpbMVI0KuvfSMKxmDRiZA7ToKdk4U',
+  apiKey: 'AIzaSyA9NZSPbMVI0KuvfSMKxmDRiZA7ToKdk4U',
   authDomain: 'pemberani-badminton.firebaseapp.com',
   databaseURL: 'https://pemberani-badminton-default-rtdb.asia-southeast1.firebasedatabase.app',
   projectId: 'pemberani-badminton',
