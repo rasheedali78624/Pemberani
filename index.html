@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Pemberani Tournament 2.0</title>
+  <meta name="description" content="Live scores, fixtures, standings and bracket for Pemberani Badminton Club's Tournament Edition 2.0.">
+  <meta name="theme-color" content="#000000">
+  <meta property="og:title" content="Pemberani Tournament 2.0 — Live">
+  <meta property="og:description" content="Live scores, fixtures and standings. Play with courage. Win with pride.">
+  <meta property="og:image" content="assets/banner.jpg">
+  <link rel="icon" href="assets/icon.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/icon.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="nav-brand" href="#top"><img src="assets/icon.png" alt="">Pemberani 2.0</a>
+    <nav class="nav-links" aria-label="Sections">
+      <a href="#live">Live</a>
+      <a href="#fixtures">Fixtures</a>
+      <a href="#standings">Standings</a>
+      <a href="#bracket">Bracket</a>
+      <a href="#format">Format</a>
+      <a href="#champions">Champions</a>
+    </nav>
+    <a class="live-pill off" id="navLive" href="#live"><span class="dot"></span><span>No matches live</span></a>
+  </div>
+</header>
+<nav class="chips" id="chips" aria-label="Sections">
+  <a href="#live">Live</a><a href="#fixtures">Fixtures</a><a href="#standings">Standings</a>
+  <a href="#bracket">Bracket</a><a href="#format">Format</a><a href="#champions">Champions</a>
+</nav>
+
+<main>
+  <section class="hero" id="top">
+    <div class="hero-inner" id="heroInner">
+      <img class="hero-crest" src="assets/crest.png" alt="Pemberani Badminton Club crest" width="459" height="640">
+      <div class="eyebrow">Pemberani Badminton Club</div>
+      <h1>Tournament<br><span class="gold-text">Edition 2.0</span></h1>
+      <p class="sub">Play with courage. Win with pride.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#live">Watch live</a>
+        <a class="btn btn-ghost" href="#fixtures">See fixtures</a>
+      </div>
+      <div class="countdown hide" id="countdown"></div>
+    </div>
+    <div class="scroll-cue" aria-hidden="true"></div>
+  </section>
+
+  <section class="statement" id="statement" aria-label="The tournament in one line">
+    <div class="statement-sticky">
+      <div class="wrap"><p id="statementText">Twelve pairs. Two courts. Sixteen group battles. One *trophy.*</p></div>
+    </div>
+  </section>
+
+  <section class="block" id="live">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="row">
+          <div>
+            <h2>Live on court.</h2>
+            <p>Every rally, the moment it lands. No refreshing needed.</p>
+          </div>
+          <span class="status" id="connStatus"><span class="dot"></span>Connecting…</span>
+        </div>
+      </div>
+      <div class="courts reveal" data-delay="1" id="courts"></div>
+      <div class="card ticker reveal hide" id="ticker">
+        <span class="ticker-label">Latest</span>
+        <div class="ticker-track" id="tickerTrack"></div>
+      </div>
+      <div class="live-actions reveal">
+        <button class="btn btn-quiet btn-sm" id="tvBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          TV mode
+        </button>
+        <button class="btn btn-quiet btn-sm" id="shareBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v7a2 2 0 002 2h12a2 2 0 002-2v-7M16 6l-4-4-4 4M12 2v13"/></svg>
+          Share
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="follow" style="padding-top:0">
+    <div class="wrap">
+      <div class="card follow reveal">
+        <div>
+          <h3>Follow your pair.</h3>
+          <p>Pick a pair and we'll highlight their matches, track their record, and tell you when they're up next.</p>
+          <label class="sr" for="followSelect">Pair to follow</label>
+          <select class="select" id="followSelect"></select>
+        </div>
+        <div class="follow-card" id="followCard"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="fixtures">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <h2>Fixtures.</h2>
+        <p>One group per court, eight matches each. Nobody plays back to back.</p>
+      </div>
+      <div class="seg reveal" role="tablist" id="fxTabs">
+        <span class="thumb"></span>
+        <button role="tab" data-tab="G1" aria-selected="true">Group 1 · Court 1</button>
+        <button role="tab" data-tab="G2" aria-selected="false">Group 2 · Court 2</button>
+        <button role="tab" data-tab="KO" aria-selected="false">Knockout</button>
+      </div>
+      <div class="fixtures reveal" data-delay="1">
+        <div class="fx-meta" id="fxMeta"></div>
+        <div class="card"><ol class="fx-list" id="fxList"></ol></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="standings">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <h2>Standings.</h2>
+        <p>Top four in each group go through to the quarter-finals.</p>
+      </div>
+      <div class="tables" id="tables"></div>
+    </div>
+  </section>
+
+  <section class="block" id="bracket">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <h2>The road to the trophy.</h2>
+        <p>Knockouts are best of three games to 21. Group winners are kept apart until the final.</p>
+      </div>
+      <div class="bracket-scroll reveal" data-delay="1"><div class="bracket" id="bracketEl"></div></div>
+    </div>
+  </section>
+
+  <section class="block" id="format">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <h2>How it works.</h2>
+        <p>Simple format. Zero mercy.</p>
+      </div>
+      <div class="tiles">
+        <div class="card tile reveal"><span class="k">Players</span><h3>Twelve pairs, twenty-four players.</h3><div class="big gold-text" data-count="12">12</div></div>
+        <div class="card tile reveal" data-delay="1"><span class="k">Groups</span><h3>Two groups of six.</h3><p>Each group owns its court. No mixing.</p><div class="big" data-count="2">2</div></div>
+        <div class="card tile reveal" data-delay="2"><span class="k">Group stage</span><h3>Eight matches per group.</h3><p>One game to 21. No deuce.</p><div class="big" data-count="21">21</div></div>
+        <div class="card tile span3 reveal"><span class="k">Qualify</span><h3>Top four go through.</h3><p>Ranked by wins, then point difference, then points scored, then head-to-head. The bottom two in each group are out.</p><div class="big" data-count="8">8</div></div>
+        <div class="card tile span3 reveal" data-delay="1"><span class="k">Knockout</span><h3>Best of three.</h3><p>Quarter-finals, semi-finals, third place and the final. Games to 21 with deuce, capped at 30.</p><div class="big" data-count="3">3</div></div>
+        <div class="card tile span6 reveal"><span class="k">Prizes</span><h3>Hampers and goodies from PBC.</h3>
+          <ul class="prize-list">
+            <li><b>Champions</b><span>Hamper + goodies</span></li>
+            <li><b>Runners-up</b><span>Hamper + goodies</span></li>
+            <li><b>Third place</b><span>Hamper + goodies</span></li>
+            <li><b>4th to 12th</b><span>PBC goodies</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="champions">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <h2>Hall of fame.</h2>
+        <p>Names that took the trophy home.</p>
+      </div>
+      <div class="hof">
+        <div class="card hof-photo reveal">
+          <img src="assets/champions-e1.jpg" alt="Rasheed and Jai holding the Edition 1 trophy" id="hofImg" loading="lazy">
+          <div class="hof-cap"><small>Edition 1.0 champions</small><b>Rasheed &amp; Jai</b></div>
+        </div>
+        <div class="card hof-next reveal" data-delay="1" id="hofNext">
+          <img src="assets/crest.png" alt="">
+          <h3>Edition 2.0 champions.<br><span class="gold-text">To be decided.</span></h3>
+          <p>Rasheed and Jai are split up this time — Rasheed with Haziq in Group 2, Jai with Paul in Group 1. Can either defend the crown?</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Pemberani Badminton Club · Tournament Edition 2.0</span>
+    <nav>
+      <a href="score.html">Scorer console</a>
+      <a href="index-edition1.html">Edition 1 archive</a>
+      <a href="#top">Back to top ↑</a>
+    </nav>
+  </div>
+</footer>
+
+<div class="tv" id="tv" role="dialog" aria-label="TV scoreboard">
+  <div class="tv-head">
+    <img src="assets/icon.png" alt="">
+    <h2>Pemberani Tournament 2.0 · Live</h2>
+    <button class="btn btn-quiet btn-sm" id="tvClose">Exit</button>
+  </div>
+  <div class="courts" id="tvCourts"></div>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
