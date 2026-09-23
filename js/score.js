@@ -254,7 +254,23 @@ $('#login').addEventListener('submit', async e => {
   e.preventDefault();
   $('#loginErr').textContent = '';
   try { await store.auth.signIn($('#email').value.trim(), $('#password').value); }
-  catch (err) { $('#loginErr').textContent = 'Sign-in failed. Check the email and password.'; console.error(err); }
+  catch (err) {
+    console.error(err);
+    const reasons = {
+      'auth/invalid-credential': 'Wrong email or password, or this user doesn’t exist in Firebase → Authentication → Users.',
+      'auth/invalid-email': 'That email address isn’t valid.',
+      'auth/user-not-found': 'No user with this email in Firebase → Authentication → Users.',
+      'auth/wrong-password': 'Wrong password.',
+      'auth/operation-not-allowed': 'Email/Password sign-in is turned off. Enable it in Firebase → Authentication → Sign-in method.',
+      'auth/configuration-not-found': 'Authentication isn’t set up yet. In Firebase → Authentication, click Get started and enable Email/Password.',
+      'auth/unauthorized-domain': `This site (${location.hostname}) isn’t allowed. Add it in Firebase → Authentication → Settings → Authorized domains.`,
+      'auth/too-many-requests': 'Too many attempts. Wait a few minutes and try again.',
+      'auth/network-request-failed': 'No internet connection.',
+      'auth/api-key-not-valid.-please-pass-a-valid-api-key.': 'The apiKey in js/firebase-config.js is wrong. Copy it again from Firebase → Project settings → Your apps.',
+      'auth/invalid-api-key': 'The apiKey in js/firebase-config.js is wrong. Copy it again from Firebase → Project settings → Your apps.',
+    };
+    $('#loginErr').textContent = reasons[err?.code] || `Sign-in failed (${err?.code || err?.message || 'unknown error'}).`;
+  }
 });
 $('#signOut').onclick = () => store.auth.signOut();
 
