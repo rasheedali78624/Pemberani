@@ -318,11 +318,10 @@ function onScroll() {
   const y = scrollY, vh = innerHeight;
   $('#nav').classList.toggle('scrolled', y > 10);
   $('#chips').classList.toggle('show', y > vh * 0.7);
-  if (reduced) return;
 
   const hero = $('#heroInner');
   const k = Math.min(y / vh, 1);
-  hero.style.transform = `translateY(${k * 120}px) scale(${1 - k * 0.12})`;
+  if (!reduced) hero.style.transform = `translateY(${k * 120}px) scale(${1 - k * 0.12})`;
   hero.style.opacity = 1 - k * 1.2;
 
   const st = $('#statement');
@@ -332,6 +331,7 @@ function onScroll() {
   const lit = Math.round(prog * words.length * 1.15);
   words.forEach((w, i) => w.classList.toggle('on', i < lit));
 
+  if (reduced) return;
   const img = $('#hofImg');
   const ir = img.parentElement.getBoundingClientRect();
   if (ir.top < vh && ir.bottom > 0) img.style.transform = `translateY(${((ir.top + ir.height / 2 - vh / 2) / vh) * -40}px)`;
@@ -343,8 +343,8 @@ function setupReveal() {
     e.target.classList.add('in');
     io.unobserve(e.target);
     const n = e.target.querySelector('[data-count]');
-    if (n && !reduced) countUp(n);
-  }), { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    if (n) countUp(n);
+  }), { threshold: 0, rootMargin: '0px 0px -12% 0px' });
   $$('.reveal').forEach(el => io.observe(el));
 
   const sections = ['live', 'fixtures', 'standings', 'bracket', 'format', 'champions'];
