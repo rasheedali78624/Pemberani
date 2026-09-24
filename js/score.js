@@ -1,4 +1,4 @@
-import { store } from './store.js';
+import { openStore } from './store.js';
 import { GROUPS, FIXTURES } from './config.js';
 import {
   evalMatch, rulesFor, addPoint, undoPoint, resolveFixtures, courtNow, statusOf, pairName,
@@ -12,6 +12,7 @@ const ls = {
   set(k, v) { try { localStorage.setItem(k, v); } catch {} },
 };
 
+const store = await openStore({ auth: true });
 let state = {};
 let user = null;
 let court = +(ls.get('pt2-court') || 1);

@@ -24,7 +24,7 @@ export const RULES = {
 
 export const GROUPS = [
   {
-    id: 'G1', name: 'Group 1', court: 1,
+    id: 'G1', name: 'Group A', court: 1,
     pairs: [
       { id: 'g1p1', name: 'Abdel & Azlan' },
       { id: 'g1p2', name: 'Ical & Syafiq' },
@@ -35,25 +35,28 @@ export const GROUPS = [
     ],
   },
   {
-    id: 'G2', name: 'Group 2', court: 2,
+    id: 'G2', name: 'Group B', court: 2,
     pairs: [
       { id: 'g2p1', name: 'Azzam & Saiful' },
       { id: 'g2p2', name: 'Pok & Daus' },
-      { id: 'g2p3', name: 'Herman & Taufik' },
+      { id: 'g2p3', name: 'Herman & Nataman' },
       { id: 'g2p4', name: 'Rasheed & Haziq' },
       { id: 'g2p5', name: 'Fareez & Awie' },
-      { id: 'g2p6', name: 'Charlie & Abg Fizan' },
+      { id: 'g2p6', name: 'Charlie & Fizan' },
     ],
   },
 ];
 
-// 8 matches per group, each group on its own court. Numbers are the
-// pair numbers from the group poster (1–6). The order is the order of
-// play and is arranged so nobody plays two matches back to back.
-// Pairs 3 and 6 play twice; everyone else plays three times.
-// To give every pair 3 matches, add a 9th line: [3, 6].
+// Full round robin: 15 matches per group, every pair plays the other
+// five once. Each group stays on its own court. Numbers are the pair
+// numbers from the group poster (1–6), in the captain's order of play;
+// nobody plays two matches back to back.
 const GROUP_ORDER = [
-  [1, 2], [3, 4], [5, 6], [1, 4], [2, 3], [4, 5], [6, 1], [2, 5],
+  [1, 2], [3, 6], [4, 5],
+  [1, 3], [2, 4], [5, 6],
+  [1, 4], [3, 5], [2, 6],
+  [1, 5], [4, 6], [2, 3],
+  [1, 6], [2, 5], [3, 4],
 ];
 
 // Top 4 of each group go through to the quarter-finals.

@@ -53,15 +53,15 @@ function createDemoStore() {
   };
 }
 
-async function createFirebaseStore() {
+async function createFirebaseStore(withAuth) {
   const [{ initializeApp }, db, au] = await Promise.all([
     import(`${FB}/firebase-app.js`),
     import(`${FB}/firebase-database.js`),
-    import(`${FB}/firebase-auth.js`),
+    withAuth ? import(`${FB}/firebase-auth.js`) : null,
   ]);
   const app = initializeApp(firebaseConfig);
   const database = db.getDatabase(app);
-  const auth = au.getAuth(app);
+  const auth = au?.getAuth(app);
   const root = db.ref(database, DB_ROOT);
 
   return {
@@ -84,7 +84,12 @@ async function createFirebaseStore() {
   };
 }
 
-export const store = DEMO ? createDemoStore() : await createFirebaseStore().catch(err => {
-  console.error('Firebase failed to load, falling back to demo mode', err);
-  return createDemoStore();
-});
+// Pages call this and keep working while it loads. Only the scorer
+// console needs sign-in, so the public site skips the auth library.
+export function openStore({ auth = false } = {}) {
+  if (DEMO) return Promise.resolve(createDemoStore());
+  return createFirebaseStore(auth).catch(err => {
+    console.error('Firebase failed to load, falling back to demo mode', err);
+    return createDemoStore();
+  });
+}

@@ -1,4 +1,4 @@
-import { store } from './store.js';
+import { openStore } from './store.js';
 import { TOURNAMENT, GROUPS, FIXTURES, PAIR_BY_ID } from './config.js';
 import {
   evalMatch, rulesFor, resolveFixtures, computeStandings, courtNow, statusOf, pairName, minutesFor,
@@ -238,9 +238,10 @@ function moveThumb(seg) {
 function renderStandings() {
   $('#tables').innerHTML = GROUPS.map((g, gi) => {
     const rows = computeStandings(state, g.id);
-    const played = FIXTURES.filter(f => f.group === g.id && statusOf(state, f.id) === 'done').length;
+    const groupFx = FIXTURES.filter(f => f.group === g.id);
+    const played = groupFx.filter(f => statusOf(state, f.id) === 'done').length;
     return `<div class="card table-card reveal in" data-delay="${gi}">
-      <h3>${esc(g.name)} <small>Court ${g.court} · ${played}/8 played</small></h3>
+      <h3>${esc(g.name)} <small>Court ${g.court} · ${played}/${groupFx.length} played</small></h3>
       <table class="st tnum">
         <thead><tr><th></th><th>Pair</th><th title="Played">P</th><th title="Won">W</th><th title="Lost">L</th><th class="hide-sm" title="Points for">PF</th><th title="Point difference">+/−</th><th title="Points">Pts</th></tr></thead>
         <tbody>${rows.map((r, i) => `<tr class="${r.q ? 'q' : ''}${i === 4 ? ' cut' : ''}${r.id === followId ? ' mine' : ''}">
@@ -422,14 +423,39 @@ $('#tvClose').addEventListener('click', closeTv);
 addEventListener('keydown', e => { if (e.key === 'Escape') closeTv(); });
 $('#shareBtn').addEventListener('click', share);
 
-store.onConnection(ok => {
-  const s = $('#connStatus');
-  s.className = 'status' + (ok ? ' done' : '');
-  s.innerHTML = `<span class="dot"></span>${ok ? (store.mode === 'demo' ? 'Demo mode' : 'Connected · live') : 'Reconnecting…'}`;
+// Draw the page straight away; live data fills in once Firebase connects.
+render();
+openStore().then(store => {
+  store.onConnection(ok => {
+    const s = $('#connStatus');
+    s.className = 'status' + (ok ? ' done' : '');
+    s.innerHTML = `<span class="dot"></span>${ok ? (store.mode === 'demo' ? 'Demo mode' : 'Connected · live') : 'Reconnecting…'}`;
+  });
+  if (store.mode === 'demo') document.body.insertAdjacentHTML('beforeend', '<div class="demo-banner">Demo mode — scores stay in this browser</div>');
+  store.subscribe(s => { state = s || {}; render(); });
 });
-if (store.mode === 'demo') document.body.insertAdjacentHTML('beforeend', '<div class="demo-banner">Demo mode — scores stay in this browser</div>');
-
-store.subscribe(s => { state = s || {}; render(); });
 // Re-render once a minute so "just finished" results roll over to "up next".
 setInterval(renderCourts, 60000);
 if (new URLSearchParams(location.search).has('tv')) openTv();
+
+// ?debug shows what this device reports, for tracking down phone-only issues.
+if (new URLSearchParams(location.search).has('debug')) {
+  const box = document.createElement('div');
+  box.className = 'debug';
+  document.body.append(box);
+  const t0 = performance.now();
+  let scrolls = 0, storeMs = '…';
+  addEventListener('scroll', () => scrolls++, { passive: true });
+  openStore().then(() => { storeMs = Math.round(performance.now() - t0) + ' ms'; });
+  setInterval(() => {
+    box.textContent = [
+      `reduce motion: ${reduced}`,
+      `viewport: ${innerWidth}×${innerHeight}`,
+      `scroll events: ${scrolls}  y: ${Math.round(scrollY)}`,
+      `revealed: ${$$('.reveal.in').length}/${$$('.reveal').length}`,
+      `words lit: ${$$('#statementText .w.on').length}`,
+      `firebase ready: ${storeMs}`,
+      `sticky ok: ${CSS.supports('position', 'sticky')}`,
+    ].join('\n');
+  }, 300);
+}
