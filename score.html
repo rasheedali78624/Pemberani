@@ -78,6 +78,15 @@
     .ko-row { display: grid; grid-template-columns: 70px 1fr 1fr; gap: 8px; align-items: center; font-size: 14px; }
     .ko-row select { height: 40px; font-size: 14px; margin: 0; padding: 0 30px 0 10px; background-position: right 10px center; }
     .danger { color: #ff6961; border: 1px solid rgba(255,69,58,.4); }
+    .cl-sum { display: flex; gap: 10px; margin-bottom: 12px; }
+    .cl-sum div { flex: 1; background: var(--card-2); border-radius: 12px; padding: 10px 12px; }
+    .cl-sum b { display: block; font-size: 24px; color: var(--text); }
+    .cl-pair { padding: 10px 0; border-top: 1px solid var(--line); }
+    .cl-pair > b { color: var(--text); font-size: 15px; }
+    .cl-pair .none { color: #ff9f0a; }
+    .cl-name { display: flex; justify-content: space-between; gap: 10px; color: var(--muted); padding: 3px 0 0 12px; }
+    .cl-name span:first-child { color: var(--text); }
+    .cl-kind { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 2px 8px; border-radius: 99px; background: var(--gold-soft); color: var(--gold); margin-left: 8px; }
   </style>
 </head>
 <body>
@@ -126,6 +135,11 @@
             <select class="select" id="resetSel" style="margin:0; height:44px; font-size:15px"></select>
             <button class="btn btn-sm danger" id="resetBtn" style="height:44px">Reset</button>
           </div>
+        </div>
+        <div>
+          <h4>E-certificates</h4>
+          <p class="muted" style="font-size:14px;margin:4px 0 10px">Who has generated a certificate on cert.html, grouped by pair.</p>
+          <div id="certLog" class="muted" style="font-size:14px">Loading…</div>
         </div>
       </div>
     </details>
