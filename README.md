@@ -7,6 +7,7 @@ Static site for GitHub Pages, with Firebase Realtime Database for live scoring.
 | --- | --- |
 | `index.html` | Everyone: live courts, fixtures, standings, bracket, format, hall of fame |
 | `score.html` | Umpires and committee: tap-to-score console (sign-in required) |
+| `cert.html` | Players: type full name + pick pair → download their e-certificate (PDF / image) |
 | `index-edition1.html` | Edition 1 site, kept as a read-only archive |
 
 ## Files
@@ -83,7 +84,7 @@ The site only needs `index.html`, `score.html`, `index-edition1.html`, `logo.png
   interval at 11, and stops the game automatically at 21 (no deuce in groups; deuce up to 30 in knockouts).
   **Undo** reverses the last rally, even after the match has ended. The screen stays awake while a match is live.
 - **Venue screen:** open `index.html?tv` on a laptop plugged into a TV, or tap **TV mode** on the site.
-- **Knockouts fill themselves** once all 8 matches in both groups are done. If a tie needs a committee
+- **Knockouts fill themselves** once all 15 matches in both groups are done. If a tie needs a committee
   decision, use **Committee tools → Knockout draw overrides** in the scorer console.
 - **Wrong result?** Go to **Committee tools → Correct a result** to reset a match so it can be rescored.
 
@@ -93,6 +94,6 @@ Everything lives in `js/config.js`:
 
 - `startsAt`: set the first-serve time, for example `'2026-10-04T08:00:00+08:00'`. This turns on the hero countdown
   and approximate start times in the fixtures list.
-- `GROUP_ORDER`: the 8 group matchups and their order of play, using the poster's pair numbers (1–6).
+- `GROUP_ORDER`: the 15 group matchups and their order of play, using the poster's pair numbers (1–6).
 - `RULES`: points per game, deuce and cap, best-of for each stage.
 - `KNOCKOUT`: who meets whom, and which court each knockout match is on.

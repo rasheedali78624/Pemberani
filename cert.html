@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>E-Certificate · Pemberani 2.0</title>
+  <meta name="description" content="Download your Pemberani Tournament Edition 2.0 e-certificate.">
+  <meta name="theme-color" content="#000000">
+  <meta property="og:title" content="Pemberani 2.0 — Get your E-Certificate">
+  <meta property="og:description" content="Type your name, pick your pair, download your certificate.">
+  <meta property="og:image" content="assets/banner.jpg">
+  <link rel="icon" href="assets/icon.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/icon.png">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    @font-face { font-family: 'Great Vibes'; src: url(assets/fonts/greatvibes.woff2) format('woff2'); font-display: block; }
+    .cert-page { width: min(1040px, 100% - 32px); margin: 0 auto; padding: 96px 0 72px; }
+    .cert-head { text-align: center; }
+    .cert-head img { width: 84px; margin: 0 auto 18px; filter: drop-shadow(0 12px 30px rgba(227, 179, 65, .35)); }
+    .cert-head h1 { font-size: clamp(40px, 7vw, 64px); line-height: 1.05; font-weight: 700; letter-spacing: -0.04em; }
+    .cert-head p { color: var(--muted); font-size: clamp(17px, 2.2vw, 21px); margin-top: 10px; }
+
+    .cert-grid { display: grid; grid-template-columns: 360px 1fr; gap: 20px; margin-top: 40px; align-items: start; }
+    @media (max-width: 880px) { .cert-grid { grid-template-columns: 1fr; } }
+
+    .form-card { padding: 26px; }
+    .field { display: block; margin-bottom: 20px; }
+    .field span { display: block; font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+    .field input { width: 100%; height: 52px; padding: 0 16px; border-radius: 14px; background: var(--card-2); border: 1px solid var(--line-2); font-size: 17px; }
+    .field input:focus { outline: none; border-color: var(--gold); }
+    .field .select { margin-top: 0; }
+    .field small { display: block; font-size: 13px; color: var(--dim); margin-top: 8px; }
+
+    .award { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 14px; background: var(--card-2); margin-bottom: 22px; }
+    .award i { width: 34px; height: 34px; border-radius: 50%; flex: none; background: var(--c, #3a3a3e); box-shadow: inset 0 -3px 6px rgba(0,0,0,.25); }
+    .award b { display: block; font-size: 15px; }
+    .award small { display: block; font-size: 13px; color: var(--muted); }
+
+    .actions { display: grid; gap: 10px; }
+    .actions .btn { width: 100%; height: 50px; }
+    .btn[disabled] { opacity: .35; pointer-events: none; }
+
+    .preview-card { padding: 14px; position: relative; }
+    .preview-card canvas { display: block; width: 100%; height: auto; border-radius: 10px; background: #111; aspect-ratio: 3508 / 2480; }
+    .preview-card .hint { position: absolute; top: 24px; left: 24px; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; background: rgba(0,0,0,.65); color: var(--muted); padding: 5px 10px; border-radius: 99px; }
+    .busy { position: absolute; inset: 14px; display: none; place-items: center; background: rgba(0,0,0,.45); border-radius: 10px; color: var(--muted); font-size: 15px; }
+    .busy.on { display: grid; }
+    .foot-note { text-align: center; color: var(--dim); font-size: 13px; margin-top: 26px; }
+    .foot-note a { color: var(--muted); }
+  </style>
+</head>
+<body>
+
+<header class="nav scrolled">
+  <div class="wrap">
+    <a class="nav-brand" href="index.html"><img src="assets/icon.png" alt="">Pemberani 2.0</a>
+    <a class="live-pill off" href="index.html" style="margin-left:auto"><span>← Back to site</span></a>
+  </div>
+</header>
+
+<main class="cert-page">
+  <div class="cert-head">
+    <img src="assets/crest.png" alt="Pemberani Badminton Club crest">
+    <h1>Your <span class="gold-text">E-Certificate.</span></h1>
+    <p>Type your full name, pick your pair, and download it instantly.</p>
+  </div>
+
+  <div class="cert-grid">
+    <form class="card form-card" id="certForm" autocomplete="off" onsubmit="return false">
+      <label class="field">
+        <span>Full name</span>
+        <input id="name" type="text" maxlength="60" placeholder="e.g. Mohd Fareez Izhwan bin Suhaili" autocapitalize="words" spellcheck="false">
+        <small>Spell it exactly as you want it printed.</small>
+      </label>
+      <label class="field">
+        <span>Your pair</span>
+        <select class="select" id="pair"></select>
+      </label>
+
+      <div class="award" id="award"><i></i><div><b>Choose your pair</b><small>We'll pick the right certificate for you.</small></div></div>
+
+      <div class="actions">
+        <button class="btn btn-primary" id="pdfBtn" type="button" disabled>Download PDF</button>
+        <button class="btn btn-quiet" id="imgBtn" type="button" disabled>Save as image</button>
+        <button class="btn btn-quiet hide" id="shareBtn" type="button" disabled>Share…</button>
+      </div>
+    </form>
+
+    <div class="card preview-card">
+      <canvas id="cert" width="3508" height="2480" aria-label="Certificate preview"></canvas>
+      <span class="hint">Preview</span>
+      <div class="busy" id="busy">Preparing…</div>
+    </div>
+  </div>
+
+  <p class="foot-note">Pemberani Badminton Club · Tournament Edition 2.0 · 26 September 2026 · <a href="index.html">Back to the tournament site</a></p>
+</main>
+
+<div class="toast" id="toast" role="status"></div>
+<script src="js/vendor/jspdf.umd.min.js"></script>
+<script type="module" src="js/cert.js"></script>
+</body>
+</html>
