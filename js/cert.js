@@ -3,6 +3,7 @@
 // Nothing is uploaded or stored anywhere.
 
 import { GROUPS } from './config.js';
+import { openStore } from './store.js';
 
 // Final standings → which certificate each pair receives.
 const AWARDS = {
@@ -107,6 +108,18 @@ function updateUi() {
     : '<b>Choose your pair</b><small>We\'ll pick the right certificate for you.</small>';
 }
 
+// Record who generated a certificate so the committee can see it in the
+// scorer console. Failures are ignored; the download still works offline.
+const storeReady = openStore().catch(() => null);
+let lastLogged = '';
+function logDownload(format) {
+  const entry = { name: tidyName($('#name').value), pair: $('#pair').value, kind: currentKind(), format };
+  const key = `${entry.name}|${entry.pair}|${format}`;
+  if (key === lastLogged) return;
+  lastLogged = key;
+  storeReady.then(s => s?.logCert?.(entry)).catch(err => console.warn('Could not log certificate', err));
+}
+
 const fileBase = () => `Pemberani-2.0-E-Certificate-${tidyName($('#name').value).replace(/[^\p{L}\p{N}]+/gu, '-')}`;
 const jpegBlob = () => new Promise(res => canvas.toBlob(res, 'image/jpeg', 0.92));
 
@@ -131,11 +144,11 @@ async function withBusy(fn) {
   finally { $('#busy').classList.remove('on'); }
 }
 
-$('#pdfBtn').onclick = () => withBusy(async () => { saveBlob(await pdfBlob(), fileBase() + '.pdf'); toast('Certificate downloaded'); });
-$('#imgBtn').onclick = () => withBusy(async () => { saveBlob(await jpegBlob(), fileBase() + '.jpg'); toast('Image saved'); });
+$('#pdfBtn').onclick = () => withBusy(async () => { saveBlob(await pdfBlob(), fileBase() + '.pdf'); logDownload('pdf'); toast('Certificate downloaded'); });
+$('#imgBtn').onclick = () => withBusy(async () => { saveBlob(await jpegBlob(), fileBase() + '.jpg'); logDownload('jpg'); toast('Image saved'); });
 $('#shareBtn').onclick = () => withBusy(async () => {
   const file = new File([await jpegBlob()], fileBase() + '.jpg', { type: 'image/jpeg' });
-  try { await navigator.share({ files: [file], title: 'My Pemberani 2.0 certificate' }); } catch {}
+  try { await navigator.share({ files: [file], title: 'My Pemberani 2.0 certificate' }); logDownload('share'); } catch {}
 });
 
 // Pair list from the tournament config, grouped like the site.

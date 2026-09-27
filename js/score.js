@@ -275,8 +275,49 @@ $('#login').addEventListener('submit', async e => {
 });
 $('#signOut').onclick = () => store.auth.signOut();
 
+// ── E-certificate log (admins only) ─────────────────────
+
+let certUnsub = null;
+function watchCertLog(on) {
+  if (!store.onCertLog) return;
+  if (!on) { certUnsub?.(); certUnsub = null; return; }
+  if (certUnsub) return;
+  certUnsub = store.onCertLog(renderCertLog) || (() => {});
+}
+
+function renderCertLog(log) {
+  const box = $('#certLog');
+  if (log === null) { box.textContent = 'No access. Is this account in /admins, and are the latest rules published?'; return; }
+  const entries = Object.values(log || {});
+  // One row per person per pair; keep their latest time and every format used.
+  const people = {};
+  for (const e of entries) {
+    const key = `${e.pair}|${(e.name || '').toLowerCase()}`;
+    const p = people[key] ||= { name: e.name, pair: e.pair, kind: e.kind, at: 0, formats: new Set() };
+    p.at = Math.max(p.at, e.at || 0);
+    p.formats.add(e.format);
+  }
+  const list = Object.values(people);
+  const fmtTime = t => t ? new Date(t).toLocaleString([], { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }) : '';
+  const byPair = GROUPS.flatMap(g => g.pairs).map(pair => {
+    const names = list.filter(p => p.pair === pair.id).sort((a, b) => a.at - b.at);
+    const kind = names[0]?.kind;
+    return `<div class="cl-pair"><b>${esc(pair.name)}</b>${kind && kind !== 'participation' ? `<span class="cl-kind">${esc(kind)}</span>` : ''}
+      ${names.length
+        ? names.map(p => `<div class="cl-name"><span>${esc(p.name)}</span><span>${[...p.formats].join(' · ')} · ${fmtTime(p.at)}</span></div>`).join('')
+        : '<div class="cl-name none">No one yet</div>'}</div>`;
+  }).join('');
+  const pairsDone = new Set(list.map(p => p.pair)).size;
+  box.innerHTML = `<div class="cl-sum">
+      <div><b>${list.length}</b>people</div>
+      <div><b>${entries.length}</b>downloads</div>
+      <div><b>${pairsDone}/12</b>pairs</div>
+    </div>${byPair}`;
+}
+
 store.auth.onChange(u => {
   user = u;
+  watchCertLog(!!u);
   $('#login').classList.toggle('hide', !!u);
   $('#console').classList.toggle('hide', !u);
   $('#signOut').classList.toggle('hide', !u || store.mode === 'demo');

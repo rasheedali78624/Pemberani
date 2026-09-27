@@ -5,6 +5,9 @@
 //   matches/{fixtureId}: { status: 'live'|'done', games: ['abba…', …],
 //                          serve: 'a'|'b', startedAt, endedAt, winner }
 //   ko/{fixtureId}:      { a?: pairId, b?: pairId }   (manual overrides)
+//
+// Separately, certLog/{pushId}: { name, pair, kind, format, at } records each
+// e-certificate download. Anyone can add an entry; only admins can read.
 
 import { firebaseConfig } from './firebase-config.js';
 import { DB_ROOT } from './config.js';
@@ -45,6 +48,12 @@ function createDemoStore() {
       write(s);
     },
     async resetAll() { write({}); },
+    async logCert(entry) {
+      const log = JSON.parse(localStorage.getItem('pt2-demo-certlog') || '{}');
+      log['d' + Date.now()] = { ...entry, at: Date.now() };
+      localStorage.setItem('pt2-demo-certlog', JSON.stringify(log));
+    },
+    onCertLog(cb) { cb(JSON.parse(localStorage.getItem('pt2-demo-certlog') || '{}')); },
     auth: {
       onChange(cb) { authListeners.add(cb); cb(user); },
       async signIn(email) { user = { email: email || 'demo@local' }; authListeners.forEach(cb => cb(user)); },
@@ -76,6 +85,12 @@ async function createFirebaseStore(withAuth) {
       await db.set(db.ref(database, `${DB_ROOT}/ko/${id}/${side}`), pairId || null);
     },
     async resetAll() { await db.set(root, null); },
+    async logCert(entry) {
+      await db.push(db.ref(database, 'certLog'), { ...entry, at: db.serverTimestamp() });
+    },
+    onCertLog(cb) {
+      return db.onValue(db.ref(database, 'certLog'), s => cb(s.val() || {}), () => cb(null));
+    },
     auth: {
       onChange(cb) { au.onAuthStateChanged(auth, cb); },
       async signIn(email, password) { await au.signInWithEmailAndPassword(auth, email, password); },
