@@ -3,57 +3,150 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Family Badminton Night — Live Scores</title>
+<title>Thursday Family Night — Live Scores</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@700&family=Inter:wght@400;500;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@700;800&family=Inter:wght@400;500;600;700;800&display=swap');
+
   :root{
-    --court: #0B2F23;
-    --court-light: #14402F;
+    --navy: #0A1A33;
+    --navy-light: #122A4D;
+    --navy-card: #0E2242;
     --gold: #E7B444;
-    --gold-deep: #A97A1E;
+    --gold-hi: #F6D685;
+    --gold-deep: #9A6E1E;
     --chalk: #F7F4EB;
-    --ink-soft: #B9C4BC;
-    --win: #4CAF6D;
-    --line: #2A4A3A;
+    --ink-soft: #AEBBD4;
+    --win: #58D68D;
+    --lose-faint: #7E8BA8;
+    --line: #223B63;
+    --red: #E2685C;
   }
   *{ box-sizing:border-box; }
-  body{ margin:0; font-family:'Inter',sans-serif; background:var(--court); color:var(--chalk); padding-bottom:50px; }
-  header{ background:linear-gradient(180deg,#143A2A 0%, var(--court) 100%); padding:26px 20px 18px; text-align:center; border-bottom:1px solid var(--line); }
-  h1{ font-family:'Big Shoulders',sans-serif; font-size:30px; margin:4px 0; color:var(--gold); letter-spacing:0.5px; }
+  body{
+    margin:0; font-family:'Inter',sans-serif; color:var(--chalk); padding-bottom:60px;
+    background:
+      repeating-linear-gradient(135deg, rgba(231,180,68,0.035) 0 2px, transparent 2px 46px),
+      radial-gradient(circle at 85% 0%, rgba(231,180,68,0.14), transparent 55%),
+      radial-gradient(circle at 10% 95%, rgba(88,214,141,0.08), transparent 45%),
+      linear-gradient(180deg, var(--navy) 0%, #081326 100%);
+    min-height:100vh;
+  }
+
+  header{
+    position:relative; overflow:hidden;
+    background:linear-gradient(180deg, var(--navy-light) 0%, var(--navy) 100%);
+    padding:30px 20px 22px; text-align:center; border-bottom:1px solid var(--line);
+  }
+  header::before, header::after{
+    content:"🏸"; position:absolute; font-size:46px; opacity:0.16; top:14px;
+  }
+  header::before{ left:14px; transform:rotate(-18deg); }
+  header::after{ right:14px; transform:rotate(18deg) scaleX(-1); }
+
+  .eyebrow{
+    font-size:12.5px; letter-spacing:3px; color:var(--gold-hi); font-weight:700; margin-bottom:6px;
+  }
+  h1{
+    font-family:'Big Shoulders',sans-serif; font-size:34px; margin:2px 0 6px; letter-spacing:0.5px;
+    color:var(--gold-hi); font-weight:800;
+    text-shadow: 1px 1px 0 var(--gold-deep), 2px 2px 0 var(--gold-deep), 3px 3px 0 var(--gold-deep), 4px 5px 8px rgba(0,0,0,0.5);
+  }
   .sub{ font-size:13px; color:var(--ink-soft); }
-  .status{ display:flex; align-items:center; justify-content:center; gap:7px; font-size:12.5px; color:var(--ink-soft); margin-top:8px; }
-  .dot{ width:8px; height:8px; border-radius:50%; background:var(--win); }
-  .dot.err{ background:#E2685C; }
+  .status{ display:flex; align-items:center; justify-content:center; gap:8px; font-size:12.5px; color:var(--ink-soft); margin-top:10px; }
+  .dot{ width:9px; height:9px; border-radius:50%; background:var(--win); box-shadow:0 0 0 0 rgba(88,214,141,0.6); animation:pulse 1.8s infinite; }
+  .dot.err{ background:var(--red); animation:none; box-shadow:none; }
+  @keyframes pulse{
+    0%{ box-shadow:0 0 0 0 rgba(88,214,141,0.55); }
+    70%{ box-shadow:0 0 0 7px rgba(88,214,141,0); }
+    100%{ box-shadow:0 0 0 0 rgba(88,214,141,0); }
+  }
 
-  #list{ padding:16px 16px 0; display:flex; flex-direction:column; gap:12px; }
-  .card{ background:var(--court-light); border:1px solid var(--line); border-radius:14px; padding:14px 16px; }
+  .section-title{
+    font-family:'Big Shoulders',sans-serif; font-size:22px; color:var(--gold-hi);
+    letter-spacing:1px; text-align:center; margin:26px 0 4px; font-weight:800;
+  }
+  .section-sub{ text-align:center; font-size:12.5px; color:var(--ink-soft); margin-bottom:14px; }
+
+  #list{ padding:4px 16px 0; display:flex; flex-direction:column; gap:12px; max-width:560px; margin:0 auto; }
+  .card{
+    position:relative;
+    background:linear-gradient(145deg, var(--navy-card), #091830);
+    border:1px solid var(--line); border-left:4px solid var(--gold);
+    border-radius:14px; padding:14px 16px;
+    box-shadow:0 6px 16px rgba(0,0,0,0.35);
+  }
   .card-top{ display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
-  .round-badge{ background:var(--gold); color:#1d1708; font-weight:700; font-size:13px; padding:4px 10px; border-radius:999px; }
-  .time{ font-size:12.5px; color:var(--ink-soft); }
-  .sitout{ font-size:12px; color:#D8B873; }
+  .round-badge{
+    background:linear-gradient(135deg, var(--gold-hi), var(--gold-deep));
+    color:#1d1708; font-weight:800; font-size:12.5px; padding:4px 11px; border-radius:999px;
+    letter-spacing:0.4px; box-shadow:0 2px 5px rgba(0,0,0,0.3);
+  }
+  .time{ font-size:12.5px; color:var(--ink-soft); font-weight:600; }
+  .sitout{ font-size:11.5px; color:var(--gold-hi); opacity:0.85; margin-top:4px; }
 
-  .team-row{ display:flex; align-items:center; justify-content:space-between; padding:8px 0; }
-  .team-row.winner .team-name{ color:var(--win); font-weight:700; }
+  .team-row{ display:flex; align-items:center; justify-content:space-between; padding:7px 0; }
+  .team-row.winner .team-name{ color:var(--win); font-weight:800; }
   .team-name{ font-size:16px; font-weight:600; flex:1; }
   .score-input{
-    width:56px; text-align:center; font-size:18px; font-weight:700; padding:7px 0;
-    border-radius:9px; border:1px solid var(--line); background:#0E2A1F; color:var(--chalk);
+    width:56px; text-align:center; font-size:19px; font-weight:800; padding:7px 0;
+    border-radius:9px; border:1px solid var(--line); background:#071830; color:var(--chalk);
   }
-  .vs{ text-align:center; font-size:11px; color:var(--ink-soft); padding:2px 0; }
+  .score-input:focus{ outline:none; border-color:var(--gold); }
+  .vs{
+    text-align:center; font-size:11px; color:var(--navy); font-weight:800; padding:2px 0;
+    background:var(--gold); width:34px; margin:2px auto; border-radius:6px; letter-spacing:0.5px;
+  }
 
-  .trophy{ font-size:15px; margin-left:8px; }
-  footer{ text-align:center; font-size:12.5px; color:var(--ink-soft); padding:26px 20px 10px; }
+  .trophy{ font-size:15px; margin-left:6px; }
+  footer{ text-align:center; font-size:12.5px; color:var(--ink-soft); padding:30px 20px 10px; }
+
+  /* ===== Stats section ===== */
+  #stats{ max-width:560px; margin:0 auto; padding:0 16px; }
+  .stat-locked{
+    text-align:center; font-size:13px; color:var(--ink-soft); background:var(--navy-card);
+    border:1px dashed var(--line); border-radius:14px; padding:22px 18px; margin-top:6px;
+  }
+  .stat-locked b{ color:var(--gold-hi); }
+  .stat-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:6px; }
+  .stat-card{
+    background:linear-gradient(145deg, var(--navy-card), #091830);
+    border:1px solid var(--line); border-radius:14px; padding:14px; text-align:center;
+    box-shadow:0 6px 16px rgba(0,0,0,0.3);
+  }
+  .stat-card .label{ font-size:11px; letter-spacing:1px; color:var(--ink-soft); text-transform:uppercase; }
+  .stat-card .value{ font-family:'Big Shoulders',sans-serif; font-size:24px; color:var(--gold-hi); margin-top:4px; font-weight:800; }
+  .stat-card .detail{ font-size:11.5px; color:var(--ink-soft); margin-top:3px; }
+  .stat-card.wide{ grid-column:span 2; }
+
+  .leaderboard{
+    background:linear-gradient(145deg, var(--navy-card), #091830);
+    border:1px solid var(--line); border-radius:14px; padding:6px 16px; margin-top:12px;
+    box-shadow:0 6px 16px rgba(0,0,0,0.3);
+  }
+  .lb-row{ display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--line); }
+  .lb-row:last-child{ border-bottom:none; }
+  .lb-rank{ font-family:'Big Shoulders',sans-serif; font-size:18px; color:var(--gold-hi); width:26px; font-weight:800; }
+  .lb-name{ flex:1; font-size:15px; font-weight:700; }
+  .lb-rec{ font-size:13px; color:var(--ink-soft); }
+  .lb-row.first .lb-name{ color:var(--gold-hi); }
 </style>
 </head>
 <body>
 <header>
-  <div class="sub">THURSDAY FAMILY NIGHT</div>
+  <div class="eyebrow">THURSDAY FAMILY NIGHT</div>
   <h1>Live Scoreboard</h1>
   <div class="sub">Andalas Court &middot; 8:00 &ndash; 10:00 PM &middot; First to 21</div>
   <div class="status"><span class="dot" id="statusDot"></span><span id="statusText">Connecting&hellip;</span></div>
 </header>
 
+<div class="section-title">MATCH BY MATCH</div>
+<div class="section-sub">Tap a score box to update &mdash; everyone watching sees it instantly</div>
 <div id="list"></div>
+
+<div class="section-title">🏆 NIGHT STATS</div>
+<div class="section-sub">Unlocks automatically once all 10 rounds are scored</div>
+<div id="stats"></div>
+
 <footer>Scores sync live &mdash; everyone watching this page sees updates instantly.</footer>
 
 <script type="module">
@@ -89,6 +182,7 @@ const rounds = [
   {time:"9:36 PM",  teamA:["Jishnu","Geeta"],   teamB:["Rasheed","Mama"],  sit:"Kishan"},
   {time:"9:48 PM",  teamA:["Rasheed","Kishan"], teamB:["Jishnu","Mama"],   sit:"Geeta"},
 ];
+const PLAYERS = ["Mama","Kishan","Jishnu","Rasheed","Geeta"];
 
 let db, scoresRef;
 let scores = {};
@@ -112,12 +206,12 @@ function render(){
           <span class="time">${r.time}</span>
         </div>
         <div class="team-row ${aWin?'winner':''}">
-          <span class="team-name">${r.teamA.join(' & ')}${aWin?' <span class=\"trophy\">🏆</span>':''}</span>
+          <span class="team-name">${r.teamA.join(' & ')}${aWin?' <span class="trophy">🏆</span>':''}</span>
           <input class="score-input" type="number" min="0" max="30" data-round="${key}" data-side="a" value="${s.a}">
         </div>
-        <div class="vs">vs</div>
+        <div class="vs">VS</div>
         <div class="team-row ${bWin?'winner':''}">
-          <span class="team-name">${r.teamB.join(' & ')}${bWin?' <span class=\"trophy\">🏆</span>':''}</span>
+          <span class="team-name">${r.teamB.join(' & ')}${bWin?' <span class="trophy">🏆</span>':''}</span>
           <input class="score-input" type="number" min="0" max="30" data-round="${key}" data-side="b" value="${s.b}">
         </div>
         <div class="sitout">Sitting out: ${r.sit}</div>
@@ -139,6 +233,101 @@ function render(){
       }
     });
   });
+
+  renderStats();
+}
+
+function renderStats(){
+  const box = document.getElementById('stats');
+  const completed = rounds.every((r,i) => {
+    const s = scores['r'+i];
+    return s && s.a !== '' && s.b !== '' && !isNaN(Number(s.a)) && !isNaN(Number(s.b));
+  });
+
+  if(!completed){
+    const played = rounds.filter((r,i) => {
+      const s = scores['r'+i];
+      return s && s.a !== '' && s.b !== '';
+    }).length;
+    box.innerHTML = `<div class="stat-locked">🔒 <b>${played} of ${rounds.length}</b> rounds scored so far.<br>Finish every match to unlock the night's stats.</div>`;
+    return;
+  }
+
+  // ---- tally everything ----
+  const player = {};
+  PLAYERS.forEach(p => player[p] = {wins:0, losses:0, played:0, pf:0, pa:0});
+
+  const pairKey = (names) => names.slice().sort().join(' & ');
+  const pair = {};
+
+  let closest = null, blowout = null;
+
+  rounds.forEach((r, i) => {
+    const s = scores['r'+i];
+    const a = Number(s.a), b = Number(s.b);
+    const margin = Math.abs(a-b);
+    const aWin = a > b;
+
+    r.teamA.forEach(p => { player[p].played++; player[p].pf += a; player[p].pa += b; aWin ? player[p].wins++ : player[p].losses++; });
+    r.teamB.forEach(p => { player[p].played++; player[p].pf += b; player[p].pa += a; !aWin ? player[p].wins++ : player[p].losses++; });
+
+    [[r.teamA, aWin], [r.teamB, !aWin]].forEach(([team, won]) => {
+      const k = pairKey(team);
+      if(!pair[k]) pair[k] = {names:team, wins:0, played:0};
+      pair[k].played++;
+      if(won) pair[k].wins++;
+    });
+
+    const info = {round:i+1, teamA:r.teamA, teamB:r.teamB, a, b, margin};
+    if(!closest || margin < closest.margin) closest = info;
+    if(!blowout || margin > blowout.margin) blowout = info;
+  });
+
+  const leaderboard = PLAYERS.map(p => ({name:p, ...player[p]}))
+    .sort((x,y) => y.wins - x.wins || (y.pf-y.pa) - (x.pf-x.pa));
+
+  const topScorer = PLAYERS.map(p => ({name:p, pts:player[p].pf}))
+    .sort((x,y) => y.pts - x.pts)[0];
+
+  const bestPair = Object.values(pair)
+    .sort((x,y) => (y.wins/y.played) - (x.wins/x.played) || y.wins - x.wins)[0];
+
+  const lbHtml = leaderboard.map((p,i) => `
+    <div class="lb-row ${i===0?'first':''}">
+      <span class="lb-rank">${i===0?'🏆':i+1}</span>
+      <span class="lb-name">${p.name}</span>
+      <span class="lb-rec">${p.wins}W - ${p.losses}L &middot; ${p.pf>p.pa?'+':''}${p.pf-p.pa} pts</span>
+    </div>`).join('');
+
+  box.innerHTML = `
+    <div class="leaderboard">${lbHtml}</div>
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="label">Top Scorer</div>
+        <div class="value">${topScorer.name}</div>
+        <div class="detail">${topScorer.pts} total points</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Best Pair</div>
+        <div class="value">${bestPair.names.join(' & ')}</div>
+        <div class="detail">${bestPair.wins}/${bestPair.played} wins together</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Closest Match</div>
+        <div class="value">R${closest.round} &middot; ${closest.margin} pt${closest.margin===1?'':'s'}</div>
+        <div class="detail">${closest.teamA.join(' & ')} ${closest.a}&ndash;${closest.b} ${closest.teamB.join(' & ')}</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Biggest Blowout</div>
+        <div class="value">R${blowout.round} &middot; ${blowout.margin} pts</div>
+        <div class="detail">${blowout.teamA.join(' & ')} ${blowout.a}&ndash;${blowout.b} ${blowout.teamB.join(' & ')}</div>
+      </div>
+      <div class="stat-card wide">
+        <div class="label">Night Champion</div>
+        <div class="value">${leaderboard[0].name} &mdash; ${leaderboard[0].wins} wins</div>
+        <div class="detail">Most match wins across all 10 rounds 🎉</div>
+      </div>
+    </div>`;
 }
 
 async function boot(){
