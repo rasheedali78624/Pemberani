@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Family Badminton Night — Live Scores</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@700&family=Inter:wght@400;500;600;700&display=swap');
+  :root{
+    --court: #0B2F23;
+    --court-light: #14402F;
+    --gold: #E7B444;
+    --gold-deep: #A97A1E;
+    --chalk: #F7F4EB;
+    --ink-soft: #B9C4BC;
+    --win: #4CAF6D;
+    --line: #2A4A3A;
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; font-family:'Inter',sans-serif; background:var(--court); color:var(--chalk); padding-bottom:50px; }
+  header{ background:linear-gradient(180deg,#143A2A 0%, var(--court) 100%); padding:26px 20px 18px; text-align:center; border-bottom:1px solid var(--line); }
+  h1{ font-family:'Big Shoulders',sans-serif; font-size:30px; margin:4px 0; color:var(--gold); letter-spacing:0.5px; }
+  .sub{ font-size:13px; color:var(--ink-soft); }
+  .status{ display:flex; align-items:center; justify-content:center; gap:7px; font-size:12.5px; color:var(--ink-soft); margin-top:8px; }
+  .dot{ width:8px; height:8px; border-radius:50%; background:var(--win); }
+  .dot.err{ background:#E2685C; }
+
+  #list{ padding:16px 16px 0; display:flex; flex-direction:column; gap:12px; }
+  .card{ background:var(--court-light); border:1px solid var(--line); border-radius:14px; padding:14px 16px; }
+  .card-top{ display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+  .round-badge{ background:var(--gold); color:#1d1708; font-weight:700; font-size:13px; padding:4px 10px; border-radius:999px; }
+  .time{ font-size:12.5px; color:var(--ink-soft); }
+  .sitout{ font-size:12px; color:#D8B873; }
+
+  .team-row{ display:flex; align-items:center; justify-content:space-between; padding:8px 0; }
+  .team-row.winner .team-name{ color:var(--win); font-weight:700; }
+  .team-name{ font-size:16px; font-weight:600; flex:1; }
+  .score-input{
+    width:56px; text-align:center; font-size:18px; font-weight:700; padding:7px 0;
+    border-radius:9px; border:1px solid var(--line); background:#0E2A1F; color:var(--chalk);
+  }
+  .vs{ text-align:center; font-size:11px; color:var(--ink-soft); padding:2px 0; }
+
+  .trophy{ font-size:15px; margin-left:8px; }
+  footer{ text-align:center; font-size:12.5px; color:var(--ink-soft); padding:26px 20px 10px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="sub">PEMBERANI FAMILY NIGHT</div>
+  <h1>Live Scoreboard</h1>
+  <div class="sub">Andalas Court &middot; 8:00 &ndash; 10:00 PM &middot; First to 21</div>
+  <div class="status"><span class="dot" id="statusDot"></span><span id="statusText">Connecting&hellip;</span></div>
+</header>
+
+<div id="list"></div>
+<footer>Scores sync live &mdash; everyone watching this page sees updates instantly.</footer>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+// ============================================================
+// PASTE THE SAME firebaseConfig you used for the jersey tracker
+// (same pemberani-badminton project, same databaseURL)
+// ============================================================
+const firebaseConfig = {
+  apiKey: "AIzaSyA9NZSPbMVI0KuvfSMKxmDRiZA7ToKdk4U",
+  authDomain: "pemberani-badminton.firebaseapp.com",
+  databaseURL: "https://pemberani-badminton-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "pemberani-badminton",
+  storageBucket: "pemberani-badminton.firebasestorage.app",
+  messagingSenderId: "140352380730",
+  appId: "1:140352380730:web:da3333873dc4115ec13a03"
+};
+
+// Own separate path — doesn't touch tournament/ or jerseyTracker/
+const DB_PATH = 'familyNight/scores';
+
+const rounds = [
+  {time:"8:00 PM",  teamA:["Rasheed","Mama"],   teamB:["Kishan","Geeta"],  sit:"Jishnu"},
+  {time:"8:12 PM",  teamA:["Jishnu","Mama"],    teamB:["Kishan","Geeta"],  sit:"Rasheed"},
+  {time:"8:24 PM",  teamA:["Jishnu","Geeta"],   teamB:["Rasheed","Kishan"],sit:"Mama"},
+  {time:"8:36 PM",  teamA:["Jishnu","Rasheed"], teamB:["Geeta","Mama"],    sit:"Kishan"},
+  {time:"8:48 PM",  teamA:["Mama","Geeta"],     teamB:["Jishnu","Kishan"], sit:"Rasheed"},
+  {time:"9:00 PM",  teamA:["Kishan","Mama"],    teamB:["Rasheed","Geeta"], sit:"Jishnu"},
+  {time:"9:12 PM",  teamA:["Kishan","Mama"],    teamB:["Jishnu","Rasheed"],sit:"Geeta"},
+  {time:"9:24 PM",  teamA:["Jishnu","Kishan"],  teamB:["Rasheed","Geeta"], sit:"Mama"},
+  {time:"9:36 PM",  teamA:["Jishnu","Geeta"],   teamB:["Rasheed","Mama"],  sit:"Kishan"},
+  {time:"9:48 PM",  teamA:["Rasheed","Kishan"], teamB:["Jishnu","Mama"],   sit:"Geeta"},
+];
+
+let db, scoresRef;
+let scores = {};
+
+function setStatus(ok, text){
+  document.getElementById('statusDot').classList.toggle('err', !ok);
+  document.getElementById('statusText').textContent = text;
+}
+
+function render(){
+  const list = document.getElementById('list');
+  list.innerHTML = rounds.map((r, i) => {
+    const key = 'r' + i;
+    const s = scores[key] || {a:'', b:''};
+    const aWin = s.a !== '' && s.b !== '' && Number(s.a) > Number(s.b);
+    const bWin = s.a !== '' && s.b !== '' && Number(s.b) > Number(s.a);
+    return `
+      <div class="card">
+        <div class="card-top">
+          <span class="round-badge">ROUND ${i+1}</span>
+          <span class="time">${r.time}</span>
+        </div>
+        <div class="team-row ${aWin?'winner':''}">
+          <span class="team-name">${r.teamA.join(' & ')}${aWin?' <span class=\"trophy\">🏆</span>':''}</span>
+          <input class="score-input" type="number" min="0" max="30" data-round="${key}" data-side="a" value="${s.a}">
+        </div>
+        <div class="vs">vs</div>
+        <div class="team-row ${bWin?'winner':''}">
+          <span class="team-name">${r.teamB.join(' & ')}${bWin?' <span class=\"trophy\">🏆</span>':''}</span>
+          <input class="score-input" type="number" min="0" max="30" data-round="${key}" data-side="b" value="${s.b}">
+        </div>
+        <div class="sitout">Sitting out: ${r.sit}</div>
+      </div>`;
+  }).join('');
+
+  list.querySelectorAll('.score-input').forEach(inp => {
+    inp.addEventListener('change', async (e) => {
+      const roundKey = e.target.dataset.round;
+      const side = e.target.dataset.side;
+      const val = e.target.value;
+      const current = scores[roundKey] || {a:'', b:''};
+      current[side] = val;
+      try{
+        await update(ref(db, `${DB_PATH}/${roundKey}`), current);
+      }catch(err){
+        console.error(err);
+        alert("Couldn't save — check your connection.");
+      }
+    });
+  });
+}
+
+async function boot(){
+  try{
+    const app = initializeApp(firebaseConfig);
+    db = getDatabase(app);
+    scoresRef = ref(db, DB_PATH);
+    onValue(scoresRef, (snap) => {
+      scores = snap.val() || {};
+      setStatus(true, 'Live — syncing for everyone');
+      render();
+    }, (err) => {
+      console.error(err);
+      setStatus(false, 'Connection issue — check Database rules');
+    });
+  }catch(err){
+    console.error(err);
+    setStatus(false, 'Could not connect to Firebase');
+    render();
+  }
+}
+boot();
+</script>
+</body>
+</html>
