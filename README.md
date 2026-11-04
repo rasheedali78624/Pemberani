@@ -9,6 +9,8 @@ Static site for GitHub Pages, with Firebase Realtime Database for live scoring.
 | `score.html` | Umpires and committee: tap-to-score console (sign-in required) |
 | `cert.html` | Players: type full name + pick pair → download their e-certificate (PDF / image) |
 | `index-edition1.html` | Edition 1 site, kept as a read-only archive |
+| `family-scoreboard.html` | Thursday Family Night live scoreboard (currently #2, Diwali Edition). Add `?demo` to preview with fake scores |
+| `family-night-1.html` | Family Night #1 (8 Oct 2026), read-only archive |
 
 ## Files
 
@@ -97,3 +99,14 @@ Everything lives in `js/config.js`:
 - `GROUP_ORDER`: the 15 group matchups and their order of play, using the poster's pair numbers (1–6).
 - `RULES`: points per game, deuce and cap, best-of for each stage.
 - `KNOCKOUT`: who meets whom, and which court each knockout match is on.
+
+## Thursday Family Night
+
+`family-scoreboard.html` is the link that gets shared, so it always holds the latest night.
+When a night is over, copy it to `family-night-N.html`, make the inputs read-only, and build the next one in its place.
+
+- **Night #2 · Diwali (5 Nov 2026):** 15 rounds = every possible 2-vs-2 match-up of the 5 players exactly once.
+  Three sets of five; each player sits out once per set and never twice in a row. After round 10 every pair has
+  partnered twice (a fair place to stop); after round 15, three times. Scores are stored under
+  `familyNight/scores/n2r0` … `n2r14`. Night #1 used `r0` … `r9` in the same node, so no rule changes are needed.
+  The schedule, start/end time and minutes per round are at the top of the page's script.
