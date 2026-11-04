@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1B0A2A">
+<title>Thursday Family Night · Diwali Edition</title>
+
+<!-- Open Graph tags: rich preview card on WhatsApp / Telegram / iMessage -->
+<meta property="og:title" content="Thursday Family Night · Diwali Edition 🪔">
+<meta property="og:description" content="Five diyas, one shuttle. Live scores for the Diwali family badminton night at Andalas Court. Tap in and watch the standings update instantly.">
+<meta property="og:image" content="https://rasheedali78624.github.io/Pemberani/assets/family-night-diwali.jpg">
+<meta property="og:url" content="https://rasheedali78624.github.io/Pemberani/family-scoreboard.html">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Yatra+One&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --night: #1B0A2A;
+    --night-2: #12061E;
+    --plum: #2A1240;
+    --card: #24103A;
+    --card-2: #1A0A2B;
+    --line: #42245E;
+    --marigold: #FFA41B;
+    --saffron: #F2672E;
+    --gold: #FFD27A;
+    --gold-deep: #B8741A;
+    --rani: #E2457F;
+    --leaf: #3FA36B;
+    --cream: #FFF4E2;
+    --muted: #C7B3DA;
+    --faint: #8E78A6;
+    --win: #FFC94D;
+    --red: #FF6B6B;
+  }
+  *{ box-sizing:border-box; }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; font-family:'Inter',system-ui,sans-serif; color:var(--cream); padding-bottom:40px;
+    min-height:100vh; overflow-x:hidden;
+    background:
+      radial-gradient(ellipse 80% 45% at 50% 0%, rgba(255,164,27,0.20), transparent 70%),
+      radial-gradient(circle at 0% 60%, rgba(226,69,127,0.12), transparent 40%),
+      radial-gradient(circle at 100% 85%, rgba(242,103,46,0.10), transparent 40%),
+      linear-gradient(180deg, var(--night) 0%, var(--night-2) 100%);
+    background-attachment: fixed;
+  }
+  a{ color:var(--gold); }
+
+  /* ---------- floating background: sparkles + rangoli ---------- */
+  #sky{ position:fixed; inset:0; pointer-events:none; z-index:0; }
+  .rangoli-bg{ position:fixed; pointer-events:none; z-index:0; opacity:0.07; }
+  .rangoli-bg.a{ width:520px; height:520px; left:-200px; top:38vh; }
+  .rangoli-bg.b{ width:440px; height:440px; right:-170px; top:85vh; }
+  main, header, footer{ position:relative; z-index:1; }
+  #fx{ position:fixed; inset:0; pointer-events:none; z-index:50; }
+
+  /* ---------- header ---------- */
+  header{ text-align:center; padding:0 16px 8px; }
+  .toran{
+    height:58px; margin:0 -16px;
+    background-repeat:repeat-x; background-position:center top; background-size:72px 58px;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.35));
+  }
+  .hero-rangoli{ width:120px; height:120px; margin:6px auto -6px; display:block; animation: spin 90s linear infinite; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .eyebrow{
+    font-size:12px; letter-spacing:4px; color:var(--marigold); font-weight:800; margin-top:10px;
+    text-transform:uppercase;
+  }
+  h1{
+    font-family:'Yatra One', 'Inter', serif; font-weight:400;
+    font-size:clamp(34px, 9vw, 52px); line-height:1.05; margin:6px 0 4px;
+    background: linear-gradient(180deg, #FFF1C9 0%, var(--gold) 45%, var(--marigold) 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    filter: drop-shadow(0 2px 0 rgba(120,50,10,0.55)) drop-shadow(0 0 22px rgba(255,164,27,0.35));
+  }
+  .edition{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'Yatra One', serif; font-size:18px; color:var(--rani);
+    letter-spacing:0.5px;
+  }
+  .edition::before, .edition::after{ content:""; width:28px; height:1.5px; background:linear-gradient(90deg, transparent, var(--rani)); }
+  .edition::after{ transform:scaleX(-1); }
+  .meta{
+    display:flex; flex-wrap:wrap; justify-content:center; gap:6px 8px; margin:14px auto 0; max-width:520px;
+  }
+  .chip{
+    font-size:12.5px; font-weight:600; color:var(--cream);
+    background:rgba(255,255,255,0.06); border:1px solid var(--line);
+    padding:6px 11px; border-radius:999px; white-space:nowrap;
+  }
+  .status{ display:flex; align-items:center; justify-content:center; gap:8px; font-size:12.5px; color:var(--muted); margin-top:14px; }
+  .dot{ width:9px; height:9px; border-radius:50%; background:var(--marigold); animation:pulse 1.8s infinite; }
+  .dot.err{ background:var(--red); animation:none; }
+  @keyframes pulse{
+    0%{ box-shadow:0 0 0 0 rgba(255,164,27,0.6); }
+    70%{ box-shadow:0 0 0 8px rgba(255,164,27,0); }
+    100%{ box-shadow:0 0 0 0 rgba(255,164,27,0); }
+  }
+
+  /* ---------- diya row (one diya per player) ---------- */
+  .diyas{
+    display:grid; grid-template-columns:repeat(5, 1fr); gap:4px;
+    max-width:560px; margin:22px auto 0; padding:0 10px;
+  }
+  .diya{ text-align:center; position:relative; }
+  .diya svg{ width:100%; max-width:84px; height:auto; overflow:visible; display:block; margin:0 auto; }
+  .diya .flame{ transform-origin:50% 92%; transform-box:fill-box; animation:flicker 1.6s ease-in-out infinite alternate; }
+  .diya:nth-child(2) .flame{ animation-delay:-0.4s; animation-duration:1.9s; }
+  .diya:nth-child(3) .flame{ animation-delay:-0.9s; animation-duration:1.4s; }
+  .diya:nth-child(4) .flame{ animation-delay:-0.2s; animation-duration:1.7s; }
+  .diya:nth-child(5) .flame{ animation-delay:-1.1s; animation-duration:2.1s; }
+  .diya .flame-wrap{ transform-origin:50% 100%; transform-box:fill-box; transition:transform .8s cubic-bezier(.2,1.4,.4,1); }
+  .diya .halo{ transition:opacity .8s, r .8s; }
+  @keyframes flicker{
+    0%{ transform:scale(1,1) rotate(-2deg); }
+    35%{ transform:scale(0.94,1.06) rotate(2deg); }
+    70%{ transform:scale(1.04,0.95) rotate(-1deg); }
+    100%{ transform:scale(0.97,1.04) rotate(1.5deg); }
+  }
+  .diya-name{ font-size:13px; font-weight:800; margin-top:2px; letter-spacing:0.2px; }
+  .diya-rec{ font-size:11.5px; color:var(--muted); font-variant-numeric:tabular-nums; }
+  .diya.sitting .diya-name::after{ content:" ☕"; font-size:11px; }
+  .diya.leader .diya-name{ color:var(--gold); }
+  .diya-caption{ text-align:center; font-size:11.5px; color:var(--faint); margin-top:8px; padding:0 16px; }
+
+  /* ---------- sections ---------- */
+  main{ max-width:560px; margin:0 auto; padding:0 16px; }
+  .section-title{
+    font-family:'Yatra One', serif; font-size:24px; color:var(--gold); font-weight:400;
+    text-align:center; margin:34px 0 2px; letter-spacing:0.5px;
+  }
+  .section-sub{ text-align:center; font-size:12.5px; color:var(--muted); margin-bottom:14px; line-height:1.5; }
+
+  /* pace tracker */
+  .pace{
+    display:flex; gap:12px; align-items:center;
+    background:linear-gradient(135deg, rgba(255,164,27,0.12), rgba(226,69,127,0.08));
+    border:1px solid rgba(255,164,27,0.35); border-radius:14px; padding:12px 14px; margin-top:16px;
+    font-size:13px; line-height:1.45; color:var(--cream);
+  }
+  .pace .ico{ font-size:22px; }
+  .pace b{ color:var(--gold); }
+  .pace.warn{ border-color:rgba(255,107,107,0.55); background:linear-gradient(135deg, rgba(255,107,107,0.14), rgba(226,69,127,0.08)); }
+
+  /* sets */
+  .set-head{
+    display:flex; align-items:center; gap:10px; margin:26px 0 10px;
+  }
+  .set-head:first-child{ margin-top:6px; }
+  .set-num{
+    font-family:'Yatra One', serif; font-size:15px; color:#2a1405;
+    background:linear-gradient(135deg, var(--gold), var(--marigold));
+    padding:4px 12px 3px; border-radius:999px; white-space:nowrap;
+  }
+  .set-name{ font-family:'Yatra One', serif; font-size:18px; color:var(--cream); white-space:nowrap; }
+  .set-line{ flex:1; height:1px; background:linear-gradient(90deg, var(--line), transparent); }
+  .set-pips{ display:flex; gap:4px; }
+  .pip{ width:8px; height:8px; border-radius:50%; background:var(--line); }
+  .pip.on{ background:var(--marigold); box-shadow:0 0 6px var(--marigold); }
+  .set-note{ font-size:12px; color:var(--muted); margin:-4px 0 10px; }
+  .set-note.bonus{ color:var(--rani); }
+  .checkpoint{
+    text-align:center; font-size:12.5px; color:var(--gold);
+    border:1px dashed rgba(255,210,122,0.45); border-radius:12px; padding:10px 12px; margin:14px 0 4px;
+    background:rgba(255,210,122,0.05);
+  }
+
+  /* match cards */
+  .list{ display:flex; flex-direction:column; gap:12px; }
+  .card{
+    position:relative; overflow:hidden;
+    background:linear-gradient(150deg, var(--card), var(--card-2));
+    border:1px solid var(--line); border-radius:16px; padding:14px 16px 12px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.35);
+    transition:border-color .3s, box-shadow .3s;
+  }
+  .card::before{ /* rangoli dot border on the left edge */
+    content:""; position:absolute; left:0; top:0; bottom:0; width:5px;
+    background:
+      radial-gradient(circle, var(--marigold) 1.6px, transparent 2px) 0 0/5px 9px repeat-y,
+      linear-gradient(180deg, var(--saffron), var(--rani));
+    opacity:0.9;
+  }
+  .card.done{ opacity:0.92; }
+  .card.done::before{ background:linear-gradient(180deg, var(--gold), var(--marigold)); }
+  .card.now{
+    border-color:rgba(255,164,27,0.75);
+    box-shadow:0 0 0 1px rgba(255,164,27,0.35), 0 0 28px rgba(255,164,27,0.22), 0 8px 20px rgba(0,0,0,0.35);
+  }
+  .card-top{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; gap:8px; }
+  .round-badge{
+    font-weight:800; font-size:12px; padding:4px 11px; border-radius:999px; letter-spacing:0.6px;
+    background:rgba(255,255,255,0.07); color:var(--gold); border:1px solid var(--line);
+  }
+  .card.now .round-badge{ background:linear-gradient(135deg, var(--gold), var(--marigold)); color:#2a1405; border-color:transparent; }
+  .tag{ font-size:11px; font-weight:800; letter-spacing:1px; text-transform:uppercase; }
+  .tag.now{ color:var(--marigold); }
+  .tag.next{ color:var(--muted); }
+  .tag.done{ color:var(--faint); }
+  .time{ font-size:12.5px; color:var(--muted); font-weight:600; font-variant-numeric:tabular-nums; }
+
+  .team-row{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding:6px 0; }
+  .team-name{ font-size:16px; font-weight:600; flex:1; min-width:0; }
+  .team-row.winner .team-name{ color:var(--win); font-weight:800; }
+  .team-row.loser .team-name{ color:var(--muted); }
+  .win-ico{ font-size:15px; margin-left:4px; }
+  .score-input{
+    width:60px; text-align:center; font-size:20px; font-weight:800; padding:8px 0;
+    border-radius:10px; border:1px solid var(--line); background:#12071D; color:var(--cream);
+    font-family:inherit; -moz-appearance:textfield;
+  }
+  .score-input::-webkit-inner-spin-button, .score-input::-webkit-outer-spin-button{ -webkit-appearance:none; margin:0; }
+  .score-input:focus{ outline:none; border-color:var(--marigold); box-shadow:0 0 0 3px rgba(255,164,27,0.25); }
+  .team-row.winner .score-input{ border-color:rgba(255,201,77,0.6); color:var(--win); }
+  .vs{
+    display:flex; align-items:center; gap:10px; font-size:10.5px; color:var(--faint); font-weight:800; letter-spacing:2px;
+  }
+  .vs::before, .vs::after{ content:""; flex:1; height:1px; background:var(--line); }
+  .sitout{ font-size:12px; color:var(--muted); margin-top:6px; }
+  .sitout b{ color:var(--rani); font-weight:700; }
+
+  /* ---------- stats ---------- */
+  .stat-locked{
+    text-align:center; font-size:13px; color:var(--muted); line-height:1.55;
+    background:rgba(255,255,255,0.03); border:1px dashed var(--line); border-radius:16px; padding:22px 18px;
+  }
+  .stat-locked b{ color:var(--gold); }
+  .champion{
+    position:relative; text-align:center; overflow:hidden;
+    background:
+      radial-gradient(circle at 50% -20%, rgba(255,210,122,0.35), transparent 60%),
+      linear-gradient(150deg, #3A1A3F, #22102F);
+    border:1px solid rgba(255,210,122,0.5); border-radius:18px; padding:20px 16px 18px;
+    box-shadow:0 0 34px rgba(255,164,27,0.2);
+  }
+  .champion .label{ font-size:11px; letter-spacing:3px; color:var(--marigold); font-weight:800; text-transform:uppercase; }
+  .champion .name{
+    font-family:'Yatra One', serif; font-size:40px; line-height:1.1; margin-top:6px;
+    background:linear-gradient(180deg, #FFF1C9, var(--gold) 50%, var(--marigold)); -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .champion .detail{ font-size:13px; color:var(--muted); margin-top:4px; }
+  .leaderboard{
+    background:linear-gradient(150deg, var(--card), var(--card-2));
+    border:1px solid var(--line); border-radius:16px; padding:4px 16px; margin-top:12px;
+  }
+  .lb-row{ display:flex; align-items:center; gap:10px; padding:11px 0; border-bottom:1px solid var(--line); }
+  .lb-row:last-child{ border-bottom:none; }
+  .lb-rank{ font-family:'Yatra One', serif; font-size:18px; color:var(--gold); width:24px; text-align:center; }
+  .lb-name{ flex:1; font-size:15px; font-weight:700; }
+  .lb-rec{ font-size:13px; color:var(--muted); font-variant-numeric:tabular-nums; text-align:right; }
+  .lb-rec b{ color:var(--cream); }
+  .lb-row.first .lb-name{ color:var(--gold); }
+  .stat-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px; }
+  .stat-card{
+    background:linear-gradient(150deg, var(--card), var(--card-2));
+    border:1px solid var(--line); border-radius:16px; padding:14px 12px; text-align:center; min-width:0;
+  }
+  .stat-card .label{ font-size:10.5px; letter-spacing:1.4px; color:var(--muted); text-transform:uppercase; font-weight:700; }
+  .stat-card .value{ font-family:'Yatra One', serif; font-size:21px; color:var(--gold); margin-top:5px; line-height:1.2; }
+  .stat-card .detail{ font-size:11.5px; color:var(--muted); margin-top:4px; line-height:1.4; }
+  .stat-card.wide{ grid-column:span 2; }
+
+  .how{
+    font-size:13px; color:var(--muted); line-height:1.6;
+    background:rgba(255,255,255,0.03); border:1px solid var(--line); border-radius:16px; padding:14px 16px;
+  }
+  .how b{ color:var(--cream); }
+  .how ul{ margin:6px 0 0; padding-left:18px; }
+
+  footer{ text-align:center; font-size:12.5px; color:var(--faint); padding:34px 20px 8px; line-height:1.7; }
+  footer .archive{ display:inline-block; margin-top:6px; padding:7px 14px; border:1px solid var(--line); border-radius:999px; text-decoration:none; color:var(--muted); }
+
+  @media (max-width:380px){
+    .team-name{ font-size:15px; }
+    .diya-name{ font-size:12px; }
+    .stat-card .value{ font-size:18px; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .hero-rangoli, .diya .flame, .dot{ animation:none; }
+  }
+</style>
+</head>
+<body>
+<canvas id="sky"></canvas>
+<svg class="rangoli-bg a" viewBox="-100 -100 200 200" aria-hidden="true"><use href="#rangoli"/></svg>
+<svg class="rangoli-bg b" viewBox="-100 -100 200 200" aria-hidden="true"><use href="#rangoli"/></svg>
+<canvas id="fx"></canvas>
+
+<header>
+  <div class="toran" id="toran" aria-hidden="true"></div>
+  <svg class="hero-rangoli" viewBox="-100 -100 200 200" aria-hidden="true"><use href="#rangoli"/></svg>
+  <div class="eyebrow">Shubh Deepavali &middot; Family Night #2</div>
+  <h1>Thursday Family Night</h1>
+  <div class="edition">Diwali Edition</div>
+  <div class="meta">
+    <span class="chip">📅 Thu, 5 Nov 2026</span>
+    <span class="chip">🕗 8:00 – 10:00 PM</span>
+    <span class="chip">📍 Andalas Court</span>
+    <span class="chip">🏸 15 rounds · first to 21</span>
+  </div>
+  <div class="status"><span class="dot" id="statusDot"></span><span id="statusText">Lighting the diyas&hellip;</span></div>
+
+  <div class="diyas" id="diyas"></div>
+  <div class="diya-caption">One diya per player &mdash; the more you win, the brighter it burns.</div>
+</header>
+
+<main>
+  <div id="pace"></div>
+
+  <div class="section-title">Match by Match</div>
+  <div class="section-sub">Tap a score box to update &mdash; everyone watching sees it instantly.<br>
+    Every player plays 12 and sits out 3 &mdash; exactly one sit-out per set.</div>
+  <div id="list"></div>
+
+  <div class="section-title">🪔 Night Stats</div>
+  <div class="section-sub" id="statsSub">Unlocks after Set 2 (round 10) &mdash; the first point where everything is perfectly even</div>
+  <div id="stats"></div>
+
+  <div class="section-title">How It's Fair</div>
+  <div class="how">
+    With five players, 15 rounds is <b>every possible match-up exactly once</b>:
+    <ul>
+      <li>Everyone plays <b>12</b> and sits out <b>3</b> (one per set), never twice in a row.</li>
+      <li>Every two people are <b>partners 3 times</b> and <b>opponents 6 times</b>.</li>
+      <li>If time runs short, stop after <b>Round 10</b>: still perfectly even (8 played, 2 sat out, partners twice each).</li>
+    </ul>
+  </div>
+</main>
+
+<footer>
+  Scores sync live &mdash; everyone watching this page sees updates instantly.<br>
+  Happy Diwali from the Pemberani family ✨<br>
+  <a class="archive" href="family-night-1.html">📜 Family Night #1 &middot; 8 Oct (archive)</a>
+</footer>
+
+<!-- shared rangoli drawing, reused by <use> -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="rangoli"></g>
+  </defs>
+</svg>
+
+<script type="module">
+// Firebase is loaded inside boot() so the page still draws if the CDN is unreachable.
+let ref, onValue, update;
+
+const firebaseConfig = {
+  apiKey: "AIzaSyA9NZSPbMVI0KuvfSMKxmDRiZA7ToKdk4U",
+  authDomain: "pemberani-badminton.firebaseapp.com",
+  databaseURL: "https://pemberani-badminton-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "pemberani-badminton",
+  storageBucket: "pemberani-badminton.firebasestorage.app",
+  messagingSenderId: "140352380730",
+  appId: "1:140352380730:web:da3333873dc4115ec13a03"
+};
+
+// Same node as Night #1 (so the existing Firebase rules already allow it),
+// but every Night #2 key is prefixed "n2r" so Night #1's r0–r9 stay untouched.
+const DB_PATH = 'familyNight/scores';
+const KEY = i => 'n2r' + i;
+
+// ============================================================
+// THE SCHEDULE
+// 15 rounds = every possible 2-vs-2 match-up with 5 players, once each.
+// Each set of 5: everyone sits out exactly once. Nobody sits twice in a row.
+// After round 10: every pair has partnered twice, opposed 4 times (fair stop).
+// After round 15: every pair has partnered 3 times, opposed 6 times.
+// ============================================================
+const START = { h: 20, m: 0 };     // 8:00 PM first serve
+const END   = { h: 22, m: 0 };     // 10:00 PM court booking ends
+const SLOT_MIN = 8;                // planned minutes per round (game ~7.5 + change-over)
+
+const rounds = [
+  { a:["Rasheed","Kishan"], b:["Jishnu","Geeta"],   sit:"Mama"    },
+  { a:["Mama","Kishan"],    b:["Rasheed","Geeta"],  sit:"Jishnu"  },
+  { a:["Rasheed","Mama"],   b:["Jishnu","Kishan"],  sit:"Geeta"   },
+  { a:["Jishnu","Mama"],    b:["Rasheed","Geeta"],  sit:"Kishan"  },
+  { a:["Geeta","Mama"],     b:["Jishnu","Kishan"],  sit:"Rasheed" },
+
+  { a:["Geeta","Kishan"],   b:["Jishnu","Rasheed"], sit:"Mama"    },
+  { a:["Jishnu","Mama"],    b:["Rasheed","Kishan"], sit:"Geeta"   },
+  { a:["Rasheed","Mama"],   b:["Geeta","Kishan"],   sit:"Jishnu"  },
+  { a:["Mama","Kishan"],    b:["Jishnu","Geeta"],   sit:"Rasheed" },
+  { a:["Geeta","Mama"],     b:["Jishnu","Rasheed"], sit:"Kishan"  },
+
+  { a:["Jishnu","Kishan"],  b:["Rasheed","Geeta"],  sit:"Mama"    },
+  { a:["Geeta","Mama"],     b:["Rasheed","Kishan"], sit:"Jishnu"  },
+  { a:["Mama","Kishan"],    b:["Jishnu","Rasheed"], sit:"Geeta"   },
+  { a:["Rasheed","Mama"],   b:["Jishnu","Geeta"],   sit:"Kishan"  },
+  { a:["Jishnu","Mama"],    b:["Geeta","Kishan"],   sit:"Rasheed" },
+];
+const SETS = [
+  { name:"Diya",       note:"Everyone sits out once." },
+  { name:"Rangoli",    note:"Everyone sits out once. After this set the night is perfectly even — a fair place to stop." },
+  { name:"Phuljhadi",  note:"Bonus set ✨ Play it if the pace tracker says it fits." , bonus:true },
+];
+const PLAYERS = ["Mama","Kishan","Jishnu","Rasheed","Geeta"];
+const N = rounds.length;
+
+let db;
+let scores = {};
+let prevDone = null;
+
+// ---------- helpers ----------
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmtClock = d => d.toLocaleTimeString([], { hour:'numeric', minute:'2-digit' });
+function plannedTime(i){
+  const mins = START.h*60 + START.m + i*SLOT_MIN;
+  const d = new Date(); d.setHours(Math.floor(mins/60), mins%60, 0, 0);
+  return fmtClock(d);
+}
+const filled = v => v !== '' && v !== undefined && v !== null && !isNaN(Number(v));
+function result(i){
+  const s = scores[KEY(i)];
+  if(!s || !filled(s.a) || !filled(s.b) || Number(s.a) === Number(s.b)) return null;
+  return { a:Number(s.a), b:Number(s.b), aWin:Number(s.a) > Number(s.b), t:s.t || null };
+}
+const doneCount = () => rounds.reduce((n,_,i) => n + (result(i) ? 1 : 0), 0);
+const firstOpen = () => rounds.findIndex((_,i) => !result(i));
+
+function setStatus(ok, text){
+  $('statusDot').classList.toggle('err', !ok);
+  $('statusText').textContent = text;
+}
+
+// ---------- decoration: rangoli, toran, diyas ----------
+function buildRangoli(){
+  const g = document.getElementById('rangoli');
+  const ring = (n, r, petal, fill, w=1) => {
+    let s = '';
+    for(let k=0;k<n;k++){
+      const ang = 360/n*k;
+      s += `<path transform="rotate(${ang}) translate(0 ${-r})" d="${petal}" fill="${fill}" stroke="#2a1405" stroke-width="${w}"/>`;
+    }
+    return s;
+  };
+  const petal = (h,w) => `M0 0 C ${w} ${-h*0.35} ${w*0.6} ${-h*0.85} 0 ${-h} C ${-w*0.6} ${-h*0.85} ${-w} ${-h*0.35} 0 0Z`;
+  let s = '';
+  s += `<circle r="98" fill="none" stroke="#FFD27A" stroke-width="1.5" stroke-dasharray="2 5"/>`;
+  s += ring(24, 70, petal(26,7), '#E2457F', 0.8);
+  s += ring(16, 46, petal(28,10), '#FFA41B', 0.8);
+  s += ring(16, 46, petal(16,5), '#FFD27A', 0);
+  s += `<circle r="44" fill="#3FA36B" stroke="#2a1405" stroke-width="1"/>`;
+  s += ring(12, 18, petal(24,9), '#F2672E', 0.8);
+  s += `<circle r="18" fill="#FFD27A" stroke="#2a1405" stroke-width="1"/>`;
+  s += ring(8, 4, petal(12,5), '#E2457F', 0.6);
+  s += `<circle r="4" fill="#FFF4E2"/>`;
+  for(let k=0;k<24;k++){
+    const a = (k/24)*Math.PI*2, r = 86;
+    s += `<circle cx="${(Math.cos(a)*r).toFixed(1)}" cy="${(Math.sin(a)*r).toFixed(1)}" r="2.6" fill="#FFF4E2"/>`;
+  }
+  g.innerHTML = s;
+}
+
+function buildToran(){
+  // one 72px tile: string sag + hanging marigold strand + mango leaf
+  const tile = `
+  <svg xmlns='http://www.w3.org/2000/svg' width='72' height='58' viewBox='0 0 72 58'>
+    <path d='M0 4 Q36 14 72 4' fill='none' stroke='%23B8741A' stroke-width='2'/>
+    <path d='M54 10 q6 10 0 22 q-6 -12 0 -22z' fill='%233FA36B' stroke='%23255f3e' stroke-width='1'/>
+    <path d='M54 11 L54 31' stroke='%23255f3e' stroke-width='0.8'/>
+    <line x1='20' y1='8' x2='20' y2='50' stroke='%23B8741A' stroke-width='1'/>
+    <circle cx='20' cy='13' r='6.5' fill='%23F2672E'/>
+    <circle cx='20' cy='13' r='3' fill='%23FFA41B'/>
+    <circle cx='20' cy='25' r='6' fill='%23FFA41B'/>
+    <circle cx='20' cy='25' r='2.6' fill='%23FFD27A'/>
+    <circle cx='20' cy='36' r='5.2' fill='%23F2672E'/>
+    <circle cx='20' cy='36' r='2.2' fill='%23FFA41B'/>
+    <circle cx='20' cy='46' r='4.4' fill='%23FFA41B'/>
+    <circle cx='20' cy='53' r='2.6' fill='%23E2457F'/>
+  </svg>`.replace(/\s+/g,' ').replace(/#/g,'%23');
+  $('toran').style.backgroundImage = `url("data:image/svg+xml,${tile}")`;
+}
+
+function diyaSVG(id){
+  return `
+  <svg viewBox="0 0 100 100" aria-hidden="true">
+    <defs>
+      <radialGradient id="halo${id}" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#FFD27A" stop-opacity="0.75"/>
+        <stop offset="60%" stop-color="#FFA41B" stop-opacity="0.18"/>
+        <stop offset="100%" stop-color="#FFA41B" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="fl${id}" x1="0" y1="1" x2="0" y2="0">
+        <stop offset="0%" stop-color="#F2672E"/>
+        <stop offset="45%" stop-color="#FFA41B"/>
+        <stop offset="100%" stop-color="#FFF4C2"/>
+      </linearGradient>
+      <linearGradient id="clay${id}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#D9662B"/>
+        <stop offset="100%" stop-color="#8A3413"/>
+      </linearGradient>
+    </defs>
+    <circle class="halo" cx="50" cy="44" r="30" fill="url(#halo${id})"/>
+    <g class="flame-wrap" data-flame="${id}">
+      <path class="flame" d="M50 22 C 58 34 60 44 50 54 C 40 44 42 34 50 22 Z" fill="url(#fl${id})"/>
+      <path class="flame" d="M50 36 C 54 42 54 48 50 53 C 46 48 46 42 50 36 Z" fill="#FFF8DC" opacity="0.85"/>
+    </g>
+    <path d="M14 56 Q 50 52 86 56 Q 82 80 50 82 Q 18 80 14 56 Z" fill="url(#clay${id})"/>
+    <path d="M14 56 Q 50 61 86 56" fill="none" stroke="#FFD27A" stroke-width="2.5"/>
+    <path d="M24 66 Q 50 74 76 66" fill="none" stroke="#FFD27A" stroke-width="1.6" stroke-dasharray="1 4" stroke-linecap="round"/>
+    <circle cx="50" cy="72" r="2.4" fill="#E2457F"/>
+    <circle cx="38" cy="70" r="1.6" fill="#FFD27A"/>
+    <circle cx="62" cy="70" r="1.6" fill="#FFD27A"/>
+  </svg>`;
+}
+
+function buildDiyas(){
+  $('diyas').innerHTML = PLAYERS.map((p,i) => `
+    <div class="diya" id="diya-${i}">
+      ${diyaSVG(i)}
+      <div class="diya-name">${esc(p)}</div>
+      <div class="diya-rec" id="diya-rec-${i}">0–0</div>
+    </div>`).join('');
+}
+
+function updateDiyas(){
+  const tally = {}; PLAYERS.forEach(p => tally[p] = { w:0, l:0 });
+  rounds.forEach((r,i) => {
+    const res = result(i); if(!res) return;
+    r.a.forEach(p => res.aWin ? tally[p].w++ : tally[p].l++);
+    r.b.forEach(p => res.aWin ? tally[p].l++ : tally[p].w++);
+  });
+  const maxW = Math.max(0, ...PLAYERS.map(p => tally[p].w));
+  const open = firstOpen();
+  const sitter = open >= 0 ? rounds[open].sit : null;
+  PLAYERS.forEach((p,i) => {
+    const t = tally[p];
+    $('diya-rec-'+i).textContent = `${t.w}W – ${t.l}L`;
+    // flame grows from 0.75x to 1.35x with wins (12 wins max)
+    const scale = 0.75 + Math.min(t.w, 12) / 12 * 0.6;
+    const el = $('diya-'+i);
+    el.querySelector('.flame-wrap').style.transform = `scale(${scale})`;
+    el.querySelector('.halo').setAttribute('r', (24 + t.w * 1.6).toFixed(1));
+    el.classList.toggle('leader', maxW > 0 && t.w === maxW);
+    el.classList.toggle('sitting', p === sitter);
+  });
+}
+
+// ---------- render ----------
+function render(){
+  const open = firstOpen();
+  let html = '';
+  rounds.forEach((r, i) => {
+    const setIdx = Math.floor(i/5);
+    if(i % 5 === 0){
+      const set = SETS[setIdx];
+      const pips = [0,1,2,3,4].map(k => `<span class="pip ${result(setIdx*5+k)?'on':''}"></span>`).join('');
+      html += `
+        <div class="set-head">
+          <span class="set-num">Set ${setIdx+1}</span>
+          <span class="set-name">${set.name}</span>
+          <span class="set-line"></span>
+          <span class="set-pips">${pips}</span>
+        </div>
+        <div class="set-note ${set.bonus?'bonus':''}">${set.note}</div>
+        <div class="list">`;
+    }
+    const s = scores[KEY(i)] || {};
+    const sa = filled(s.a) ? s.a : '', sb = filled(s.b) ? s.b : '';
+    const res = result(i);
+    const aCls = res ? (res.aWin ? 'winner' : 'loser') : '';
+    const bCls = res ? (res.aWin ? 'loser' : 'winner') : '';
+    const state = res ? 'done' : (i === open ? 'now' : (i === open+1 ? 'next' : ''));
+    const tag = state === 'now' ? '<span class="tag now">● On court</span>'
+              : state === 'next' ? '<span class="tag next">Up next</span>'
+              : state === 'done' ? '<span class="tag done">Final</span>' : '';
+    html += `
+      <div class="card ${state}" id="card-${i}">
+        <div class="card-top">
+          <span class="round-badge">ROUND ${i+1}</span>
+          ${tag}
+          <span class="time">~${plannedTime(i)}</span>
+        </div>
+        <div class="team-row ${aCls}">
+          <span class="team-name">${r.a.map(esc).join(' &amp; ')}${aCls==='winner'?'<span class="win-ico">🪔</span>':''}</span>
+          <input class="score-input" type="number" inputmode="numeric" min="0" max="30" aria-label="Round ${i+1} ${r.a.join(' and ')} score" data-i="${i}" data-side="a" value="${esc(sa)}">
+        </div>
+        <div class="vs">VS</div>
+        <div class="team-row ${bCls}">
+          <span class="team-name">${r.b.map(esc).join(' &amp; ')}${bCls==='winner'?'<span class="win-ico">🪔</span>':''}</span>
+          <input class="score-input" type="number" inputmode="numeric" min="0" max="30" aria-label="Round ${i+1} ${r.b.join(' and ')} score" data-i="${i}" data-side="b" value="${esc(sb)}">
+        </div>
+        <div class="sitout">Sitting out: <b>${esc(r.sit)}</b></div>
+      </div>`;
+    if(i % 5 === 4){
+      html += `</div>`;
+      if(i === 9) html += `<div class="checkpoint">✦ Fair stopping point ✦<br>After round 10 everyone has played 8, sat out 2, and partnered each other twice.</div>`;
+    }
+  });
+
+  // keep focus + caret if the user is mid-edit when a live update arrives
+  const active = document.activeElement;
+  const keep = active && active.classList.contains('score-input') ? { i:active.dataset.i, side:active.dataset.side, v:active.value } : null;
+  $('list').innerHTML = html;
+  if(keep){
+    const el = $('list').querySelector(`.score-input[data-i="${keep.i}"][data-side="${keep.side}"]`);
+    if(el){ el.value = keep.v; el.focus(); }
+  }
+
+  $('list').querySelectorAll('.score-input').forEach(inp => {
+    inp.addEventListener('change', onScoreChange);
+    inp.addEventListener('keydown', e => { if(e.key === 'Enter') e.target.blur(); });
+  });
+
+  updateDiyas();
+  renderPace();
+  renderStats();
+
+  // celebrate newly finished rounds (not on first load)
+  const d = doneCount();
+  if(prevDone !== null && d > prevDone){
+    burst(d === N || d === 10 ? 7 : 2);
+  }
+  prevDone = d;
+}
+
+async function onScoreChange(e){
+  const i = Number(e.target.dataset.i);
+  const side = e.target.dataset.side;
+  let val = e.target.value.trim();
+  if(val !== ''){
+    val = Math.max(0, Math.min(30, Math.round(Number(val))));
+    if(isNaN(val)) val = '';
+  }
+  const cur = { a:'', b:'', ...(scores[KEY(i)] || {}) };
+  cur[side] = val === '' ? '' : String(val);
+  const complete = cur.a !== '' && cur.b !== '' && filled(cur.a) && filled(cur.b) && Number(cur.a) !== Number(cur.b);
+  // timestamp the moment a round is finished, for the pace tracker
+  cur.t = complete ? (cur.t || Date.now()) : null;
+  if(!db){ scores[KEY(i)] = cur; render(); return; }   // demo mode
+  try{
+    await update(ref(db, `${DB_PATH}/${KEY(i)}`), cur);
+  }catch(err){
+    console.error(err);
+    alert("Couldn't save — check your connection.");
+  }
+}
+
+// ---------- pace tracker ----------
+function renderPace(){
+  const box = $('pace');
+  const done = rounds.map((_,i) => result(i)).filter(Boolean);
+  const stamps = done.map(r => r.t).filter(Boolean).sort((x,y) => x-y);
+  const d = done.length;
+  const endToday = new Date(); endToday.setHours(END.h, END.m, 0, 0);
+
+  if(d === N){
+    box.innerHTML = `<div class="pace"><span class="ico">🎆</span><div>All <b>15 rounds</b> done! Scroll down for the night's champion.</div></div>`;
+    return;
+  }
+  if(stamps.length < 2){
+    box.innerHTML = `<div class="pace"><span class="ico">⏱️</span><div>
+      Planned at about <b>${SLOT_MIN} min</b> a round (last time games averaged 7–8 min).
+      Once two rounds are in, this box tracks your real pace and tells you whether the bonus set fits before 10:00.</div></div>`;
+    return;
+  }
+  const per = (stamps[stamps.length-1] - stamps[0]) / (stamps.length - 1);   // ms per round
+  const perMin = per / 60000;
+  const last = stamps[stamps.length-1];
+  const finish15 = new Date(last + per * (N - d));
+  const finish10 = new Date(last + per * Math.max(0, 10 - d));
+  const fits15 = finish15 <= endToday;
+  let msg;
+  if(fits15){
+    msg = `Pace <b>${perMin.toFixed(1)} min</b>/round. All 15 rounds should finish around <b>${fmtClock(finish15)}</b>, so the bonus set fits. 🎉`;
+  }else if(d < 10){
+    msg = `Pace <b>${perMin.toFixed(1)} min</b>/round. Round 10 should wrap around <b>${fmtClock(finish10)}</b>; all 15 would run to about <b>${fmtClock(finish15)}</b>. Speed up the change-overs, or call it after Round 10 (still perfectly fair).`;
+  }else{
+    msg = `Pace <b>${perMin.toFixed(1)} min</b>/round. Finishing all 15 would take you to about <b>${fmtClock(finish15)}</b>, past 10:00. Stopping at Round 10 keeps everything even; a half-played bonus set won't.`;
+  }
+  box.innerHTML = `<div class="pace ${fits15?'':'warn'}"><span class="ico">${fits15?'⏱️':'⚠️'}</span><div>${msg}</div></div>`;
+}
+
+// ---------- stats ----------
+function renderStats(){
+  const box = $('stats');
+  const d = doneCount();
+  // Only count complete, fair blocks: rounds 1–10 or 1–15
+  const allTen = rounds.slice(0,10).every((_,i) => result(i));
+  const allFifteen = d === N;
+  if(!allTen){
+    const in10 = rounds.slice(0,10).filter((_,i) => result(i)).length;
+    box.innerHTML = `<div class="stat-locked">🔒 <b>${in10} of 10</b> rounds scored towards the first fair checkpoint.<br>Finish Set 2 to unlock the night's stats.</div>`;
+    return;
+  }
+  const upto = allFifteen ? N : 10;
+  $('statsSub').textContent = allFifteen
+    ? 'Final, all 15 rounds'
+    : (d > 10 ? `Counting the first 10 rounds until the bonus set is finished (${d-10} of 5 played)` : 'After 10 rounds. Updates again when the bonus set is finished');
+
+  const player = {}; PLAYERS.forEach(p => player[p] = { wins:0, losses:0, pf:0, pa:0, streak:0, best:0 });
+  const pair = {}; const pairKey = n => n.slice().sort().join(' & ');
+  let closest = null, blowout = null;
+
+  for(let i=0;i<upto;i++){
+    const r = rounds[i], res = result(i);
+    const { a, b, aWin } = res; const margin = Math.abs(a-b);
+    [[r.a, a, b, aWin], [r.b, b, a, !aWin]].forEach(([team, f, ag, won]) => {
+      team.forEach(p => {
+        const P = player[p]; P.pf += f; P.pa += ag;
+        if(won){ P.wins++; P.streak++; P.best = Math.max(P.best, P.streak); } else { P.losses++; P.streak = 0; }
+      });
+      const k = pairKey(team);
+      if(!pair[k]) pair[k] = { names:team.slice().sort(), wins:0, played:0, diff:0 };
+      pair[k].played++; pair[k].diff += f - ag; if(won) pair[k].wins++;
+    });
+    const info = { round:i+1, r, a, b, margin };
+    if(!closest || margin < closest.margin) closest = info;
+    if(!blowout || margin > blowout.margin) blowout = info;
+  }
+
+  const lb = PLAYERS.map(p => ({ name:p, ...player[p], diff:player[p].pf - player[p].pa }))
+    .sort((x,y) => y.wins - x.wins || y.diff - x.diff || y.pf - x.pf);
+  const topScorer = lb.slice().sort((x,y) => y.pf - x.pf)[0];
+  const bestPair = Object.values(pair).sort((x,y) => y.wins - x.wins || y.diff - x.diff)[0];
+  const streaker = lb.slice().sort((x,y) => y.best - x.best || y.wins - x.wins)[0];
+  const tiedTop = lb.filter(p => p.wins === lb[0].wins && p.diff === lb[0].diff);
+
+  const sgn = n => (n > 0 ? '+' : '') + n;
+  const matchLine = m => `${m.r.a.map(esc).join(' &amp; ')} ${m.a}–${m.b} ${m.r.b.map(esc).join(' &amp; ')}`;
+
+  box.innerHTML = `
+    <div class="champion">
+      <div class="label">${allFifteen ? 'Diwali Night Champion' : 'Leading after 10 rounds'}</div>
+      <div class="name">${tiedTop.map(p => esc(p.name)).join(' &amp; ')}</div>
+      <div class="detail">${lb[0].wins} wins of ${lb[0].wins + lb[0].losses} &middot; ${sgn(lb[0].diff)} points 🪔</div>
+    </div>
+    <div class="leaderboard">
+      ${lb.map((p,i) => `
+        <div class="lb-row ${i===0?'first':''}">
+          <span class="lb-rank">${i===0 ? '👑' : i+1}</span>
+          <span class="lb-name">${esc(p.name)}</span>
+          <span class="lb-rec"><b>${p.wins}W – ${p.losses}L</b> &middot; ${sgn(p.diff)}</span>
+        </div>`).join('')}
+    </div>
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="label">Top Scorer</div>
+        <div class="value">${esc(topScorer.name)}</div>
+        <div class="detail">${topScorer.pf} points</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Best Pair</div>
+        <div class="value">${bestPair.names.map(esc).join(' &amp; ')}</div>
+        <div class="detail">${bestPair.wins}/${bestPair.played} wins together</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Closest Match</div>
+        <div class="value">R${closest.round} &middot; ${closest.margin} pt${closest.margin===1?'':'s'}</div>
+        <div class="detail">${matchLine(closest)}</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Biggest Win</div>
+        <div class="value">R${blowout.round} &middot; ${blowout.margin} pts</div>
+        <div class="detail">${matchLine(blowout)}</div>
+      </div>
+      <div class="stat-card wide">
+        <div class="label">Hottest Streak</div>
+        <div class="value">${esc(streaker.name)} &middot; ${streaker.best} in a row</div>
+        <div class="detail">Longest run of consecutive wins 🔥</div>
+      </div>
+    </div>`;
+}
+
+// ---------- background sparkles (twinkling diya-light dots) ----------
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function startSky(){
+  const c = $('sky'), ctx = c.getContext('2d');
+  let w, h, dots = [];
+  const resize = () => {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = window.innerWidth; h = window.innerHeight;
+    c.width = w*dpr; c.height = h*dpr; c.style.width = w+'px'; c.style.height = h+'px';
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    const n = Math.round(w*h/9000);
+    dots = Array.from({length:n}, () => ({
+      x:Math.random()*w, y:Math.random()*h, r:Math.random()*1.4+0.4,
+      p:Math.random()*Math.PI*2, s:0.6+Math.random()*1.4,
+      c: Math.random() < 0.7 ? '255,210,122' : (Math.random() < 0.5 ? '255,164,27' : '226,69,127'),
+    }));
+  };
+  resize(); window.addEventListener('resize', resize);
+  const draw = (t) => {
+    ctx.clearRect(0,0,w,h);
+    for(const d of dots){
+      const a = reduceMotion ? 0.45 : 0.25 + 0.5*(0.5+0.5*Math.sin(t/1000*d.s + d.p));
+      ctx.beginPath(); ctx.arc(d.x, d.y, d.r, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(${d.c},${a.toFixed(3)})`; ctx.fill();
+    }
+    if(!reduceMotion) requestAnimationFrame(draw);
+  };
+  requestAnimationFrame(draw);
+}
+
+// ---------- fireworks (on finished rounds; big one at 10 & 15) ----------
+const fx = $('fx'), fctx = fx.getContext('2d');
+let sparks = [], fxRunning = false;
+function sizeFx(){
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  fx.width = innerWidth*dpr; fx.height = innerHeight*dpr;
+  fx.style.width = innerWidth+'px'; fx.style.height = innerHeight+'px';
+  fctx.setTransform(dpr,0,0,dpr,0,0);
+}
+sizeFx(); window.addEventListener('resize', sizeFx);
+const COLORS = ['#FFD27A','#FFA41B','#F2672E','#E2457F','#FFF4E2','#7FE0A0'];
+function burst(count){
+  if(reduceMotion) return;
+  for(let k=0;k<count;k++){
+    setTimeout(() => {
+      const x = innerWidth*(0.15 + Math.random()*0.7), y = innerHeight*(0.15 + Math.random()*0.35);
+      const col = COLORS[Math.floor(Math.random()*COLORS.length)];
+      const n = 60 + Math.floor(Math.random()*30);
+      for(let j=0;j<n;j++){
+        const ang = (j/n)*Math.PI*2, sp = 1.6 + Math.random()*2.6;
+        sparks.push({ x, y, vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp, life:1, col: Math.random()<0.2 ? '#FFF4E2' : col });
+      }
+      if(!fxRunning){ fxRunning = true; requestAnimationFrame(tickFx); }
+    }, k*320);
+  }
+}
+function tickFx(){
+  fctx.clearRect(0,0,innerWidth,innerHeight);
+  sparks = sparks.filter(s => s.life > 0);
+  for(const s of sparks){
+    s.vx *= 0.985; s.vy = s.vy*0.985 + 0.035; s.x += s.vx; s.y += s.vy; s.life -= 0.012;
+    fctx.globalAlpha = Math.max(0, s.life);
+    fctx.fillStyle = s.col;
+    fctx.beginPath(); fctx.arc(s.x, s.y, 2, 0, Math.PI*2); fctx.fill();
+  }
+  fctx.globalAlpha = 1;
+  if(sparks.length) requestAnimationFrame(tickFx); else { fxRunning = false; fctx.clearRect(0,0,innerWidth,innerHeight); }
+}
+
+// ---------- boot ----------
+buildRangoli();
+buildToran();
+buildDiyas();
+startSky();
+render();
+
+const demo = new URLSearchParams(location.search).has('demo');
+async function boot(){
+  if(demo){
+    // ?demo: local-only preview with fake scores, nothing is written to Firebase
+    const now = Date.now();
+    for(let i=0;i<11;i++){
+      const w = 21, l = 8 + ((i*7) % 12);
+      scores[KEY(i)] = i % 3 === 0 ? { a:String(l), b:String(w), t: now - (11-i)*8.2*60000 } : { a:String(w), b:String(l), t: now - (11-i)*8.2*60000 };
+    }
+    db = null;
+    setStatus(true, 'Demo mode — nothing is saved');
+    render();
+    return;
+  }
+  try{
+    const [{ initializeApp }, dbMod] = await Promise.all([
+      import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"),
+      import("https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"),
+    ]);
+    ({ ref, onValue, update } = dbMod);
+    const app = initializeApp(firebaseConfig);
+    const getDatabase = dbMod.getDatabase;
+    db = getDatabase(app);
+    onValue(ref(db, DB_PATH), snap => {
+      const all = snap.val() || {};
+      scores = {};
+      for(const k in all) if(k.startsWith('n2r')) scores[k] = all[k];
+      setStatus(true, 'Live — syncing for everyone');
+      render();
+    }, err => {
+      console.error(err);
+      setStatus(false, 'Connection issue — check Database rules');
+    });
+  }catch(err){
+    console.error(err);
+    setStatus(false, 'Could not connect to Firebase');
+  }
+}
+boot();
+</script>
+</body>
+</html>

@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Thursday Family Night — Live Scores</title>
+<title>Thursday Family Night #1 — Archive</title>
 
 <!-- Open Graph tags: without these, WhatsApp/Telegram/iMessage etc. show a bare link
      instead of a rich card with title, description and image. -->
-<meta property="og:title" content="Thursday Family Night — Live Scores">
-<meta property="og:description" content="Live scores for tonight's family badminton matches at Andalas Court. Tap in and watch the standings update instantly.">
-<meta property="og:image" content="https://rasheedali78624.github.io/Pemberani/assets/family-night-banner.png">
-<meta property="og:url" content="https://rasheedali78624.github.io/Pemberani/family-scoreboard.html">
+<meta property="og:title" content="Thursday Family Night #1 — Final Scores">
+<meta property="og:description" content="Final scores and stats from the first Thursday Family Night (8 Oct 2026) at Andalas Court.">
+<meta property="og:image" content="https://rasheedali78624.github.io/Pemberani/assets/family-night-1-banner.png">
+<meta property="og:url" content="https://rasheedali78624.github.io/Pemberani/family-night-1.html">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
 <style>
@@ -62,7 +62,7 @@
   }
   .sub{ font-size:13px; color:var(--ink-soft); }
   .status{ display:flex; align-items:center; justify-content:center; gap:8px; font-size:12.5px; color:var(--ink-soft); margin-top:10px; }
-  .dot{ width:9px; height:9px; border-radius:50%; background:var(--win); box-shadow:0 0 0 0 rgba(88,214,141,0.6); animation:pulse 1.8s infinite; }
+  .dot{ width:9px; height:9px; border-radius:50%; background:var(--gold); }
   .dot.err{ background:var(--red); animation:none; box-shadow:none; }
   @keyframes pulse{
     0%{ box-shadow:0 0 0 0 rgba(88,214,141,0.55); }
@@ -100,7 +100,9 @@
     width:56px; text-align:center; font-size:19px; font-weight:800; padding:7px 0;
     border-radius:9px; border:1px solid var(--line); background:#071830; color:var(--chalk);
   }
-  .score-input:focus{ outline:none; border-color:var(--gold); }
+  .score-input:focus{ outline:none; }
+  .score-input[readonly]{ pointer-events:none; -moz-appearance:textfield; }
+  .score-input::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
   .vs{
     text-align:center; font-size:11px; color:var(--navy); font-weight:800; padding:2px 0;
     background:var(--gold); width:34px; margin:2px auto; border-radius:6px; letter-spacing:0.5px;
@@ -142,25 +144,25 @@
 </head>
 <body>
 <header>
-  <div class="eyebrow">THURSDAY FAMILY NIGHT</div>
-  <h1>Live Scoreboard</h1>
-  <div class="sub">Andalas Court &middot; 8:00 &ndash; 10:00 PM &middot; First to 21</div>
+  <div class="eyebrow">THURSDAY FAMILY NIGHT &middot; #1 &middot; ARCHIVE</div>
+  <h1>Final Scoreboard</h1>
+  <div class="sub">Thu 8 Oct 2026 &middot; Andalas Court &middot; First to 21</div>
   <div class="status"><span class="dot" id="statusDot"></span><span id="statusText">Connecting&hellip;</span></div>
 </header>
 
 <div class="section-title">MATCH BY MATCH</div>
-<div class="section-sub">Tap a score box to update &mdash; everyone watching sees it instantly</div>
+<div class="section-sub">Read-only archive &middot; <a href="family-scoreboard.html" style="color:var(--gold-hi)">Go to the latest Family Night &rarr;</a></div>
 <div id="list"></div>
 
 <div class="section-title">🏆 NIGHT STATS</div>
-<div class="section-sub">Unlocks automatically once all 10 rounds are scored</div>
+<div class="section-sub">All 10 rounds</div>
 <div id="stats"></div>
 
-<footer>Scores sync live &mdash; everyone watching this page sees updates instantly.</footer>
+<footer>Archived results from Family Night #1. <a href="family-scoreboard.html" style="color:var(--gold-hi)">Latest Family Night &rarr;</a></footer>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 // ============================================================
 // PASTE THE SAME firebaseConfig you used for the jersey tracker
@@ -216,32 +218,16 @@ function render(){
         </div>
         <div class="team-row ${aWin?'winner':''}">
           <span class="team-name">${r.teamA.join(' & ')}${aWin?' <span class="trophy">🏆</span>':''}</span>
-          <input class="score-input" type="number" min="0" max="30" data-round="${key}" data-side="a" value="${s.a}">
+          <input class="score-input" type="number" min="0" max="30" data-round="${key}" data-side="a" value="${s.a}" readonly tabindex="-1">
         </div>
         <div class="vs">VS</div>
         <div class="team-row ${bWin?'winner':''}">
           <span class="team-name">${r.teamB.join(' & ')}${bWin?' <span class="trophy">🏆</span>':''}</span>
-          <input class="score-input" type="number" min="0" max="30" data-round="${key}" data-side="b" value="${s.b}">
+          <input class="score-input" type="number" min="0" max="30" data-round="${key}" data-side="b" value="${s.b}" readonly tabindex="-1">
         </div>
         <div class="sitout">Sitting out: ${r.sit}</div>
       </div>`;
   }).join('');
-
-  list.querySelectorAll('.score-input').forEach(inp => {
-    inp.addEventListener('change', async (e) => {
-      const roundKey = e.target.dataset.round;
-      const side = e.target.dataset.side;
-      const val = e.target.value;
-      const current = scores[roundKey] || {a:'', b:''};
-      current[side] = val;
-      try{
-        await update(ref(db, `${DB_PATH}/${roundKey}`), current);
-      }catch(err){
-        console.error(err);
-        alert("Couldn't save — check your connection.");
-      }
-    });
-  });
 
   renderStats();
 }
@@ -346,7 +332,7 @@ async function boot(){
     scoresRef = ref(db, DB_PATH);
     onValue(scoresRef, (snap) => {
       scores = snap.val() || {};
-      setStatus(true, 'Live — syncing for everyone');
+      setStatus(true, 'Archive — final results');
       render();
     }, (err) => {
       console.error(err);
