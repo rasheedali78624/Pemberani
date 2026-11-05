@@ -3,13 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
-  <title>Scorer · Pemberani 2.0</title>
+  <title>Scorer · Pemberani 3.0</title>
   <meta name="robots" content="noindex">
   <meta name="theme-color" content="#000000">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <link rel="icon" href="assets/icon.png" type="image/png">
   <link rel="apple-touch-icon" href="assets/icon.png">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* Edition 3.0 skin over the shared console styles */
+    :root { --bg:#050505; --bg-elev:#0b0b0b; --card:#111111; --card-2:#1a1a1a; --gold:#FFC61A; --gold-2:#FFE45C; --gold-3:#E08A00;
+      --gold-soft:rgba(255,198,26,.12); --muted:#BFC3C9; --radius:6px; --radius-sm:4px;
+      --font:'Archivo', 'Helvetica Neue', Arial, sans-serif; }
+    .bar h1, .panel h2 { font-family:'Anton', Impact, sans-serif; font-weight:400; text-transform:uppercase; letter-spacing:.02em; }
+    .btn-primary { background:var(--gold) !important; color:#050505 !important; }
+    details.admin .admin-body > div:last-child { display:none; } /* E2 certificate log not used in 3.0 */
+  </style>
   <style>
     body { min-height: 100svh; display: flex; flex-direction: column; -webkit-user-select: none; user-select: none; }
     .bar { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: 12px; padding: 12px 16px;
@@ -115,8 +126,8 @@
   <div class="hide" id="console" style="display:flex; flex-direction:column; gap:16px; flex:1">
     <div class="seg" role="tablist" id="courtTabs">
       <span class="thumb"></span>
-      <button role="tab" data-court="1" aria-selected="true">Court 1 · Group A</button>
-      <button role="tab" data-court="2" aria-selected="false">Court 2 · Group B</button>
+      <button role="tab" data-court="1" aria-selected="true">Court C4 · Group A</button>
+      <button role="tab" data-court="2" aria-selected="false">Court C5 · Group B</button>
     </div>
     <div id="main" class="scorer"></div>
 

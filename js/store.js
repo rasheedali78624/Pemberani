@@ -17,7 +17,7 @@ const params = new URLSearchParams(location.search);
 const DEMO = params.has('demo') || !firebaseConfig.apiKey;
 
 function createDemoStore() {
-  const KEY = 'pt2-demo-state';
+  const KEY = `${DB_ROOT}-demo-state`;
   const listeners = new Set();
   const authListeners = new Set();
   let user = null;
@@ -49,11 +49,11 @@ function createDemoStore() {
     },
     async resetAll() { write({}); },
     async logCert(entry) {
-      const log = JSON.parse(localStorage.getItem('pt2-demo-certlog') || '{}');
+      const log = JSON.parse(localStorage.getItem(`${DB_ROOT}-demo-certlog`) || '{}');
       log['d' + Date.now()] = { ...entry, at: Date.now() };
-      localStorage.setItem('pt2-demo-certlog', JSON.stringify(log));
+      localStorage.setItem(`${DB_ROOT}-demo-certlog`, JSON.stringify(log));
     },
-    onCertLog(cb) { cb(JSON.parse(localStorage.getItem('pt2-demo-certlog') || '{}')); },
+    onCertLog(cb) { cb(JSON.parse(localStorage.getItem(`${DB_ROOT}-demo-certlog`) || '{}')); },
     auth: {
       onChange(cb) { authListeners.add(cb); cb(user); },
       async signIn(email) { user = { email: email || 'demo@local' }; authListeners.forEach(cb => cb(user)); },

@@ -48,7 +48,7 @@ function loadTemplate(kind) {
     const img = new Image();
     img.onload = () => resolve(img);
     img.onerror = reject;
-    img.src = `assets/cert/${kind}.jpg`;
+    img.src = `../assets/cert/${kind}.jpg`;
   });
   return templates[kind];
 }

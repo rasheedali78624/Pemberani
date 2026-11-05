@@ -3,210 +3,373 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Pemberani Tournament 2.0</title>
-  <meta name="description" content="Live scores, fixtures, standings and bracket for Pemberani Badminton Club's Tournament Edition 2.0.">
-  <meta name="theme-color" content="#000000">
-  <meta property="og:title" content="Pemberani Tournament 2.0 — Live">
-  <meta property="og:description" content="Live scores, fixtures and standings. Play with courage. Win with pride.">
-  <meta property="og:image" content="assets/banner.jpg">
+  <title>Pemberani Tournament · Edition 3.0</title>
+  <meta name="description" content="Pemberani Tournament Edition 3.0. Saturday 5 December 2026, 10 AM – 5 PM, Andalas Sports Centre. Fiercer. Grander. More competitive than ever.">
+  <meta name="theme-color" content="#050505">
+  <meta property="og:title" content="Pemberani Tournament · Edition 3.0">
+  <meta property="og:description" content="Sat 05.12.2026 · Andalas Sports Centre. Fiercer. Grander. More competitive than ever.">
+  <meta property="og:image" content="https://rasheedali78624.github.io/Pemberani/assets/e3/og.jpg">
+  <meta property="og:url" content="https://rasheedali78624.github.io/Pemberani/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="assets/icon.png" type="image/png">
   <link rel="apple-touch-icon" href="assets/icon.png">
-  <link rel="stylesheet" href="css/style.css">
-  <script>document.documentElement.classList.add('js')</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="assets/crest.png">
+  <link rel="stylesheet" href="css/e3.css">
+  <script>try { if (sessionStorage.getItem('pt3-seen')) document.documentElement.classList.add('skip-intro'); sessionStorage.setItem('pt3-seen', 1); } catch (e) {}</script>
 </head>
 <body>
 
-<header class="nav" id="nav">
+<div class="progress" aria-hidden="true"><i></i></div>
+
+<!-- ── NAV ── -->
+<header class="nav">
   <div class="wrap">
-    <a class="nav-brand" href="#top"><img src="assets/icon.png" alt="">Pemberani 2.0</a>
+    <a class="brand" href="#top"><img src="assets/icon.png" alt="">Pemberani <em>3.0</em></a>
     <nav class="nav-links" aria-label="Sections">
-      <a href="#live">Live</a>
-      <a href="#fixtures">Fixtures</a>
-      <a href="#standings">Standings</a>
-      <a href="#bracket">Bracket</a>
-      <a href="#format">Format</a>
-      <a href="#champions">Champions</a>
+      <a href="#top">Home</a><a href="#event">The Event</a><a href="#players">Players</a>
+      <a href="#match-centre">Match Centre</a><a href="#standings">Standings</a><a href="#bracket-sec">Bracket</a><a href="#prizes">Prizes</a>
     </nav>
-    <a class="live-pill off" id="navLive" href="#live"><span class="dot"></span><span>No matches live</span></a>
+    <span class="tag live live-pill">Live</span>
+    <button class="menu-btn" aria-label="Menu" aria-expanded="false" aria-controls="menu"><i></i><i></i></button>
   </div>
 </header>
-<nav class="chips" id="chips" aria-label="Sections">
-  <a href="#live">Live</a><a href="#fixtures">Fixtures</a><a href="#standings">Standings</a>
-  <a href="#bracket">Bracket</a><a href="#format">Format</a><a href="#champions">Champions</a>
-</nav>
+<div class="menu" id="menu" aria-hidden="true">
+  <a href="#top"><span class="ln"><span style="--i:0">Home</span></span></a>
+  <a href="#event"><span class="ln"><span style="--i:1">The Event</span></span></a>
+  <a href="#players"><span class="ln"><span style="--i:2">Players</span></span></a>
+  <a href="#match-centre"><span class="ln"><span style="--i:3">Match Centre</span></span></a>
+  <a href="#standings"><span class="ln"><span style="--i:4">Standings</span></span></a>
+  <a href="#bracket-sec"><span class="ln"><span style="--i:5">Bracket</span></span></a>
+  <a href="#prizes"><span class="ln"><span style="--i:6">Prizes</span></span></a>
+  <div class="menu-foot">Sat 05.12.2026 · Andalas Sports Centre</div>
+</div>
 
-<main>
-  <section class="hero" id="top">
-    <div class="hero-inner" id="heroInner">
-      <img class="hero-crest" src="assets/crest.png" alt="Pemberani Badminton Club crest" width="459" height="640">
-      <div class="eyebrow">Pemberani Badminton Club</div>
-      <h1>Tournament<br><span class="gold-text">Edition 2.0</span></h1>
-      <p class="sub">Play with courage. Win with pride.</p>
-      <div class="hero-cta">
-        <a class="btn btn-primary" href="#live">Watch live</a>
-        <a class="btn btn-ghost" href="#fixtures">See fixtures</a>
-      </div>
-      <div class="countdown hide" id="countdown"></div>
-    </div>
-    <div class="scroll-cue" aria-hidden="true"></div>
-  </section>
+<main id="top">
 
-  <section class="statement" id="statement" aria-label="The tournament in one line">
-    <div class="statement-sticky">
-      <div class="wrap"><p id="statementText">Twelve pairs. Two courts. Thirty group battles. One *trophy.*</p></div>
-    </div>
-  </section>
+<!-- ═════════ 01 · HERO ═════════ -->
+<section class="hero" data-scene>
+  <div class="hero-bg" aria-hidden="true">
+    <svg class="court-art" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMax slice">
+      <g fill="none" stroke="#1e1e1e" stroke-width="2">
+        <path d="M330 1000 L640 420 L960 420 L1270 1000"/>
+        <path d="M390 1000 L660 420 M1210 1000 L940 420"/>
+        <path d="M800 420 L800 1000"/>
+        <path d="M515 655 L1085 655"/>
+        <path d="M600 520 L1000 520"/>
+        <path d="M640 420 L960 420"/>
+      </g>
+      <path class="yl" d="M455 800 L1145 800" stroke="#FFC61A" stroke-width="3" fill="none"/>
+      <g stroke="#2a2a2a" stroke-width="1.5">
+        <path d="M560 560 L1040 560" stroke="#3a3a3a" stroke-width="3"/>
+        <path d="M560 560 L560 470 M1040 560 L1040 470"/>
+        <path d="M560 470 L1040 470"/>
+      </g>
+    </svg>
+    <div class="photo missing"><img data-photo="hero" alt="" fetchpriority="high"></div>
+  </div>
+  <svg class="hero-shuttle" viewBox="0 0 200 300" aria-hidden="true"><use href="#shuttle"/></svg>
 
-  <section class="block" id="live">
-    <div class="wrap">
-      <div class="section-head reveal">
-        <div class="row">
-          <div>
-            <h2>Live on court.</h2>
-            <p>Every rally, the moment it lands. No refreshing needed.</p>
-          </div>
-          <span class="status" id="connStatus"><span class="dot"></span>Connecting…</span>
-        </div>
-      </div>
-      <div class="courts reveal" data-delay="1" id="courts"></div>
-      <div class="card ticker reveal hide" id="ticker">
-        <span class="ticker-label">Latest</span>
-        <div class="ticker-track" id="tickerTrack"></div>
-      </div>
-      <div class="live-actions reveal">
-        <button class="btn btn-quiet btn-sm" id="tvBtn">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-          TV mode
-        </button>
-        <button class="btn btn-quiet btn-sm" id="shareBtn">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v7a2 2 0 002 2h12a2 2 0 002-2v-7M16 6l-4-4-4 4M12 2v13"/></svg>
-          Share
-        </button>
-      </div>
-    </div>
-  </section>
+  <div class="wrap hero-top">
+    <img class="hero-crest" src="assets/crest.png" alt="Pemberani Badminton Club crest" width="459" height="640">
+    <p class="label plain" style="text-align:right">Pemberani Badminton Club<br><b>presents</b></p>
+  </div>
 
-  <section class="block" id="follow" style="padding-top:0">
-    <div class="wrap">
-      <div class="card follow reveal">
-        <div>
-          <h3>Follow your pair.</h3>
-          <p>Pick a pair and we'll highlight their matches, track their record, and tell you when they're up next.</p>
-          <label class="sr" for="followSelect">Pair to follow</label>
-          <select class="select" id="followSelect"></select>
-        </div>
-        <div class="follow-card" id="followCard"></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="block" id="fixtures">
-    <div class="wrap">
-      <div class="section-head reveal">
-        <h2>Fixtures.</h2>
-        <p>Everyone plays everyone in their group. Fifteen matches per court, nobody plays back to back.</p>
-      </div>
-      <div class="seg reveal" role="tablist" id="fxTabs">
-        <span class="thumb"></span>
-        <button role="tab" data-tab="G1" aria-selected="true">Group A · Court 1</button>
-        <button role="tab" data-tab="G2" aria-selected="false">Group B · Court 2</button>
-        <button role="tab" data-tab="KO" aria-selected="false">Knockout</button>
-      </div>
-      <div class="fixtures reveal" data-delay="1">
-        <div class="fx-meta" id="fxMeta"></div>
-        <div class="card"><ol class="fx-list" id="fxList"></ol></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="block" id="standings">
-    <div class="wrap">
-      <div class="section-head reveal">
-        <h2>Standings.</h2>
-        <p>Top four in each group go through to the quarter-finals.</p>
-      </div>
-      <div class="tables" id="tables"></div>
-    </div>
-  </section>
-
-  <section class="block" id="bracket">
-    <div class="wrap">
-      <div class="section-head reveal">
-        <h2>The road to the trophy.</h2>
-        <p>Knockouts are best of three games to 21. Group winners are kept apart until the final.</p>
-      </div>
-      <div class="bracket-scroll reveal" data-delay="1"><div class="bracket" id="bracketEl"></div></div>
-    </div>
-  </section>
-
-  <section class="block" id="format">
-    <div class="wrap">
-      <div class="section-head reveal">
-        <h2>How it works.</h2>
-        <p>Simple format. Zero mercy.</p>
-      </div>
-      <div class="tiles">
-        <div class="card tile reveal"><span class="k">Players</span><h3>Twelve pairs, twenty-four players.</h3><div class="big gold-text" data-count="12">12</div></div>
-        <div class="card tile reveal" data-delay="1"><span class="k">Groups</span><h3>Two groups of six.</h3><p>Each group owns its court. No mixing.</p><div class="big" data-count="2">2</div></div>
-        <div class="card tile reveal" data-delay="2"><span class="k">Group stage</span><h3>Fifteen matches per group.</h3><p>Every pair plays all five rivals. One game to 21, no deuce.</p><div class="big" data-count="15">15</div></div>
-        <div class="card tile span3 reveal"><span class="k">Qualify</span><h3>Top four go through.</h3><p>Ranked by wins, then point difference, then points scored, then head-to-head. The bottom two in each group are out.</p><div class="big" data-count="8">8</div></div>
-        <div class="card tile span3 reveal" data-delay="1"><span class="k">Knockout</span><h3>Best of three.</h3><p>Quarter-finals, semi-finals, third place and the final. Games to 21 with deuce, capped at 30.</p><div class="big" data-count="3">3</div></div>
-        <div class="card tile span6 reveal"><span class="k">Prizes</span><h3>Hampers and goodies from PBC.</h3>
-          <ul class="prize-list">
-            <li><b>Champions</b><span>Hamper + goodies</span></li>
-            <li><b>Runners-up</b><span>Hamper + goodies</span></li>
-            <li><b>Third place</b><span>Hamper + goodies</span></li>
-            <li><b>4th to 12th</b><span>PBC goodies</span></li>
-          </ul>
+  <div class="wrap hero-type">
+    <h1 class="display">
+      <span class="ln"><span style="--i:0">Pemberani</span></span>
+      <span class="ln"><span style="--i:1" class="outline">Tournament</span></span>
+    </h1>
+    <div class="row2">
+      <div class="display ed"><span class="ln"><span style="--i:2">Edition <span class="y">03</span></span></span></div>
+      <div class="hero-tag">
+        <p>Fiercer. Grander.<br><span class="y">More competitive</span> than ever.</p>
+        <small>Lebih sengit · Lebih besar · Lebih kompetitif</small>
+        <div class="btn-row hero-cta">
+          <a class="btn magnetic" href="live.html">Enter the championship <span class="arr">→</span></a>
+          <a class="btn ghost magnetic" href="#statement">Explore the tournament <span class="arr">↓</span></a>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 
-  <section class="block" id="champions">
-    <div class="wrap">
-      <div class="section-head reveal">
-        <h2>Hall of fame.</h2>
-        <p>Names that took the trophy home.</p>
+  <div class="wrap">
+    <div class="hero-bar">
+      <div><span class="k">Date</span><span class="v">Sat 05.12.26</span></div>
+      <div><span class="k">Time</span><span class="v">10AM – 5PM</span></div>
+      <div><span class="k">Venue</span><span class="v">Andalas Sports Centre</span></div>
+      <div data-cd-label><span class="k">Countdown</span><div class="countdown" id="countdown"></div></div>
+    </div>
+  </div>
+</section>
+
+<div class="band" aria-hidden="true"><div class="track">
+  <span>Fiercer</span><span>Grander</span><span>More competitive</span><span>Lebih sengit</span><span>Lebih besar</span><span>Lebih kompetitif</span>
+  <span>Fiercer</span><span>Grander</span><span>More competitive</span><span>Lebih sengit</span><span>Lebih besar</span><span>Lebih kompetitif</span>
+</div></div>
+
+<!-- ═════════ 02 · STATEMENT (pinned) ═════════ -->
+<section class="statement" id="statement" data-pin data-steps="4" data-phase="0">
+  <div class="pin">
+    <div class="bgs" aria-hidden="true">
+      <div class="photo s0 missing"><img data-photo="story-1" alt="" loading="lazy"></div>
+      <div class="photo s1 missing"><img data-photo="story-2" alt="" loading="lazy"></div>
+      <div class="photo s2 missing"><img data-photo="story-3" alt="" loading="lazy"></div>
+    </div>
+    <div class="ghost-num" aria-hidden="true">03</div>
+    <div class="lines">
+      <div class="st"><p class="label">The statement</p>
+        <h2 class="display"><span class="ln"><span style="--i:0">This is not</span></span><span class="ln"><span style="--i:1">just a <span class="y">game.</span></span></span></h2></div>
+      <div class="st"><p class="label">Courage</p>
+        <h2 class="display"><span class="ln"><span style="--i:0">It's about</span></span><span class="ln"><span style="--i:1">the courage</span></span><span class="ln"><span style="--i:2" class="y">to compete.</span></span></h2></div>
+      <div class="st"><p class="label">Pride</p>
+        <h2 class="display"><span class="ln"><span style="--i:0">It's about</span></span><span class="ln"><span style="--i:1">the pride</span></span><span class="ln"><span style="--i:2" class="y">of victory.</span></span></h2></div>
+      <div class="st st4"><img src="assets/crest.png" alt="" loading="lazy">
+        <h2 class="display"><span class="ln"><span style="--i:0">This is</span></span><span class="ln"><span style="--i:1">Pemberani.</span></span></h2></div>
+    </div>
+    <div class="meter" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+  </div>
+</section>
+
+<!-- ═════════ 03 · THE CHAMPIONSHIP ═════════ -->
+<section class="champ sec" id="event">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="label" data-reveal><b>01</b> The Championship</p>
+      <h2 class="display" data-reveal="lines"><span class="ln" data-reveal-self><span style="--i:0">The biggest</span></span><span class="ln" data-reveal-self><span style="--i:1"><span class="y">Pemberani</span> yet.</span></span></h2>
+      <p class="lede" data-reveal>One day. Two courts. Twenty-four players chasing one crown. Every match counts from the first serve.</p>
+    </div>
+    <div class="numbers">
+      <div class="n" data-reveal style="--i:0"><b data-count="24">24</b><span>Players</span><small>Registered so far</small></div>
+      <div class="n" data-reveal style="--i:1"><b data-count="12">12</b><span>Pairs</span><small>Doubles</small></div>
+      <div class="n" data-reveal style="--i:2"><b data-count="2">02</b><span>Groups</span><small>A and B · round robin</small></div>
+      <div class="n" data-reveal style="--i:3"><b data-count="2">02</b><span>Courts</span><small>C4 and C5</small></div>
+      <div class="n" data-reveal style="--i:4"><b data-count="38">38</b><span>Matches</span><small>30 group · 8 knockout</small></div>
+      <div class="n" data-reveal style="--i:5"><b data-count="3">03</b><span>Edition</span><small>The third chapter</small></div>
+    </div>
+    <div class="reg" data-reveal>
+      <div class="l">
+        <p class="label">Registration</p>
+        <h3>Open now.<br><span class="y">Closes 10 Nov.</span></h3>
+        <p>Registration opened on 21 Oct 2026. The fee covers court, shuttles, drinks and more. If the fee is a concern, PM Fareez to discuss.</p>
       </div>
-      <div class="hof">
-        <div class="card hof-photo reveal">
-          <img src="assets/champions-e1.jpg" alt="Rasheed and Jai holding the Edition 1 trophy" id="hofImg" loading="lazy">
-          <div class="hof-cap"><small>Edition 1.0 champions</small><b>Rasheed &amp; Jai</b></div>
-        </div>
-        <div class="card hof-next reveal" data-delay="1" id="hofNext">
-          <img src="assets/crest.png" alt="">
-          <h3>Edition 2.0 champions.<br><span class="gold-text">To be decided.</span></h3>
-          <p>Rasheed and Jai are split up this time — Rasheed with Haziq in Group B, Jai with Paul in Group A. Can either defend the crown?</p>
-        </div>
+      <div class="r">
+        <p class="label">Entry fee</p>
+        <div class="fee">RM40<small>per player</small></div>
+        <div class="closing">Pay to Fareez by<b>10.11.2026</b></div>
       </div>
     </div>
-  </section>
+    <p class="prov">Pairs, groups and match count are provisional until the draw is confirmed.</p>
+  </div>
+</section>
+
+<!-- ═════════ 04 · DEFENDING CHAMPIONS ═════════ -->
+<section class="defending sec" id="champions" data-scene>
+  <div class="wrap def-grid">
+    <div class="photo def-photo missing">
+      <img data-photo="champions-e2" alt="Pok and Daus, Edition 2.0 champions" loading="lazy">
+      <div class="fallback" aria-hidden="true"><span class="big">E2</span><img src="assets/crest.png" alt=""></div>
+      <span class="stamp">Edition 2.0 champions</span>
+    </div>
+    <div class="def-copy">
+      <p class="label" data-reveal><b>02</b> The Defending Champions</p>
+      <h2 class="display" data-reveal="lines"><span class="ln" data-reveal-self><span style="--i:0">Pok</span></span><span class="ln" data-reveal-self><span style="--i:1"><span class="y">&amp;</span> Daus</span></span></h2>
+      <p class="lede" data-reveal>Champions of Edition 2.0. They came in as one pair among twelve and left with the crown. Now every pair in the draw is coming for it.</p>
+      <div class="hof" data-reveal>
+        <div><div class="e">1.0</div><div class="nm">Rasheed &amp; Jai</div></div>
+        <div class="cur"><div class="e">2.0</div><div class="nm">Pok &amp; Daus</div></div>
+        <div class="next"><div class="e">3.0</div><div class="nm">Your name here?</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="band dark" aria-hidden="true"><div class="track">
+  <span>Group stage</span><span>Quarter-finals</span><span>Semi-finals</span><span>Final</span><span>Champions</span>
+  <span>Group stage</span><span>Quarter-finals</span><span>Semi-finals</span><span>Final</span><span>Champions</span>
+</div></div>
+
+<!-- ═════════ 05 · FORMAT ═════════ -->
+<section class="format sec" id="format" data-scene>
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="label" data-reveal><b>03</b> The Format</p>
+      <h2 class="display" data-reveal="lines"><span class="ln" data-reveal-self><span style="--i:0">The road</span></span><span class="ln" data-reveal-self><span style="--i:1">to <span class="y">glory.</span></span></span></h2>
+    </div>
+    <div class="road" id="road">
+      <span class="fill" aria-hidden="true"></span>
+      <div class="stage"><span class="dot">01</span><h3>Group stage</h3><p>Two groups of six. Everyone plays everyone in their group.</p><span class="tag rule">1 game · to 21</span></div>
+      <div class="stage"><span class="dot">02</span><h3>Quarter-finals</h3><p>Top four from each group cross over: A1 v B4, B2 v A3, B1 v A4, A2 v B3.</p><span class="tag rule">Best of 3 · to 15</span></div>
+      <div class="stage"><span class="dot">03</span><h3>Semi-finals</h3><p>Four pairs left. Lose and you play for third.</p><span class="tag rule">Best of 3 · to 15</span></div>
+      <div class="stage"><span class="dot">04</span><h3>Final</h3><p>One match for the crown, plus the third-place play-off.</p><span class="tag rule">Best of 3 · to 15</span></div>
+      <div class="stage"><span class="dot">★</span><h3>Champions</h3><p>Cash prize, the trophy, and your names next to 1.0 and 2.0.</p></div>
+    </div>
+    <div class="groups-ab">
+      <div data-reveal><span class="gl">A</span><span class="tag y">Court C4</span><h4>Group A</h4><p>Six pairs, fifteen matches, one court. Top four go through.</p><div class="qual"><i class="q"></i><i class="q"></i><i class="q"></i><i class="q"></i><i></i><i></i></div></div>
+      <div data-reveal style="--i:1"><span class="gl">B</span><span class="tag y">Court C5</span><h4>Group B</h4><p>Six pairs, fifteen matches, one court. Top four go through.</p><div class="qual"><i class="q"></i><i class="q"></i><i class="q"></i><i class="q"></i><i></i><i></i></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ 06 · LINE-UP ═════════ -->
+<section class="lineup sec" id="players">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="label" data-reveal><b>04</b> The Line-up</p>
+      <h2 class="display" data-reveal="lines"><span class="ln" data-reveal-self><span style="--i:0">Twelve pairs.</span></span><span class="ln" data-reveal-self><span style="--i:1" class="y">One crown.</span></span></h2>
+      <p class="lede" data-reveal>The draw is still to come. Tap a pair to see their matches; names appear here as soon as the pairs are confirmed.</p>
+    </div>
+    <div class="tabs" role="tablist" data-reveal>
+      <button role="tab" data-pg="G1" aria-selected="true">Group A</button>
+      <button role="tab" data-pg="G2" aria-selected="false">Group B</button>
+    </div>
+    <div class="pairs" id="pairs" data-group="G1"></div>
+
+    <div class="roster">
+      <p class="label" data-reveal>Registered</p>
+      <h3 data-reveal>The <span class="y" id="rosterCount">24</span></h3>
+      <div class="names" id="names" data-reveal></div>
+    </div>
+  </div>
+</section>
+<dialog class="profile" id="profile"></dialog>
+
+<!-- ═════════ 07 · MATCH CENTRE ═════════ -->
+<section class="mc sec" id="match-centre">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="label" data-reveal><b>05</b> Match Centre <span class="conn"><i></i><span>Connecting…</span></span></p>
+      <h2 class="display" data-reveal="lines"><span class="ln" data-reveal-self><span style="--i:0">On court</span></span><span class="ln" data-reveal-self><span style="--i:1" class="y">right now.</span></span></h2>
+    </div>
+    <div class="courts" id="courts" data-reveal></div>
+    <div class="fx-tools">
+      <h3>Fixtures</h3>
+      <div class="tabs" role="tablist">
+        <button role="tab" data-fx="all" aria-selected="true">All</button>
+        <button role="tab" data-fx="G1" aria-selected="false">Group A</button>
+        <button role="tab" data-fx="G2" aria-selected="false">Group B</button>
+        <button role="tab" data-fx="ko" aria-selected="false">Knockout</button>
+        <button role="tab" data-fx="results" aria-selected="false">Results</button>
+      </div>
+    </div>
+    <div class="fx-list" id="fixtures" data-limit="8"></div>
+    <div class="btn-row more">
+      <button class="btn ghost" id="fxMore"><span class="t">All matches</span></button>
+      <a class="btn" href="live.html">Full match centre <span class="arr">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ 08 · STANDINGS ═════════ -->
+<section class="standings sec" id="standings">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="label" data-reveal><b>06</b> Group Standings</p>
+      <h2 class="display" data-reveal="lines"><span class="ln" data-reveal-self><span style="--i:0">Earn</span></span><span class="ln" data-reveal-self><span style="--i:1">your <span class="y">place.</span></span></span></h2>
+      <p class="lede" data-reveal>Ranked by wins, then point difference, then points scored, then head-to-head. Updates live after every match.</p>
+    </div>
+    <div class="tables" data-standings></div>
+  </div>
+</section>
+
+<!-- ═════════ 09 · BRACKET ═════════ -->
+<section class="bracket-sec sec" id="bracket-sec">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="label" data-reveal><b>07</b> Knockouts</p>
+      <h2 class="display" data-reveal="lines"><span class="ln" data-reveal-self><span style="--i:0">Eight pairs.</span></span><span class="ln" data-reveal-self><span style="--i:1">No <span class="y">second chances.</span></span></span></h2>
+    </div>
+    <p class="swipe-hint">Swipe to follow the bracket →</p>
+    <div class="bracket-scroll" id="bracketScroll"><div class="bracket" id="bracket"></div></div>
+  </div>
+</section>
+
+<!-- ═════════ 10 · REWARDS ═════════ -->
+<section class="rewards sec" id="prizes">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="label" data-reveal><b>08</b> The Rewards</p>
+      <h2 class="display" data-reveal="lines"><span class="ln" data-reveal-self><span style="--i:0">Play for</span></span><span class="ln" data-reveal-self><span style="--i:1" class="y">something.</span></span></h2>
+    </div>
+    <div class="podium" id="podium">
+      <div class="pl"><div class="top"><span class="k">Runners-up</span><h3>2nd place</h3><p><b>Cash prize</b> · amount TBA</p></div><div class="block" style="--h:clamp(160px,22vw,300px);--i:1"><b>2</b></div></div>
+      <div class="pl first"><div class="top"><span class="k">Champions</span><h3>1st place</h3><p><b>Cash prize</b> · amount TBA</p></div><div class="block" style="--h:clamp(220px,30vw,420px);--i:0"><b>1</b></div></div>
+      <div class="pl"><div class="top"><span class="k">Third place</span><h3>3rd place</h3><p><b>Cash prize</b> · amount TBA</p></div><div class="block" style="--h:clamp(120px,16vw,220px);--i:2"><b>3</b></div></div>
+    </div>
+    <div class="goody" data-reveal>
+      <h3>Every entry wins<br>a goody bag.</h3>
+      <p>Worth up to RM15 per entry. Prize amounts will be announced closer to the day.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ GALLERY (only shown when photos exist) ═════════ -->
+<section class="gallery sec" id="gallery" hidden>
+  <div class="wrap"><div class="sec-head">
+    <p class="label"><b>09</b> Moments</p>
+    <h2 class="display"><span class="ln in"><span>The story</span></span><span class="ln in"><span class="y">so far.</span></span></h2>
+  </div></div>
+  <div class="g-track" id="gTrack"></div>
+</section>
+
+<!-- ═════════ 11 · FINALE ═════════ -->
+<section class="finale" data-scene>
+  <img class="crest" src="assets/crest.png" alt="" loading="lazy">
+  <div class="wrap">
+    <h2 class="display" data-reveal="lines">
+      <span class="ln" data-reveal-self><span style="--i:0">Play with courage.</span></span>
+      <span class="ln" data-reveal-self><span style="--i:1">Win with pride.</span></span>
+    </h2>
+    <div class="ed" data-reveal><img src="assets/crest.png" alt="" loading="lazy">Pemberani 3.0 · 05.12.2026</div>
+    <div class="btn-row">
+      <a class="btn dark magnetic" href="live.html">Enter the championship <span class="arr">→</span></a>
+      <a class="btn ghost magnetic" href="#event" style="--fg:var(--black);box-shadow:inset 0 0 0 1.5px var(--black)">Register · RM40</a>
+    </div>
+  </div>
+</section>
 </main>
 
-<footer>
+<footer class="foot">
   <div class="wrap">
-    <span>© 2026 Pemberani Badminton Club · Tournament Edition 2.0</span>
+    <span>© 2026 Pemberani Badminton Club · Andalas Sports Centre</span>
     <nav>
-      <a href="cert.html">E-Certificate</a>
-      <a href="score.html">Scorer console</a>
-      <a href="index-edition1.html">Edition 1 archive</a>
-      <a href="#top">Back to top ↑</a>
+      <a href="live.html">Match centre</a>
+      <a href="edition2/index.html">Edition 2.0</a>
+      <a href="score.html">Scorers</a>
     </nav>
   </div>
 </footer>
 
-<div class="tv" id="tv" role="dialog" aria-label="TV scoreboard">
-  <div class="tv-head">
-    <img src="assets/icon.png" alt="">
-    <h2>Pemberani Tournament 2.0 · Live</h2>
-    <button class="btn btn-quiet btn-sm" id="tvClose">Exit</button>
-  </div>
-  <div class="courts" id="tvCourts"></div>
-</div>
+<button class="to-top" aria-label="Back to top">
+  <svg class="ring" viewBox="0 0 56 56" aria-hidden="true"><circle cx="28" cy="28" r="26"/></svg>
+  <svg class="arrow" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 13V3M3.5 7.5 8 3l4.5 4.5" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+</button>
 
-<div class="toast" id="toast" role="status"></div>
+<!-- shuttlecock drawing -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="feather" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#BFC3C9"/></linearGradient>
+    <symbol id="shuttle" viewBox="0 0 200 300" overflow="visible">
+      <linearGradient id="trail" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#FFC61A"/><stop offset="1" stop-color="#FFC61A" stop-opacity="0"/></linearGradient>
+      <path class="trail" d="M86 -1400 L114 -1400 L112 0 L88 0 Z" fill="url(#trail)"/>
+      <g stroke="#FFE45C" stroke-width="2" stroke-linecap="round">
+        <path d="M60 -260 L66 -20" opacity=".45"/><path d="M140 -260 L134 -20" opacity=".45"/>
+      </g>
+      <path d="M38 10 L162 10 L130 200 L70 200 Z" fill="url(#feather)" opacity=".95"/>
+      <g stroke="#9aa0a6" stroke-width="1.5" fill="none">
+        <path d="M52 10 L78 200 M68 10 L84 200 M84 10 L92 200 M100 10 L100 200 M116 10 L108 200 M132 10 L116 200 M148 10 L122 200"/>
+      </g>
+      <path d="M48 70 L152 70" stroke="#050505" stroke-width="5"/>
+      <path d="M58 130 L142 130" stroke="#050505" stroke-width="5"/>
+      <path d="M66 200 L134 200 L134 214 L66 214 Z" fill="#FFC61A"/>
+      <path d="M66 214 C66 268 134 268 134 214 Z" fill="#f2f2f2"/>
+    </symbol>
+  </defs>
+</svg>
 
-<script type="module" src="js/app.js"></script>
+<script type="module" src="js/e3/site.js"></script>
 </body>
 </html>

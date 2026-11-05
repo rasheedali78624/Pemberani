@@ -289,7 +289,7 @@ function renderBracket() {
     </div></div>`;
 
   if (champ) {
-    $('#hofNext').innerHTML = `<img src="assets/crest.png" alt=""><h3>Edition 2.0 champions.<br><span class="gold-text">${esc(champ)}</span></h3><p>Congratulations — your names join the hall of fame.</p>`;
+    $('#hofNext').innerHTML = `<img src="../assets/crest.png" alt=""><h3>Edition 2.0 champions.<br><span class="gold-text">${esc(champ)}</span></h3><p>Congratulations — your names join the hall of fame.</p>`;
   }
 }
 
