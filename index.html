@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Pemberani Tournament · Edition 3.0</title>
-  <meta name="description" content="Pemberani Tournament Edition 3.0. Saturday 5 December 2026, 10 AM – 5 PM, Andalas Sports Centre. Fiercer. Grander. More competitive than ever.">
+  <meta name="description" content="Pemberani Tournament Edition 3.0. Saturday 5 December 2026, 10 AM – 5 PM, Andalas Sports Complex. Live scores, standings and bracket.">
   <meta name="theme-color" content="#050505">
   <meta property="og:title" content="Pemberani Tournament · Edition 3.0">
-  <meta property="og:description" content="Sat 05.12.2026 · Andalas Sports Centre. Fiercer. Grander. More competitive than ever.">
+  <meta property="og:description" content="Sat 05.12.2026 · Andalas Sports Complex. Fiercer. Grander. More competitive than ever.">
   <meta property="og:image" content="https://rasheedali78624.github.io/Pemberani/assets/e3/og.jpg">
   <meta property="og:url" content="https://rasheedali78624.github.io/Pemberani/">
   <meta property="og:type" content="website">
@@ -17,9 +17,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;700;800&display=swap" rel="stylesheet">
-  <link rel="preload" as="image" href="assets/crest.png">
+  <link rel="preload" as="image" href="assets/e3/crest-240.webp">
   <link rel="stylesheet" href="css/e3.css">
-  <script>try { if (sessionStorage.getItem('pt3-seen')) document.documentElement.classList.add('skip-intro'); sessionStorage.setItem('pt3-seen', 1); } catch (e) {}</script>
+  <script>try { if (localStorage.getItem('pt3-lang') === 'bm' || (!localStorage.getItem('pt3-lang') && /^ms/i.test(navigator.language))) document.documentElement.lang = 'ms'; } catch (e) {}</script>
 </head>
 <body>
 
@@ -28,24 +28,27 @@
 <!-- ── NAV ── -->
 <header class="nav">
   <div class="wrap">
-    <a class="brand" href="#top"><img src="assets/icon.png" alt="">Pemberani <em>3.0</em></a>
+    <a class="brand" href="#top"><img src="assets/icon.png" alt=""><span class="bt">Pemberani <em>3.0</em></span></a>
     <nav class="nav-links" aria-label="Sections">
-      <a href="#top">Home</a><a href="#event">The Event</a><a href="#players">Players</a>
-      <a href="#match-centre">Match Centre</a><a href="#standings">Standings</a><a href="#bracket-sec">Bracket</a><a href="#prizes">Prizes</a>
+      <a href="#top" data-i18n="nav.home">Home</a><a href="#event" data-i18n="nav.event">The Event</a><a href="#players" data-i18n="nav.players">Players</a>
+      <a href="#match-centre" data-i18n="nav.mc">Match Centre</a><a href="#standings" data-i18n="nav.standings">Standings</a><a href="#bracket-sec" data-i18n="nav.bracket">Bracket</a><a href="#prizes" data-i18n="nav.prizes">Prizes</a>
     </nav>
     <span class="tag live live-pill">Live</span>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-lang="en" aria-pressed="true">EN</button><button type="button" data-lang="bm" aria-pressed="false">BM</button>
+    </div>
     <button class="menu-btn" aria-label="Menu" aria-expanded="false" aria-controls="menu"><i></i><i></i></button>
   </div>
 </header>
 <div class="menu" id="menu" aria-hidden="true">
-  <a href="#top"><span class="ln"><span style="--i:0">Home</span></span></a>
-  <a href="#event"><span class="ln"><span style="--i:1">The Event</span></span></a>
-  <a href="#players"><span class="ln"><span style="--i:2">Players</span></span></a>
-  <a href="#match-centre"><span class="ln"><span style="--i:3">Match Centre</span></span></a>
-  <a href="#standings"><span class="ln"><span style="--i:4">Standings</span></span></a>
-  <a href="#bracket-sec"><span class="ln"><span style="--i:5">Bracket</span></span></a>
-  <a href="#prizes"><span class="ln"><span style="--i:6">Prizes</span></span></a>
-  <div class="menu-foot">Sat 05.12.2026 · Andalas Sports Centre</div>
+  <a href="#top"><span class="ln"><span style="--i:0" data-i18n="nav.home">Home</span></span></a>
+  <a href="#event"><span class="ln"><span style="--i:1" data-i18n="nav.event">The Event</span></span></a>
+  <a href="#players"><span class="ln"><span style="--i:2" data-i18n="nav.players">Players</span></span></a>
+  <a href="#match-centre"><span class="ln"><span style="--i:3" data-i18n="nav.mc">Match Centre</span></span></a>
+  <a href="#standings"><span class="ln"><span style="--i:4" data-i18n="nav.standings">Standings</span></span></a>
+  <a href="#bracket-sec"><span class="ln"><span style="--i:5" data-i18n="nav.bracket">Bracket</span></span></a>
+  <a href="#prizes"><span class="ln"><span style="--i:6" data-i18n="nav.prizes">Prizes</span></span></a>
+  <div class="menu-foot" data-i18n="meta.line">Sat 05.12.2026 · Andalas Sports Complex</div>
 </div>
 
 <main id="top">
@@ -71,45 +74,56 @@
     </svg>
     <div class="photo missing"><img data-photo="hero" alt="" fetchpriority="high"></div>
   </div>
-  <svg class="hero-shuttle" viewBox="0 0 200 300" aria-hidden="true"><use href="#shuttle"/></svg>
+  <svg class="hero-shuttle" viewBox="0 0 200 300" overflow="visible" aria-hidden="true">
+      <path class="trail" d="M86 -1400 L114 -1400 L112 0 L88 0 Z" fill="url(#trail)"/>
+      <g class="streaks" stroke="#FFE45C" stroke-width="2" stroke-linecap="round">
+        <path d="M60 -260 L66 -20" opacity=".45"/><path d="M140 -260 L134 -20" opacity=".45"/>
+      </g>
+      <path d="M38 10 L162 10 L130 200 L70 200 Z" fill="url(#feather)" opacity=".95"/>
+      <g stroke="#9aa0a6" stroke-width="1.5" fill="none">
+        <path d="M52 10 L78 200 M68 10 L84 200 M84 10 L92 200 M100 10 L100 200 M116 10 L108 200 M132 10 L116 200 M148 10 L122 200"/>
+      </g>
+      <path d="M48 70 L152 70" stroke="#050505" stroke-width="5"/>
+      <path d="M58 130 L142 130" stroke="#050505" stroke-width="5"/>
+      <path d="M66 200 L134 200 L134 214 L66 214 Z" fill="#FFC61A"/>
+      <path d="M66 214 C66 268 134 268 134 214 Z" fill="#f2f2f2"/>
+  </svg>
 
   <div class="wrap hero-top">
-    <img class="hero-crest" src="assets/crest.png" alt="Pemberani Badminton Club crest" width="459" height="640">
-    <p class="label plain" style="text-align:right">Pemberani Badminton Club<br><b>presents</b></p>
+    <div class="crest-wrap"><img class="hero-crest" src="assets/e3/crest-240.webp" alt="Pemberani Badminton Club crest" width="240" height="335"></div>
+    <p class="label plain" data-i18n="hero.presents">Pemberani Badminton Club<br><b>presents</b></p>
   </div>
 
   <div class="wrap hero-type">
     <h1 class="display">
-      <span class="ln"><span style="--i:0">Pemberani</span></span>
-      <span class="ln"><span style="--i:1" class="outline">Tournament</span></span>
+      <span class="ln"><span style="--i:0" data-i18n="hero.l1">Pemberani</span></span>
+      <span class="ln"><span style="--i:1" class="outline" data-i18n="hero.l2">Tournament</span></span>
+      <span class="ln ed"><span style="--i:2" data-i18n="hero.l3">Edition <span class="y">03</span></span></span>
     </h1>
-    <div class="row2">
-      <div class="display ed"><span class="ln"><span style="--i:2">Edition <span class="y">03</span></span></span></div>
-      <div class="hero-tag">
-        <p>Fiercer. Grander.<br><span class="y">More competitive</span> than ever.</p>
-        <small>Lebih sengit · Lebih besar · Lebih kompetitif</small>
-        <div class="btn-row hero-cta">
-          <a class="btn magnetic" href="live.html">Enter the championship <span class="arr">→</span></a>
-          <a class="btn ghost magnetic" href="#statement">Explore the tournament <span class="arr">↓</span></a>
-        </div>
+    <div class="hero-tag">
+      <p data-i18n="hero.tag">Fiercer. Grander.<br><span class="y">More competitive</span> than ever.</p>
+      <small data-i18n="hero.tag2">Lebih sengit · Lebih besar · Lebih kompetitif</small>
+      <div class="btn-row hero-cta">
+        <a class="btn magnetic" href="live.html"><span data-i18n="cta.enter">Enter the championship</span> <span class="arr">→</span></a>
+        <a class="btn ghost magnetic" href="#statement"><span data-i18n="cta.explore">Explore the tournament</span> <span class="arr">↓</span></a>
       </div>
     </div>
   </div>
 
   <div class="wrap">
     <div class="hero-bar">
-      <div><span class="k">Date</span><span class="v">Sat 05.12.26</span></div>
-      <div><span class="k">Time</span><span class="v">10AM – 5PM</span></div>
-      <div><span class="k">Venue</span><span class="v">Andalas Sports Centre</span></div>
-      <div data-cd-label><span class="k">Countdown</span><div class="countdown" id="countdown"></div></div>
+      <div><span class="k" data-i18n="k.date">Date</span><span class="v" data-i18n="v.date">Sat 05.12.26</span></div>
+      <div><span class="k" data-i18n="k.time">Time</span><span class="v">10AM – 5PM</span></div>
+      <div><span class="k" data-i18n="k.venue">Venue</span><span class="v">Andalas Sports Complex</span></div>
+      <div><span class="k" data-i18n="k.countdown" id="cdLabel">Countdown</span><div class="countdown" id="countdown"></div></div>
     </div>
   </div>
 </section>
 
-<div class="band" aria-hidden="true"><div class="track">
+<div class="band-wrap" aria-hidden="true"><div class="band"><div class="track">
   <span>Fiercer</span><span>Grander</span><span>More competitive</span><span>Lebih sengit</span><span>Lebih besar</span><span>Lebih kompetitif</span>
   <span>Fiercer</span><span>Grander</span><span>More competitive</span><span>Lebih sengit</span><span>Lebih besar</span><span>Lebih kompetitif</span>
-</div></div>
+</div></div></div>
 
 <!-- ═════════ 02 · STATEMENT (pinned) ═════════ -->
 <section class="statement" id="statement" data-pin data-steps="4" data-phase="0">
@@ -121,14 +135,14 @@
     </div>
     <div class="ghost-num" aria-hidden="true">03</div>
     <div class="lines">
-      <div class="st"><p class="label">The statement</p>
-        <h2 class="display"><span class="ln"><span style="--i:0">This is not</span></span><span class="ln"><span style="--i:1">just a <span class="y">game.</span></span></span></h2></div>
-      <div class="st"><p class="label">Courage</p>
-        <h2 class="display"><span class="ln"><span style="--i:0">It's about</span></span><span class="ln"><span style="--i:1">the courage</span></span><span class="ln"><span style="--i:2" class="y">to compete.</span></span></h2></div>
-      <div class="st"><p class="label">Pride</p>
-        <h2 class="display"><span class="ln"><span style="--i:0">It's about</span></span><span class="ln"><span style="--i:1">the pride</span></span><span class="ln"><span style="--i:2" class="y">of victory.</span></span></h2></div>
-      <div class="st st4"><img src="assets/crest.png" alt="" loading="lazy">
-        <h2 class="display"><span class="ln"><span style="--i:0">This is</span></span><span class="ln"><span style="--i:1">Pemberani.</span></span></h2></div>
+      <div class="st"><p class="label" data-i18n="st.k1">The statement</p>
+        <h2 class="display"><span class="ln"><span style="--i:0" data-i18n="st.1a">This is not</span></span><span class="ln"><span style="--i:1" data-i18n="st.1b">just a <span class="y">game.</span></span></span></h2></div>
+      <div class="st"><p class="label" data-i18n="st.k2">Courage</p>
+        <h2 class="display"><span class="ln"><span style="--i:0" data-i18n="st.2a">It's about</span></span><span class="ln"><span style="--i:1" data-i18n="st.2b">the courage</span></span><span class="ln"><span style="--i:2" class="y" data-i18n="st.2c">to compete.</span></span></h2></div>
+      <div class="st"><p class="label" data-i18n="st.k3">Pride</p>
+        <h2 class="display"><span class="ln"><span style="--i:0" data-i18n="st.3a">It's about</span></span><span class="ln"><span style="--i:1" data-i18n="st.3b">the pride</span></span><span class="ln"><span style="--i:2" class="y" data-i18n="st.3c">of victory.</span></span></h2></div>
+      <div class="st st4"><img src="assets/e3/crest-240.webp" alt="" width="240" height="335">
+        <h2 class="display"><span class="ln"><span style="--i:0" data-i18n="st.4a">This is</span></span><span class="ln"><span style="--i:1">Pemberani.</span></span></h2></div>
     </div>
     <div class="meter" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
   </div>
@@ -138,31 +152,19 @@
 <section class="champ sec" id="event">
   <div class="wrap">
     <div class="sec-head">
-      <p class="label" data-reveal><b>01</b> The Championship</p>
-      <h2 class="display" data-reveal="lines"><span class="ln" data-reveal-self><span style="--i:0">The biggest</span></span><span class="ln" data-reveal-self><span style="--i:1"><span class="y">Pemberani</span> yet.</span></span></h2>
-      <p class="lede" data-reveal>One day. Two courts. Twenty-four players chasing one crown. Every match counts from the first serve.</p>
+      <p class="label" data-reveal><b>01</b> <span data-i18n="ch.k">The Championship</span></p>
+      <h2 class="display" data-reveal="lines"><span class="ln" data-reveal-self><span style="--i:0" data-i18n="ch.h1">The biggest</span></span><span class="ln" data-reveal-self><span style="--i:1" data-i18n="ch.h2"><span class="y">Pemberani</span> yet.</span></span></h2>
+      <p class="lede" data-reveal data-i18n="ch.lede">One day. Two courts. Twenty-four players chasing one crown. Every match counts from the first serve.</p>
     </div>
     <div class="numbers">
-      <div class="n" data-reveal style="--i:0"><b data-count="24">24</b><span>Players</span><small>Registered so far</small></div>
-      <div class="n" data-reveal style="--i:1"><b data-count="12">12</b><span>Pairs</span><small>Doubles</small></div>
-      <div class="n" data-reveal style="--i:2"><b data-count="2">02</b><span>Groups</span><small>A and B · round robin</small></div>
-      <div class="n" data-reveal style="--i:3"><b data-count="2">02</b><span>Courts</span><small>C4 and C5</small></div>
-      <div class="n" data-reveal style="--i:4"><b data-count="38">38</b><span>Matches</span><small>30 group · 8 knockout</small></div>
-      <div class="n" data-reveal style="--i:5"><b data-count="3">03</b><span>Edition</span><small>The third chapter</small></div>
+      <div class="n" data-reveal style="--i:0"><b data-count="24">24</b><span data-i18n="n.players">Players</span><small data-i18n="n.players2">Doubles</small></div>
+      <div class="n" data-reveal style="--i:1"><b data-count="12">12</b><span data-i18n="n.pairs">Pairs</span><small data-i18n="n.pairs2">Six in each group</small></div>
+      <div class="n" data-reveal style="--i:2"><b data-count="2">02</b><span data-i18n="n.groups">Groups</span><small data-i18n="n.groups2">A and B · round robin</small></div>
+      <div class="n" data-reveal style="--i:3"><b data-count="2">02</b><span data-i18n="n.courts">Courts</span><small data-i18n="n.courts2">C4 and C5</small></div>
+      <div class="n" data-reveal style="--i:4"><b data-count="38">38</b><span data-i18n="n.matches">Matches</span><small data-i18n="n.matches2">30 group · 8 knockout</small></div>
+      <div class="n" data-reveal style="--i:5"><b data-count="3">03</b><span data-i18n="n.edition">Edition</span><small data-i18n="n.edition2">The third chapter</small></div>
     </div>
-    <div class="reg" data-reveal>
-      <div class="l">
-        <p class="label">Registration</p>
-        <h3>Open now.<br><span class="y">Closes 10 Nov.</span></h3>
-        <p>Registration opened on 21 Oct 2026. The fee covers court, shuttles, drinks and more. If the fee is a concern, PM Fareez to discuss.</p>
-      </div>
-      <div class="r">
-        <p class="label">Entry fee</p>
-        <div class="fee">RM40<small>per player</small></div>
-        <div class="closing">Pay to Fareez by<b>10.11.2026</b></div>
-      </div>
-    </div>
-    <p class="prov">Pairs, groups and match count are provisional until the draw is confirmed.</p>
+    <p class="prov" data-i18n="ch.prov">Pairs and groups are provisional until the draw is confirmed.</p>
   </div>
 </section>
 
@@ -171,45 +173,45 @@
   <div class="wrap def-grid">
     <div class="photo def-photo missing">
       <img data-photo="champions-e2" alt="Pok and Daus, Edition 2.0 champions" loading="lazy">
-      <div class="fallback" aria-hidden="true"><span class="big">E2</span><img src="assets/crest.png" alt=""></div>
-      <span class="stamp">Edition 2.0 champions</span>
+      <div class="fallback" aria-hidden="true"><span class="big">E2</span><img src="assets/e3/crest-480.webp" alt="" loading="lazy" width="480" height="669"></div>
+      <span class="stamp" data-i18n="def.stamp">Edition 2.0 champions</span>
     </div>
     <div class="def-copy">
-      <p class="label" data-reveal><b>02</b> The Defending Champions</p>
+      <p class="label" data-reveal><b>02</b> <span data-i18n="def.k">The Defending Champions</span></p>
       <h2 class="display" data-reveal="lines"><span class="ln" data-reveal-self><span style="--i:0">Pok</span></span><span class="ln" data-reveal-self><span style="--i:1"><span class="y">&amp;</span> Daus</span></span></h2>
-      <p class="lede" data-reveal>Champions of Edition 2.0. They came in as one pair among twelve and left with the crown. Now every pair in the draw is coming for it.</p>
+      <p class="lede" data-reveal data-i18n="def.lede">Champions of Edition 2.0. They came in as one pair among twelve and left with the crown. Now every pair in the draw is coming for it.</p>
       <div class="hof" data-reveal>
         <div><div class="e">1.0</div><div class="nm">Rasheed &amp; Jai</div></div>
         <div class="cur"><div class="e">2.0</div><div class="nm">Pok &amp; Daus</div></div>
-        <div class="next"><div class="e">3.0</div><div class="nm">Your name here?</div></div>
+        <div class="next"><div class="e">3.0</div><div class="nm" data-i18n="def.next">Your name here?</div></div>
       </div>
     </div>
   </div>
 </section>
 
-<div class="band dark" aria-hidden="true"><div class="track">
-  <span>Group stage</span><span>Quarter-finals</span><span>Semi-finals</span><span>Final</span><span>Champions</span>
-  <span>Group stage</span><span>Quarter-finals</span><span>Semi-finals</span><span>Final</span><span>Champions</span>
-</div></div>
+<div class="band-wrap" aria-hidden="true"><div class="band dark"><div class="track">
+  <span data-i18n="b.g">Group stage</span><span data-i18n="b.qf">Quarter-finals</span><span data-i18n="b.sf">Semi-finals</span><span data-i18n="b.f">Final</span><span data-i18n="b.c">Champions</span>
+  <span data-i18n="b.g">Group stage</span><span data-i18n="b.qf">Quarter-finals</span><span data-i18n="b.sf">Semi-finals</span><span data-i18n="b.f">Final</span><span data-i18n="b.c">Champions</span>
+</div></div></div>
 
 <!-- ═════════ 05 · FORMAT ═════════ -->
 <section class="format sec" id="format" data-scene>
   <div class="wrap">
     <div class="sec-head">
-      <p class="label" data-reveal><b>03</b> The Format</p>
-      <h2 class="display" data-reveal="lines"><span class="ln" data-reveal-self><span style="--i:0">The road</span></span><span class="ln" data-reveal-self><span style="--i:1">to <span class="y">glory.</span></span></span></h2>
+      <p class="label" data-reveal><b>03</b> <span data-i18n="fm.k">The Format</span></p>
+      <h2 class="display" data-reveal="lines"><span class="ln" data-reveal-self><span style="--i:0" data-i18n="fm.h1">The road</span></span><span class="ln" data-reveal-self><span style="--i:1" data-i18n="fm.h2">to <span class="y">glory.</span></span></span></h2>
     </div>
     <div class="road" id="road">
       <span class="fill" aria-hidden="true"></span>
-      <div class="stage"><span class="dot">01</span><h3>Group stage</h3><p>Two groups of six. Everyone plays everyone in their group.</p><span class="tag rule">1 game · to 21</span></div>
-      <div class="stage"><span class="dot">02</span><h3>Quarter-finals</h3><p>Top four from each group cross over: A1 v B4, B2 v A3, B1 v A4, A2 v B3.</p><span class="tag rule">Best of 3 · to 15</span></div>
-      <div class="stage"><span class="dot">03</span><h3>Semi-finals</h3><p>Four pairs left. Lose and you play for third.</p><span class="tag rule">Best of 3 · to 15</span></div>
-      <div class="stage"><span class="dot">04</span><h3>Final</h3><p>One match for the crown, plus the third-place play-off.</p><span class="tag rule">Best of 3 · to 15</span></div>
-      <div class="stage"><span class="dot">★</span><h3>Champions</h3><p>Cash prize, the trophy, and your names next to 1.0 and 2.0.</p></div>
+      <div class="stage"><span class="dot">01</span><h3 data-i18n="b.g">Group stage</h3><p data-i18n="fm.s1">Two groups of six. Everyone plays everyone in their group.</p><span class="tag rule" data-i18n="fm.r21">1 game · to 21</span></div>
+      <div class="stage"><span class="dot">02</span><h3 data-i18n="b.qf">Quarter-finals</h3><p data-i18n="fm.s2">Top four from each group cross over: A1 v B4, B2 v A3, B1 v A4, A2 v B3.</p><span class="tag rule" data-i18n="fm.r15">Best of 3 · to 15</span></div>
+      <div class="stage"><span class="dot">03</span><h3 data-i18n="b.sf">Semi-finals</h3><p data-i18n="fm.s3">Four pairs left. Lose and you play for third.</p><span class="tag rule" data-i18n="fm.r15">Best of 3 · to 15</span></div>
+      <div class="stage"><span class="dot">04</span><h3 data-i18n="b.f">Final</h3><p data-i18n="fm.s4">One match for the crown, plus the third-place play-off.</p><span class="tag rule" data-i18n="fm.r15">Best of 3 · to 15</span></div>
+      <div class="stage"><span class="dot">★</span><h3 data-i18n="b.c">Champions</h3><p data-i18n="fm.s5">Cash prize, the trophy, and your names next to 1.0 and 2.0.</p></div>
     </div>
     <div class="groups-ab">
-      <div data-reveal><span class="gl">A</span><span class="tag y">Court C4</span><h4>Group A</h4><p>Six pairs, fifteen matches, one court. Top four go through.</p><div class="qual"><i class="q"></i><i class="q"></i><i class="q"></i><i class="q"></i><i></i><i></i></div></div>
-      <div data-reveal style="--i:1"><span class="gl">B</span><span class="tag y">Court C5</span><h4>Group B</h4><p>Six pairs, fifteen matches, one court. Top four go through.</p><div class="qual"><i class="q"></i><i class="q"></i><i class="q"></i><i class="q"></i><i></i><i></i></div></div>
+      <div data-reveal><span class="gl">A</span><span class="tag y" data-i18n="fm.c4">Court C4</span><h4 data-i18n="g.a">Group A</h4><p data-i18n="fm.gp">Six pairs, fifteen matches, one court. Top four go through.</p><div class="qual"><i class="q"></i><i class="q"></i><i class="q"></i><i class="q"></i><i></i><i></i></div></div>
+      <div data-reveal style="--i:1"><span class="gl">B</span><span class="tag y" data-i18n="fm.c5">Court C5</span><h4 data-i18n="g.b">Group B</h4><p data-i18n="fm.gp">Six pairs, fifteen matches, one court. Top four go through.</p><div class="qual"><i class="q"></i><i class="q"></i><i class="q"></i><i class="q"></i><i></i><i></i></div></div>
     </div>
   </div>
 </section>
@@ -218,19 +220,19 @@
 <section class="lineup sec" id="players">
   <div class="wrap">
     <div class="sec-head">
-      <p class="label" data-reveal><b>04</b> The Line-up</p>
-      <h2 class="display" data-reveal="lines"><span class="ln" data-reveal-self><span style="--i:0">Twelve pairs.</span></span><span class="ln" data-reveal-self><span style="--i:1" class="y">One crown.</span></span></h2>
-      <p class="lede" data-reveal>The draw is still to come. Tap a pair to see their matches; names appear here as soon as the pairs are confirmed.</p>
+      <p class="label" data-reveal><b>04</b> <span data-i18n="lu.k">The Line-up</span></p>
+      <h2 class="display" data-reveal="lines"><span class="ln" data-reveal-self><span style="--i:0" data-i18n="lu.h1">Twelve pairs.</span></span><span class="ln" data-reveal-self><span style="--i:1" class="y" data-i18n="lu.h2">One crown.</span></span></h2>
+      <p class="lede" data-reveal data-i18n="lu.lede">Tap a pair to see their matches and results. Pair names appear here once the draw is confirmed.</p>
     </div>
     <div class="tabs" role="tablist" data-reveal>
-      <button role="tab" data-pg="G1" aria-selected="true">Group A</button>
-      <button role="tab" data-pg="G2" aria-selected="false">Group B</button>
+      <button role="tab" data-pg="G1" aria-selected="true" data-i18n="g.a">Group A</button>
+      <button role="tab" data-pg="G2" aria-selected="false" data-i18n="g.b">Group B</button>
     </div>
     <div class="pairs" id="pairs" data-group="G1"></div>
 
     <div class="roster">
-      <p class="label" data-reveal>Registered</p>
-      <h3 data-reveal>The <span class="y" id="rosterCount">24</span></h3>
+      <p class="label" data-reveal data-i18n="lu.rk">The players</p>
+      <h3 data-reveal data-i18n="lu.rh">All <span class="y">24</span></h3>
       <div class="names" id="names" data-reveal></div>
     </div>
   </div>
@@ -241,24 +243,24 @@
 <section class="mc sec" id="match-centre">
   <div class="wrap">
     <div class="sec-head">
-      <p class="label" data-reveal><b>05</b> Match Centre <span class="conn"><i></i><span>Connecting…</span></span></p>
-      <h2 class="display" data-reveal="lines"><span class="ln" data-reveal-self><span style="--i:0">On court</span></span><span class="ln" data-reveal-self><span style="--i:1" class="y">right now.</span></span></h2>
+      <p class="label" data-reveal><b>05</b> <span data-i18n="nav.mc">Match Centre</span> <span class="conn"><i></i><span>…</span></span></p>
+      <h2 class="display" data-reveal="lines"><span class="ln" data-reveal-self><span style="--i:0" data-i18n="mc.h1">On court</span></span><span class="ln" data-reveal-self><span style="--i:1" class="y" data-i18n="mc.h2">right now.</span></span></h2>
     </div>
     <div class="courts" id="courts" data-reveal></div>
     <div class="fx-tools">
-      <h3>Fixtures</h3>
+      <h3 data-i18n="mc.fx">Fixtures</h3>
       <div class="tabs" role="tablist">
-        <button role="tab" data-fx="all" aria-selected="true">All</button>
-        <button role="tab" data-fx="G1" aria-selected="false">Group A</button>
-        <button role="tab" data-fx="G2" aria-selected="false">Group B</button>
-        <button role="tab" data-fx="ko" aria-selected="false">Knockout</button>
-        <button role="tab" data-fx="results" aria-selected="false">Results</button>
+        <button role="tab" data-fx="all" aria-selected="true" data-i18n="fx.all">All</button>
+        <button role="tab" data-fx="G1" aria-selected="false" data-i18n="g.a">Group A</button>
+        <button role="tab" data-fx="G2" aria-selected="false" data-i18n="g.b">Group B</button>
+        <button role="tab" data-fx="ko" aria-selected="false" data-i18n="fx.ko">Knockout</button>
+        <button role="tab" data-fx="results" aria-selected="false" data-i18n="fx.res">Results</button>
       </div>
     </div>
     <div class="fx-list" id="fixtures" data-limit="8"></div>
     <div class="btn-row more">
       <button class="btn ghost" id="fxMore"><span class="t">All matches</span></button>
-      <a class="btn" href="live.html">Full match centre <span class="arr">→</span></a>
+      <a class="btn" href="live.html"><span data-i18n="cta.full">Full match centre</span> <span class="arr">→</span></a>
     </div>
   </div>
 </section>
@@ -267,9 +269,9 @@
 <section class="standings sec" id="standings">
   <div class="wrap">
     <div class="sec-head">
-      <p class="label" data-reveal><b>06</b> Group Standings</p>
-      <h2 class="display" data-reveal="lines"><span class="ln" data-reveal-self><span style="--i:0">Earn</span></span><span class="ln" data-reveal-self><span style="--i:1">your <span class="y">place.</span></span></span></h2>
-      <p class="lede" data-reveal>Ranked by wins, then point difference, then points scored, then head-to-head. Updates live after every match.</p>
+      <p class="label" data-reveal><b>06</b> <span data-i18n="sd.k">Group Standings</span></p>
+      <h2 class="display" data-reveal="lines"><span class="ln" data-reveal-self><span style="--i:0" data-i18n="sd.h1">Earn</span></span><span class="ln" data-reveal-self><span style="--i:1" data-i18n="sd.h2">your <span class="y">place.</span></span></span></h2>
+      <p class="lede" data-reveal data-i18n="sd.lede">Ranked by wins, then point difference, then points scored, then head-to-head. Updates live after every match.</p>
     </div>
     <div class="tables" data-standings></div>
   </div>
@@ -279,10 +281,10 @@
 <section class="bracket-sec sec" id="bracket-sec">
   <div class="wrap">
     <div class="sec-head">
-      <p class="label" data-reveal><b>07</b> Knockouts</p>
-      <h2 class="display" data-reveal="lines"><span class="ln" data-reveal-self><span style="--i:0">Eight pairs.</span></span><span class="ln" data-reveal-self><span style="--i:1">No <span class="y">second chances.</span></span></span></h2>
+      <p class="label" data-reveal><b>07</b> <span data-i18n="bk.k">Knockouts</span></p>
+      <h2 class="display" data-reveal="lines"><span class="ln" data-reveal-self><span style="--i:0" data-i18n="bk.h1">Eight pairs.</span></span><span class="ln" data-reveal-self><span style="--i:1" data-i18n="bk.h2">No <span class="y">second chances.</span></span></span></h2>
     </div>
-    <p class="swipe-hint">Swipe to follow the bracket →</p>
+    <p class="swipe-hint" data-i18n="bk.swipe">Swipe to follow the bracket →</p>
     <div class="bracket-scroll" id="bracketScroll"><div class="bracket" id="bracket"></div></div>
   </div>
 </section>
@@ -291,17 +293,17 @@
 <section class="rewards sec" id="prizes">
   <div class="wrap">
     <div class="sec-head">
-      <p class="label" data-reveal><b>08</b> The Rewards</p>
-      <h2 class="display" data-reveal="lines"><span class="ln" data-reveal-self><span style="--i:0">Play for</span></span><span class="ln" data-reveal-self><span style="--i:1" class="y">something.</span></span></h2>
+      <p class="label" data-reveal><b>08</b> <span data-i18n="pz.k">The Rewards</span></p>
+      <h2 class="display" data-reveal="lines"><span class="ln" data-reveal-self><span style="--i:0" data-i18n="pz.h1">Play for</span></span><span class="ln" data-reveal-self><span style="--i:1" class="y" data-i18n="pz.h2">something.</span></span></h2>
     </div>
     <div class="podium" id="podium">
-      <div class="pl"><div class="top"><span class="k">Runners-up</span><h3>2nd place</h3><p><b>Cash prize</b> · amount TBA</p></div><div class="block" style="--h:clamp(160px,22vw,300px);--i:1"><b>2</b></div></div>
-      <div class="pl first"><div class="top"><span class="k">Champions</span><h3>1st place</h3><p><b>Cash prize</b> · amount TBA</p></div><div class="block" style="--h:clamp(220px,30vw,420px);--i:0"><b>1</b></div></div>
-      <div class="pl"><div class="top"><span class="k">Third place</span><h3>3rd place</h3><p><b>Cash prize</b> · amount TBA</p></div><div class="block" style="--h:clamp(120px,16vw,220px);--i:2"><b>3</b></div></div>
+      <div class="pl"><div class="top"><span class="k" data-i18n="pz.ru">Runners-up</span><h3 data-i18n="pz.2">2nd place</h3><p data-i18n="pz.cash"><b>Cash prize</b> · amount TBA</p></div><div class="block" style="--h:clamp(140px,22vw,300px);--i:1"><b>2</b></div></div>
+      <div class="pl first"><div class="top"><span class="k" data-i18n="b.c">Champions</span><h3 data-i18n="pz.1">1st place</h3><p data-i18n="pz.cash"><b>Cash prize</b> · amount TBA</p></div><div class="block" style="--h:clamp(190px,30vw,420px);--i:0"><b>1</b></div></div>
+      <div class="pl"><div class="top"><span class="k" data-i18n="pz.th">Third place</span><h3 data-i18n="pz.3">3rd place</h3><p data-i18n="pz.cash"><b>Cash prize</b> · amount TBA</p></div><div class="block" style="--h:clamp(100px,16vw,220px);--i:2"><b>3</b></div></div>
     </div>
     <div class="goody" data-reveal>
-      <h3>Every entry wins<br>a goody bag.</h3>
-      <p>Worth up to RM15 per entry. Prize amounts will be announced closer to the day.</p>
+      <h3 data-i18n="pz.gh">Every entry<br>gets a goody bag.</h3>
+      <p data-i18n="pz.gp">Worth up to RM15 for every entry. Prize amounts will be announced closer to the day.</p>
     </div>
   </div>
 </section>
@@ -309,24 +311,24 @@
 <!-- ═════════ GALLERY (only shown when photos exist) ═════════ -->
 <section class="gallery sec" id="gallery" hidden>
   <div class="wrap"><div class="sec-head">
-    <p class="label"><b>09</b> Moments</p>
-    <h2 class="display"><span class="ln in"><span>The story</span></span><span class="ln in"><span class="y">so far.</span></span></h2>
+    <p class="label"><b>09</b> <span data-i18n="gl.k">Moments</span></p>
+    <h2 class="display"><span class="ln in"><span data-i18n="gl.h1">The story</span></span><span class="ln in"><span class="y" data-i18n="gl.h2">so far.</span></span></h2>
   </div></div>
   <div class="g-track" id="gTrack"></div>
 </section>
 
 <!-- ═════════ 11 · FINALE ═════════ -->
 <section class="finale" data-scene>
-  <img class="crest" src="assets/crest.png" alt="" loading="lazy">
+  <img class="crest" src="assets/e3/crest-480.webp" alt="" loading="lazy" width="480" height="669">
   <div class="wrap">
     <h2 class="display" data-reveal="lines">
-      <span class="ln" data-reveal-self><span style="--i:0">Play with courage.</span></span>
-      <span class="ln" data-reveal-self><span style="--i:1">Win with pride.</span></span>
+      <span class="ln" data-reveal-self><span style="--i:0" data-i18n="fn.1">Play with courage.</span></span>
+      <span class="ln" data-reveal-self><span style="--i:1" data-i18n="fn.2">Win with pride.</span></span>
     </h2>
-    <div class="ed" data-reveal><img src="assets/crest.png" alt="" loading="lazy">Pemberani 3.0 · 05.12.2026</div>
+    <div class="ed" data-reveal><img src="assets/e3/crest-240.webp" alt="" loading="lazy" width="240" height="335">Pemberani 3.0 · 05.12.2026</div>
     <div class="btn-row">
-      <a class="btn dark magnetic" href="live.html">Enter the championship <span class="arr">→</span></a>
-      <a class="btn ghost magnetic" href="#event" style="--fg:var(--black);box-shadow:inset 0 0 0 1.5px var(--black)">Register · RM40</a>
+      <a class="btn dark magnetic" href="live.html"><span data-i18n="cta.enter">Enter the championship</span> <span class="arr">→</span></a>
+      <a class="btn ghost magnetic on-yellow" href="#standings"><span data-i18n="cta.standings">See the standings</span></a>
     </div>
   </div>
 </section>
@@ -334,11 +336,11 @@
 
 <footer class="foot">
   <div class="wrap">
-    <span>© 2026 Pemberani Badminton Club · Andalas Sports Centre</span>
+    <span>© 2026 Pemberani Badminton Club · Andalas Sports Complex</span>
     <nav>
-      <a href="live.html">Match centre</a>
-      <a href="edition2/index.html">Edition 2.0</a>
-      <a href="score.html">Scorers</a>
+      <a href="live.html" data-i18n="nav.mc">Match Centre</a>
+      <a href="edition2/index.html" data-i18n="ft.e2">Edition 2.0</a>
+      <a href="score.html" data-i18n="ft.score">Scorers</a>
     </nav>
   </div>
 </footer>
@@ -352,21 +354,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
     <linearGradient id="feather" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#BFC3C9"/></linearGradient>
-    <symbol id="shuttle" viewBox="0 0 200 300" overflow="visible">
-      <linearGradient id="trail" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#FFC61A"/><stop offset="1" stop-color="#FFC61A" stop-opacity="0"/></linearGradient>
-      <path class="trail" d="M86 -1400 L114 -1400 L112 0 L88 0 Z" fill="url(#trail)"/>
-      <g stroke="#FFE45C" stroke-width="2" stroke-linecap="round">
-        <path d="M60 -260 L66 -20" opacity=".45"/><path d="M140 -260 L134 -20" opacity=".45"/>
-      </g>
-      <path d="M38 10 L162 10 L130 200 L70 200 Z" fill="url(#feather)" opacity=".95"/>
-      <g stroke="#9aa0a6" stroke-width="1.5" fill="none">
-        <path d="M52 10 L78 200 M68 10 L84 200 M84 10 L92 200 M100 10 L100 200 M116 10 L108 200 M132 10 L116 200 M148 10 L122 200"/>
-      </g>
-      <path d="M48 70 L152 70" stroke="#050505" stroke-width="5"/>
-      <path d="M58 130 L142 130" stroke="#050505" stroke-width="5"/>
-      <path d="M66 200 L134 200 L134 214 L66 214 Z" fill="#FFC61A"/>
-      <path d="M66 214 C66 268 134 268 134 214 Z" fill="#f2f2f2"/>
-    </symbol>
+    <linearGradient id="trail" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#FFC61A"/><stop offset="1" stop-color="#FFC61A" stop-opacity="0"/></linearGradient>
   </defs>
 </svg>
 

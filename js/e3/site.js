@@ -4,47 +4,47 @@ import {
   dragScroll, optionalImages, reduced,
 } from './motion.js';
 import { mountLive } from './live.js';
+import { wireLang, t } from './i18n.js';
 import { TOURNAMENT, ROSTER, PHOTOS, GALLERY_COUNT } from '../config.js';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
-// Registered players wall
+// Language first, so everything below renders in the right one
+wireLang();
+
+// The players wall
 const names = $('#names');
-if (names) {
-  names.innerHTML = ROSTER.map(n => n ? `<span>${esc(n)}</span>` : '<span class="open">Open slot</span>').join('');
-  $('#rosterCount').textContent = ROSTER.length;
-  if (!reduced) {
-    // a slow "spotlight" that wanders across the names once revealed
-    const spans = $$('span:not(.open)', names);
-    names.addEventListener('reveal', () => {
-      let i = 0;
-      const step = () => {
-        spans.forEach(s => s.classList.remove('lit'));
-        spans[i % spans.length].classList.add('lit');
-        i += 5;
-      };
-      setInterval(step, 900);
-    });
-  }
+function renderNames() {
+  if (!names) return;
+  names.innerHTML = ROSTER.map(n => n ? `<span>${esc(n)}</span>` : `<span class="open">${esc(t('openSlot'))}</span>`).join('');
+}
+renderNames();
+addEventListener('langchange', renderNames);
+if (names && !reduced) {
+  // a slow spotlight that wanders across the names once they are on screen
+  names.addEventListener('reveal', () => {
+    let i = 0;
+    setInterval(() => {
+      const spans = $$('span:not(.open)', names);
+      spans.forEach(s => s.classList.remove('lit'));
+      spans[i % spans.length]?.classList.add('lit');
+      i += 5;
+    }, 900);
+  });
 }
 
 // Format road: line fills as the section scrolls through, stages light up
-const format = $('#format');
 const road = $('#road');
 const stages = road ? $$('.stage', road) : [];
 const onScrollExtra = () => {
-  if (!format || !road) return;
+  if (!road) return;
   const r = road.getBoundingClientRect();
   const vh = innerHeight;
   const p = Math.min(1, Math.max(0, (vh * 0.75 - r.top) / (r.height + vh * 0.2)));
-  road.style.setProperty('--rp', reduced ? 1 : p.toFixed(3));
-  const vertical = matchMedia('(max-width: 860px)').matches;
-  stages.forEach((s, i) => {
-    const at = vertical ? i / (stages.length - 1) * 0.92 : i / (stages.length - 1) * 0.95;
-    s.classList.toggle('lit', reduced || p >= at);
-  });
+  road.style.setProperty('--rp', p.toFixed(3));
+  stages.forEach((s, i) => s.classList.toggle('lit', p >= i / (stages.length - 1) * 0.92));
 };
 
 // Uploaded photos (listed in config.js) replace the built-in artwork.

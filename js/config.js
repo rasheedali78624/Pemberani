@@ -11,17 +11,7 @@ export const TOURNAMENT = {
   endsAt: '2026-12-05T17:00:00+08:00',
   dateLabel: 'Saturday · 05.12.2026',
   timeLabel: '10 AM – 5 PM',
-  venue: 'Andalas Sports Centre',
-  // Registration (from the poster)
-  registration: {
-    opens: '21 Oct 2026',
-    closes: '10 Nov 2026',
-    closesAt: '2026-11-10T23:59:00+08:00',
-    fee: 'RM40',
-    feeNote: 'per player',
-    feeCovers: 'Court, shuttles, drinks and more',
-    contact: 'Fareez',
-  },
+  venue: 'Andalas Sports Complex',
   // Rough minutes per match, used for "approx. start" estimates.
   minutesPerGroupMatch: 12,
   minutesPerKnockoutMatch: 20,
@@ -42,7 +32,7 @@ export const RULES = {
   knockout: { bestOf: 3, target: 15, deuce: true, cap: 21 },
 };
 
-// Registered players (from the WhatsApp list). Names only, no payment status.
+// Players (from the WhatsApp list). Names only.
 export const ROSTER = [
   'Fareez', 'Aizat', 'Azlan', 'Soul', 'Nizam', 'Herman', 'Daus', 'Rosli',
   'Rasheed', 'Samad', 'Syahir', 'Jai', 'Fauzie Gigi', 'Abdel', 'Nataman', 'Pok',
