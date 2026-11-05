@@ -1,6 +1,8 @@
 // Edition 3.0 motion layer: one passive scroll loop drives CSS variables,
 // IntersectionObserver drives reveals. No animation library needed.
 
+import { t } from './i18n.js';
+
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
@@ -18,7 +20,7 @@ export function observeReveals(root = document) {
     }
   }, { rootMargin: '0px 0px -12% 0px', threshold: 0.05 });
   $$('[data-reveal], .ln[data-reveal-self], .def-grid, .podium', root).forEach(el => {
-    if (reduced) el.classList.add('in'); else io.observe(el);
+    io.observe(el);
   });
   // count-up numbers
   $$('[data-count]', root).forEach(el => {
@@ -178,16 +180,20 @@ export function wireCountdown(el, iso, endIso) {
   if (!el || !iso) return;
   const target = new Date(iso).getTime();
   const end = endIso ? new Date(endIso).getTime() : target + 7 * 3600e3;
-  const parts = { d: 'Days', h: 'Hrs', m: 'Min', s: 'Sec' };
-  el.innerHTML = Object.entries(parts).map(([k, l]) => `<span><b data-k="${k}">00</b><i>${l}</i></span>`).join('');
-  const cells = Object.fromEntries($$('b', el).map(b => [b.dataset.k, b]));
+  let cells = {};
+  const build = () => {
+    const parts = { d: t('days'), h: t('hrs'), m: t('min'), s: t('sec') };
+    el.innerHTML = Object.entries(parts).map(([k, l]) => `<span><b data-k="${k}">00</b><i>${l}</i></span>`).join('');
+    cells = Object.fromEntries($$('b', el).map(b => [b.dataset.k, b]));
+  };
+  let timer;
   const tick = () => {
+    clearTimeout(timer);
     const now = Date.now();
     if (now >= target) {
       el.innerHTML = now < end
-        ? '<span><b style="color:var(--y)">LIVE</b><i>Happening now</i></span>'
-        : '<span><b>FT</b><i>See you at 4.0</i></span>';
-      el.closest('[data-cd-label]')?.querySelector('.k')?.replaceChildren(now < end ? 'Status' : 'Finished');
+        ? `<span><b style="color:var(--y)">${t('live').toUpperCase()}</b><i>${t('happening')}</i></span>`
+        : `<span><b>${t('ft').toUpperCase()}</b><i>${t('seeYou')}</i></span>`;
       return;
     }
     let t = Math.floor((target - now) / 1000);
@@ -199,9 +205,11 @@ export function wireCountdown(el, iso, endIso) {
         if (!reduced) { cells[k].classList.remove('tick'); void cells[k].offsetWidth; cells[k].classList.add('tick'); }
       }
     }
-    setTimeout(tick, 1000 - (Date.now() % 1000));
+    timer = setTimeout(tick, 1000 - (Date.now() % 1000));
   };
+  build();
   tick();
+  addEventListener('langchange', () => { build(); tick(); });
 }
 
 // ── Drag-to-scroll (gallery / bracket on desktop) ────────────

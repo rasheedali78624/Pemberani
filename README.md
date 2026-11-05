@@ -4,7 +4,9 @@ Campaign site, live scores, fixtures, standings and bracket for the Pemberani Ba
 Static site for GitHub Pages, with Firebase Realtime Database for live scoring. No build step and no frameworks:
 plain HTML, CSS and JavaScript modules.
 
-**Edition 3.0:** Saturday 5 December 2026 · 10 AM – 5 PM · Andalas Sports Centre · Courts C4 and C5.
+**Edition 3.0:** Saturday 5 December 2026 · 10 AM – 5 PM · Andalas Sports Complex · Courts C4 and C5.
+
+Both Edition 3.0 pages have an **EN / BM** switch at the top. The choice is remembered on that phone, and phones set to Malay open in BM.
 
 | Page | Who uses it |
 | --- | --- |
@@ -27,6 +29,7 @@ js/config.js          ← dates, pairs, groups, rules, prizes, photos. Edit this
 js/e3/site.js         campaign page wiring
 js/e3/live.js         match centre, standings, bracket, pair cards (shared by both pages)
 js/e3/motion.js       scroll animations, nav, cursor, countdown
+js/e3/i18n.js         EN / BM text (static page text and live labels)
 js/logic.js           scoring rules, standings, bracket
 js/store.js           Firebase / demo data layer
 js/score.js           scorer console behaviour
@@ -57,7 +60,7 @@ python3 -m http.server 8765
    group poster, which decides the order of play (`GROUP_ORDER`).
 2. **Knockout rules.** The captain said "15 points, best of 3". The config assumes win by 2, capped at 21
    (`knockout: { bestOf: 3, target: 15, deuce: true, cap: 21 }`). Change `cap` or `deuce` if the captain decides otherwise.
-3. **Prize amounts.** Fill in `amount` in `PRIZES` and update the text in the Rewards section of `index.html`.
+3. **Prize amounts.** Update the Rewards text in `index.html` (English) and the `pz.cash` line in `js/e3/i18n.js` (BM).
 4. **Photos.** Upload them to `assets/e3/` using these names, then list them in `PHOTOS`:
 
    | File | Where it shows | Best shape |
@@ -100,8 +103,8 @@ If Firebase can't be reached, the pages fall back to demo mode and show a yellow
 ## Design notes
 
 - Scroll animations use CSS `position: sticky` and one small scroll handler, with no animation library, so it stays smooth on cheaper phones.
-- Visitors with "reduce motion" switched on get the same content without movement.
-- The opening animation plays once per visit and is skipped when someone comes back to the page.
+- Visitors with "Reduce Motion" switched on get gentle fades instead of movement, and the statement lines are shown one after another.
+- Any new text needs a BM version: add a `data-i18n` key in the HTML and the translation in `js/e3/i18n.js`.
 
 ## Thursday Family Night
 
