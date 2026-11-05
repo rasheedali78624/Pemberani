@@ -1,56 +1,75 @@
 // ─────────────────────────────────────────────────────────────
-//  Pemberani Tournament · Edition 2.0 — tournament data
+//  Pemberani Tournament · Edition 3.0 — tournament data
 //  Everything the committee might want to change lives here.
+//  ⚠ Pairs, groups and prize amounts are PROVISIONAL until the draw.
 // ─────────────────────────────────────────────────────────────
 
 export const TOURNAMENT = {
-  // ISO date-time of the first serve, e.g. '2026-10-04T08:00:00+08:00'.
-  // Leave empty to hide the countdown.
-  startsAt: '',
+  edition: '3.0',
+  // First serve. Malaysia time (+08:00). Drives the countdown.
+  startsAt: '2026-12-05T10:00:00+08:00',
+  endsAt: '2026-12-05T17:00:00+08:00',
+  dateLabel: 'Saturday · 05.12.2026',
+  timeLabel: '10 AM – 5 PM',
+  venue: 'Andalas Sports Centre',
+  // Registration (from the poster)
+  registration: {
+    opens: '21 Oct 2026',
+    closes: '10 Nov 2026',
+    closesAt: '2026-11-10T23:59:00+08:00',
+    fee: 'RM40',
+    feeNote: 'per player',
+    feeCovers: 'Court, shuttles, drinks and more',
+    contact: 'Fareez',
+  },
   // Rough minutes per match, used for "approx. start" estimates.
   minutesPerGroupMatch: 12,
-  minutesPerKnockoutMatch: 25,
+  minutesPerKnockoutMatch: 20,
 };
+
+// Internal court numbers are 1 and 2; this is what everyone sees.
+export const COURT_LABEL = { 1: 'C4', 2: 'C5' };
+export const courtName = n => `Court ${COURT_LABEL[n] ?? n}`;
 
 // Firebase path everything for this edition is stored under.
-export const DB_ROOT = 'pt2';
+export const DB_ROOT = 'pt3';
 
 export const RULES = {
-  // Group stage: one game to 21, no deuce (first to 21 wins).
+  // Group stage: one game to 21 (captain: "21 points best of 1").
   group: { bestOf: 1, target: 21, deuce: false, cap: 21 },
-  // Knockout: best of three games to 21, deuce up to 30.
-  knockout: { bestOf: 3, target: 21, deuce: true, cap: 30 },
+  // Knockout: best of three games to 15 (captain: "15 points best of 3").
+  // Assumed: win by 2, capped at 21 (at 20–20 the next point wins). Confirm with the captain.
+  knockout: { bestOf: 3, target: 15, deuce: true, cap: 21 },
 };
+
+// Registered players (from the WhatsApp list). Names only, no payment status.
+export const ROSTER = [
+  'Fareez', 'Aizat', 'Azlan', 'Soul', 'Nizam', 'Herman', 'Daus', 'Rosli',
+  'Rasheed', 'Samad', 'Syahir', 'Jai', 'Fauzie Gigi', 'Abdel', 'Nataman', 'Pok',
+  'Charlie', 'Syaqir', 'Abg Mie', 'Poknik', 'Adian', 'Muizz', 'Abn Fizan', null, // null = slot still open
+];
+
+// The draw. Until it is confirmed every pair is a placeholder.
+// When the draw is made, replace each entry with e.g.
+//   { id: 'g1p1', name: 'Pok & Daus', players: ['Pok', 'Daus'] }
+// and set DRAW_CONFIRMED = true.
+export const DRAW_CONFIRMED = false;
+
+const tba = (id, n) => ({ id, name: `Pair ${String(n).padStart(2, '0')}`, players: null });
 
 export const GROUPS = [
   {
     id: 'G1', name: 'Group A', court: 1,
-    pairs: [
-      { id: 'g1p1', name: 'Abdel & Azlan' },
-      { id: 'g1p2', name: 'Ical & Syafiq' },
-      { id: 'g1p3', name: 'Sol & Aizat' },
-      { id: 'g1p4', name: 'Nizam & Poknik' },
-      { id: 'g1p5', name: 'Paul & Jai' },
-      { id: 'g1p6', name: 'Zam & Fahmi' },
-    ],
+    pairs: [1, 2, 3, 4, 5, 6].map((n, i) => tba(`g1p${i + 1}`, n)),
   },
   {
     id: 'G2', name: 'Group B', court: 2,
-    pairs: [
-      { id: 'g2p1', name: 'Azzam & Saiful' },
-      { id: 'g2p2', name: 'Pok & Daus' },
-      { id: 'g2p3', name: 'Herman & Nataman' },
-      { id: 'g2p4', name: 'Rasheed & Haziq' },
-      { id: 'g2p5', name: 'Fareez & Awie' },
-      { id: 'g2p6', name: 'Charlie & Fizan' },
-    ],
+    pairs: [7, 8, 9, 10, 11, 12].map((n, i) => tba(`g2p${i + 1}`, n)),
   },
 ];
 
 // Full round robin: 15 matches per group, every pair plays the other
-// five once. Each group stays on its own court. Numbers are the pair
-// numbers from the group poster (1–6), in the captain's order of play;
-// nobody plays two matches back to back.
+// five once; nobody plays two matches back to back.
 const GROUP_ORDER = [
   [1, 2], [3, 6], [4, 5],
   [1, 3], [2, 4], [5, 6],
@@ -72,6 +91,28 @@ export const KNOCKOUT = [
   { id: 'BRONZE', label: 'Third place', round: '3RD', court: 2, a: { loserOf: 'SF1' }, b: { loserOf: 'SF2' } },
   { id: 'FINAL', label: 'Final', round: 'F', court: 1, a: { winnerOf: 'SF1' }, b: { winnerOf: 'SF2' } },
 ];
+
+// Prizes (poster: cash for 1st, 2nd and 3rd; amounts not announced yet).
+export const PRIZES = [
+  { place: '1', label: 'Champions', reward: 'Cash prize', amount: null },
+  { place: '2', label: 'Runners-up', reward: 'Cash prize', amount: null },
+  { place: '3', label: 'Third place', reward: 'Cash prize', amount: null },
+];
+export const GOODY_BAG = 'Goody bag worth up to RM15 for every entry';
+
+export const HALL_OF_FAME = [
+  { edition: '1.0', names: 'Rasheed & Jai', photo: 'assets/champions-e1.jpg' },
+  { edition: '2.0', names: 'Pok & Daus', photo: 'assets/e3/champions-e2.jpg' },
+];
+
+// Photos in assets/e3/. List a name here once its .jpg has been uploaded;
+// until then the page uses its own artwork (no broken images).
+//   hero          → assets/e3/hero.jpg            (wide action shot, landscape)
+//   story-1..3    → assets/e3/story-1.jpg …       (statement section backgrounds)
+//   champions-e2  → assets/e3/champions-e2.jpg    (Pok & Daus, portrait)
+export const PHOTOS = [];
+// Gallery: number of files named assets/e3/gallery-01.jpg, gallery-02.jpg, …
+export const GALLERY_COUNT = 0;
 
 // ── Derived lists (no need to edit below) ─────────────────────
 

@@ -15,8 +15,8 @@ const ls = {
 const store = await openStore({ auth: true });
 let state = {};
 let user = null;
-let court = +(ls.get('pt2-court') || 1);
-let swapped = ls.get('pt2-swap') === '1';
+let court = +(ls.get('pt3-court') || 1);
+let swapped = ls.get('pt3-swap') === '1';
 let wakeLock = null;
 
 function toast(msg) {
@@ -166,7 +166,7 @@ function render() {
     keepAwake(true);
     $$('[data-point]').forEach(b => b.onclick = () => point(live, b.dataset.point));
     $('#undo').onclick = () => undo(live);
-    $('#swap').onclick = () => { swapped = !swapped; ls.set('pt2-swap', swapped ? '1' : '0'); render(); };
+    $('#swap').onclick = () => { swapped = !swapped; ls.set('pt3-swap', swapped ? '1' : '0'); render(); };
     $('#abandon').onclick = () => {
       sheet(`<h3>Stop this match?</h3><p>All points in ${esc(live.label)} will be cleared and it goes back to “not played”.</p>
         <div class="opts"><button class="btn danger" id="confirmStop">Stop and clear</button><button class="btn btn-quiet" data-close>Keep playing</button></div>`);
@@ -248,7 +248,7 @@ function moveThumb(seg) {
 
 $('#courtTabs').addEventListener('click', e => {
   const b = e.target.closest('button'); if (!b) return;
-  court = +b.dataset.court; ls.set('pt2-court', court); justFinished = null; render();
+  court = +b.dataset.court; ls.set('pt3-court', court); justFinished = null; render();
 });
 
 $('#login').addEventListener('submit', async e => {
