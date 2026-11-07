@@ -75,8 +75,8 @@ function buildGallery() {
   dragScroll(track);
 }
 
-// Champions: rotate Edition 2.0 ⇄ 1.0 every 5 s while on screen; tap 1.0 / 2.0 to choose
-const CHAMP_MS = 5000;
+// Champions: rotate Edition 2.0 ⇄ 1.0 every 4 s while on screen; tap 1.0 / 2.0 to choose
+const CHAMP_MS = 4000;
 function wireChampions() {
   const box = $('[data-champs]');
   if (!box) return;
