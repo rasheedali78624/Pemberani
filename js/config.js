@@ -112,10 +112,12 @@ export const HALL_OF_FAME = [
 // until then the page uses its own artwork (no broken images).
 //   hero          → assets/e3/hero.jpg            (wide action shot, landscape)
 //   story-1..3    → assets/e3/story-1.jpg …       (statement section backgrounds)
+//   story-4       → assets/e3/story-4.jpg         (group photo, printed into the yellow "This is Pemberani")
 //   champions-e2  → assets/e3/champions-e2.jpg    (Muizz & Daus, portrait)
-export const PHOTOS = ['champions-e2', 'story-1', 'story-2', 'story-3', 'hero']; // hero.jpg: shows automatically once uploaded
-// Gallery: number of files named assets/e3/gallery-01.jpg, gallery-02.jpg, …
-export const GALLERY_COUNT = 4;
+export const PHOTOS = ['champions-e2', 'story-1', 'story-2', 'story-4', 'hero']; // hero.jpg: shows automatically once uploaded
+// Gallery: gallery-01.jpg, gallery-02.jpg, … The site also looks for the next numbers by itself,
+// so new photos appear as soon as they are uploaded with the next number.
+export const GALLERY_COUNT = 5;
 
 // ── Derived lists (no need to edit below) ─────────────────────
 
