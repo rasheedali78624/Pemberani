@@ -10,35 +10,55 @@ export const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
 
 // ── Reveals ──────────────────────────────────────────────────
+// Every reveal replays: an element animates in each time it comes on screen, and resets
+// once it is completely off screen again. If Safari restores the page from memory
+// (switching apps, the back button), the opening animation and all reveals start over.
 export function observeReveals(root = document) {
-  const io = new IntersectionObserver(entries => {
+  const els = $$('[data-reveal], .ln[data-reveal-self], .def-grid, .podium, .finale', root);
+  const counters = $$('[data-count]', root);
+
+  // shown when at least a sliver is on screen above the bottom 12%
+  const show = new IntersectionObserver(entries => {
     for (const e of entries) {
-      if (!e.isIntersecting) continue;
+      if (!e.isIntersecting || e.target.classList.contains('in')) continue;
       e.target.classList.add('in');
       e.target.dispatchEvent(new CustomEvent('reveal'));
-      io.unobserve(e.target);
     }
   }, { rootMargin: '0px 0px -12% 0px', threshold: 0.05 });
-  $$('[data-reveal], .ln[data-reveal-self], .def-grid, .podium', root).forEach(el => {
-    io.observe(el);
-  });
-  // count-up numbers
-  $$('[data-count]', root).forEach(el => {
-    const to = +el.dataset.count, pad = el.dataset.pad ? +el.dataset.pad : 2;
-    const fmt = n => String(Math.round(n)).padStart(pad, '0');
-    if (reduced) { el.textContent = fmt(to); return; }
-    el.textContent = fmt(0);
-    const run = () => {
+  // reset only when fully off screen, so nothing ever disappears while you can see it
+  const hide = new IntersectionObserver(entries => {
+    for (const e of entries) if (!e.isIntersecting) e.target.classList.remove('in');
+  }, { threshold: 0 });
+  els.forEach(el => { show.observe(el); hide.observe(el); });
+
+  // count-up numbers, replayed on every visit
+  const fmtOf = el => n => String(Math.round(n)).padStart(el.dataset.pad ? +el.dataset.pad : 2, '0');
+  const count = new IntersectionObserver(entries => {
+    for (const e of entries) {
+      const el = e.target, to = +el.dataset.count, fmt = fmtOf(el);
+      if (reduced) { el.textContent = fmt(to); continue; }
+      if (!e.isIntersecting) { el.dataset.ran = ''; el.textContent = fmt(0); continue; }
+      if (e.intersectionRatio < 0.4 || el.dataset.ran) continue;
+      el.dataset.ran = '1';
       const t0 = performance.now(), dur = 1400;
       const step = t => {
         const k = clamp((t - t0) / dur);
         el.textContent = fmt(to * (1 - Math.pow(1 - k, 4)));
-        if (k < 1) requestAnimationFrame(step);
+        if (k < 1 && el.dataset.ran) requestAnimationFrame(step);
       };
       requestAnimationFrame(step);
-    };
-    const o = new IntersectionObserver(([e]) => { if (e.isIntersecting) { run(); o.disconnect(); } }, { threshold: .4 });
-    o.observe(el);
+    }
+  }, { threshold: [0, 0.4] });
+  counters.forEach(el => { el.textContent = fmtOf(el)(reduced ? +el.dataset.count : 0); count.observe(el); });
+
+  addEventListener('pageshow', e => {
+    if (!e.persisted) return;
+    const html = document.documentElement;
+    html.classList.add('restart');            // drop the opening animations…
+    void html.offsetWidth;
+    html.classList.remove('restart');         // …and play them again
+    els.forEach(el => { el.classList.remove('in'); show.unobserve(el); show.observe(el); });
+    counters.forEach(el => { el.dataset.ran = ''; count.unobserve(el); count.observe(el); });
   });
 }
 
@@ -109,6 +129,7 @@ export function wireStatement(sec) {
   const lines = $$('.st', sec);
   const ticks = $$('.meter i', sec);
   const set = n => {
+    sec.style.setProperty('--ph', n);
     lines.forEach((l, i) => { l.classList.toggle('on', i === n); l.classList.toggle('past', i < n); });
     ticks.forEach((t, i) => t.classList.toggle('on', i <= n));
   };
