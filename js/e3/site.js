@@ -75,7 +75,48 @@ function buildGallery() {
   dragScroll(track);
 }
 
+// Champions: rotate Edition 2.0 ⇄ 1.0 every 5 s while on screen; tap 1.0 / 2.0 to choose
+const CHAMP_MS = 5000;
+function wireChampions() {
+  const box = $('[data-champs]');
+  if (!box) return;
+  const order = ['e2', 'e1'];
+  let cur = 'e2', timer = null, visible = false, pausedUntil = 0;
+  const show = id => {
+    cur = id;
+    $$('[data-slide]', box).forEach(el => {
+      const on = el.dataset.slide === id;
+      el.classList.toggle('on', on);
+      el.setAttribute('aria-hidden', String(!on));
+      if (on) el.querySelectorAll('.ln, [data-reveal]').forEach(x => x.classList.add('in'));
+    });
+    $$('.hof-b', box).forEach(btn => {
+      const on = btn.dataset.show === id;
+      btn.classList.toggle('on', on);
+      btn.setAttribute('aria-pressed', String(on));
+      // restart the progress bar on the active edition
+      const bar = btn.querySelector('.bar');
+      bar.classList.remove('run'); void bar.offsetWidth;
+      if (on && running()) bar.classList.add('run');
+    });
+  };
+  const running = () => !reduced && visible && Date.now() >= pausedUntil;
+  const tick = () => {
+    clearTimeout(timer);
+    if (!running()) { $$('.hof-b .bar', box).forEach(b => b.classList.remove('run')); return; }
+    timer = setTimeout(() => { show(order[(order.indexOf(cur) + 1) % order.length]); tick(); }, CHAMP_MS);
+  };
+  $$('.hof-b', box).forEach(btn => btn.addEventListener('click', () => {
+    pausedUntil = Date.now() + 12000;           // a tap holds that edition for 12 s
+    show(btn.dataset.show); tick();
+    setTimeout(() => { show(cur); tick(); }, 12050);
+  }));
+  new IntersectionObserver(([e]) => { visible = e.isIntersecting; show(cur); tick(); }, { threshold: 0.35 }).observe(box);
+  document.addEventListener('visibilitychange', () => { visible = visible && !document.hidden; tick(); });
+}
+
 // Boot
+wireChampions();
 usePhotos();
 optionalImages();
 observeReveals();
