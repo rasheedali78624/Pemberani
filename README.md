@@ -50,11 +50,24 @@ To preview locally, run this from the project folder and open http://localhost:8
 python3 -m http.server 8765
 ```
 
+## Players and pots
+
+`POTS` in `js/config.js` holds the 24 players. Pot A is the eight past podium finishers, each with
+their titles (`[place, edition]`, e.g. `[1, '2.0']` = Edition 2.0 champion); Pot B is everyone else.
+The pots are only used to draw the pairs. The tournament groups (A and B, six pairs each) come from the draw.
+
+## Match-day features
+
+- **Phone tab bar** (Live, Fixtures, Table, Bracket, Players) on both pages, plus quick buttons in the hero.
+- **Latest results** strip in the Match Centre.
+- **Q / OUT markers** in the standings, shown only when a pair is mathematically sure of a quarter-final place, or can no longer reach one.
+- **Champion announcement** appears automatically at the top of both pages when the final is scored.
+
 ## Before the day: what to update in `js/config.js`
 
 1. **The draw.** Replace each placeholder pair with the real one, then set `DRAW_CONFIRMED = true`:
    ```js
-   { id: 'g1p1', name: 'Pok & Daus', players: ['Pok', 'Daus'] },
+   { id: 'g1p1', name: 'Rasheed & Pok', players: ['Rasheed', 'Pok'] },
    ```
    Keep the `id`s as they are (`g1p1`…`g1p6` for Group A, `g2p1`…`g2p6` for Group B). Pair 1–6 order follows the
    group poster, which decides the order of play (`GROUP_ORDER`).
@@ -67,7 +80,7 @@ python3 -m http.server 8765
    | --- | --- | --- |
    | `hero.jpg` | Full-screen opening, behind the title | Landscape, action, subject on the right |
    | `story-1.jpg`, `story-2.jpg`, `story-3.jpg` | Behind "This is not just a game" lines | Landscape or portrait, dramatic |
-   | `champions-e2.jpg` | Defending champions (Pok & Daus) | Portrait (4:5) |
+   | `champions-e2.jpg` | Defending champions (Muizz & Daus) | Portrait (4:5) |
    | `gallery-01.jpg` … `gallery-16.jpg` | Drag-to-scroll gallery (set `GALLERY_COUNT`) | Any |
 
    Example: `export const PHOTOS = ['hero', 'champions-e2'];` and `export const GALLERY_COUNT = 9;`

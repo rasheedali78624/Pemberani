@@ -156,12 +156,22 @@ function renderStandings() {
       <h3>${esc(groupName(g.id))} <small>${esc(courtName(g.court))}</small></h3>
       <div class="head"><span>#</span><span>${t('hPair')}</span><span>${t('hP')}</span><span>${t('hW')}</span><span>${t('hL')}</span><span>+/−</span><span>${t('hPts')}</span></div>
       <div class="rows" style="height:${g.pairs.length * ROW_H}px"></div>
-      <div class="note"><i></i>${t('top4')}</div></div>`).join('');
+      <div class="note"><i></i>${t('top4')}</div><div class="note legend"><b class="qs in">Q</b> ${t('qIn')} &nbsp; <b class="qs out">${t('outTag')}</b> ${t('qOut')}</div></div>`).join('');
     host.dataset.lang = t('pair');
   }
   for (const g of GROUPS) {
     const rowsEl = $(`.tbl[data-g="${g.id}"] .rows`, host);
-    computeStandings(state, g.id).forEach((r, i) => {
+    const list = computeStandings(state, g.id);
+    // Certain outcomes only. Through: fewer than 4 other pairs can still reach this pair's wins.
+    // Out: 4 or more pairs already have more wins than this pair can still reach.
+    const maxW = r => r.w + (r.scheduled - r.p);
+    const status = r => {
+      const others = list.filter(o => o.id !== r.id);
+      if (others.filter(o => maxW(o) >= r.w).length < QUALIFIERS_PER_GROUP && r.p > 0) return 'in';
+      if (others.filter(o => o.w > maxW(r)).length >= QUALIFIERS_PER_GROUP) return 'out';
+      return '';
+    };
+    list.forEach((r, i) => {
       let row = $(`[data-id="${r.id}"]`, rowsEl);
       if (!row) {
         row = document.createElement('div');
@@ -174,7 +184,9 @@ function renderStandings() {
       row.classList.toggle('q', r.q);
       row.classList.toggle('cut', i === QUALIFIERS_PER_GROUP - 1);
       row.style.transform = `translateY(${i * ROW_H}px)`;
-      row.innerHTML = `<span class="pos">${r.rank}</span><span class="nm">${esc(name(r.id))}</span>
+      const qs = status(r);
+      row.classList.toggle('is-in', qs === 'in'); row.classList.toggle('is-out', qs === 'out');
+      row.innerHTML = `<span class="pos">${r.rank}</span><span class="nm">${esc(name(r.id))}${qs ? ` <i class="qs ${qs}">${qs === 'in' ? 'Q' : t('outTag')}</i>` : ''}</span>
         <span>${r.p}</span><span>${r.w}</span><span>${r.l}</span><span>${r.diff > 0 ? '+' : ''}${r.diff}</span><span class="pts">${r.pts}</span>`;
     });
   }
@@ -288,8 +300,39 @@ function renderConn() {
   if (demoBanner) demoBanner.textContent = params.get('demo') === 'sim' ? t('demoSim') : t('demo');
 }
 
+function renderRecent() {
+  const el = $('#recent');
+  if (!el) return;
+  const done = FIXTURES.filter(f => statusOf(state, f.id) === 'done')
+    .sort((a, b) => (state.matches[b.id].endedAt || 0) - (state.matches[a.id].endedAt || 0)).slice(0, 4);
+  el.hidden = !done.length;
+  if (!done.length) return;
+  el.innerHTML = `<h4 class="label">${t('latest')}</h4><div class="recent-row">${done.map(fx => {
+    const f = res[fx.id];
+    const { ev } = scoreLine(f);
+    const w = state.matches[f.id].winner;
+    const sc = rulesFor(f).bestOf > 1 ? ev.games.filter(g => g.a || g.b).map(g => `${g.a}-${g.b}`).join(' ') : `${ev.cur.a}-${ev.cur.b}`;
+    return `<div class="rc"><span class="rc-l">${esc(fxLabel(f))}</span>
+      <span class="rc-n ${w === 'a' ? 'w' : ''}">${esc(side(f, 'a'))}</span>
+      <span class="rc-n ${w === 'b' ? 'w' : ''}">${esc(side(f, 'b'))}</span>
+      <span class="rc-s">${sc}</span></div>`;
+  }).join('')}</div>`;
+}
+
+function renderChampion() {
+  const fin = state.matches?.FINAL;
+  const champ = fin?.status === 'done' ? name(res.FINAL?.[fin.winner]) : null;
+  $$('[data-champion]').forEach(el => {
+    el.hidden = !champ;
+    if (champ) el.innerHTML = `<div class="wrap"><img src="assets/e3/crest-240.webp" alt="" width="240" height="335">
+      <div><span class="label plain">${t('champsE3')}</span><b>${esc(champ)}</b></div></div>`;
+  });
+}
+
 function renderAll() {
   res = resolveFixtures(state);
+  renderRecent();
+  renderChampion();
   const courts = $('#courts');
   if (courts) courts.innerHTML = courtCard(1) + courtCard(2);
   renderFixtures();

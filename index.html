@@ -107,6 +107,12 @@
         <a class="btn magnetic" href="live.html"><span data-i18n="cta.enter">Enter the championship</span> <span class="arr">→</span></a>
         <a class="btn ghost magnetic" href="#statement"><span data-i18n="cta.explore">Explore the tournament</span> <span class="arr">↓</span></a>
       </div>
+        <nav class="quick" aria-label="Quick links">
+          <a href="#match-centre"><span data-i18n="q.live">Live scores</span><i>→</i></a>
+          <a href="#fixtures-anchor"><span data-i18n="tb.fx">Fixtures</span><i>→</i></a>
+          <a href="#standings"><span data-i18n="q.table">Standings</span><i>→</i></a>
+          <a href="#bracket-sec"><span data-i18n="tb.bracket">Bracket</span><i>→</i></a>
+        </nav>
     </div>
   </div>
 
@@ -119,6 +125,8 @@
     </div>
   </div>
 </section>
+
+<div class="champ-banner" data-champion hidden></div>
 
 <div class="band-wrap" aria-hidden="true"><div class="band"><div class="track">
   <span>Fiercer</span><span>Grander</span><span>More competitive</span><span>Lebih sengit</span><span>Lebih besar</span><span>Lebih kompetitif</span>
@@ -172,17 +180,17 @@
 <section class="defending sec" id="champions" data-scene>
   <div class="wrap def-grid">
     <div class="photo def-photo missing">
-      <img data-photo="champions-e2" alt="Pok and Daus, Edition 2.0 champions" loading="lazy">
+      <img data-photo="champions-e2" alt="Muizz and Daus, Edition 2.0 champions" loading="lazy">
       <div class="fallback" aria-hidden="true"><span class="big">E2</span><img src="assets/e3/crest-480.webp" alt="" loading="lazy" width="480" height="669"></div>
       <span class="stamp" data-i18n="def.stamp">Edition 2.0 champions</span>
     </div>
     <div class="def-copy">
       <p class="label" data-reveal><b>02</b> <span data-i18n="def.k">The Defending Champions</span></p>
-      <h2 class="display" data-reveal="lines"><span class="ln" data-reveal-self><span style="--i:0">Pok</span></span><span class="ln" data-reveal-self><span style="--i:1"><span class="y">&amp;</span> Daus</span></span></h2>
+      <h2 class="display" data-reveal="lines"><span class="ln" data-reveal-self><span style="--i:0">Muizz</span></span><span class="ln" data-reveal-self><span style="--i:1"><span class="y">&amp;</span> Daus</span></span></h2>
       <p class="lede" data-reveal data-i18n="def.lede">Champions of Edition 2.0. They came in as one pair among twelve and left with the crown. Now every pair in the draw is coming for it.</p>
       <div class="hof" data-reveal>
         <div><div class="e">1.0</div><div class="nm">Rasheed &amp; Jai</div></div>
-        <div class="cur"><div class="e">2.0</div><div class="nm">Pok &amp; Daus</div></div>
+        <div class="cur"><div class="e">2.0</div><div class="nm">Muizz &amp; Daus</div></div>
         <div class="next"><div class="e">3.0</div><div class="nm" data-i18n="def.next">Your name here?</div></div>
       </div>
     </div>
@@ -221,20 +229,30 @@
   <div class="wrap">
     <div class="sec-head">
       <p class="label" data-reveal><b>04</b> <span data-i18n="lu.k">The Line-up</span></p>
-      <h2 class="display" data-reveal="lines"><span class="ln" data-reveal-self><span style="--i:0" data-i18n="lu.h1">Twelve pairs.</span></span><span class="ln" data-reveal-self><span style="--i:1" class="y" data-i18n="lu.h2">One crown.</span></span></h2>
-      <p class="lede" data-reveal data-i18n="lu.lede">Tap a pair to see their matches and results. Pair names appear here once the draw is confirmed.</p>
+      <h2 class="display" data-reveal="lines"><span class="ln" data-reveal-self><span style="--i:0" data-i18n="lu.h1">24 players.</span></span><span class="ln" data-reveal-self><span style="--i:1" class="y" data-i18n="lu.h2">One crown.</span></span></h2>
+      <p class="lede" data-reveal data-i18n="lu.lede">Two pots for the pairing draw. Pot A is every past podium finisher; Pot B is everyone chasing a first title.</p>
     </div>
-    <div class="tabs" role="tablist" data-reveal>
+
+    <div class="pots">
+      <div class="pot" data-reveal>
+        <div class="pot-hd"><span class="tag y">Pot A</span><span class="pot-t" data-i18n="pot.a">Seeded · past podium</span><b>8</b></div>
+        <div class="seeds" id="potA"></div>
+      </div>
+      <div class="pot" data-reveal style="--i:1">
+        <div class="pot-hd"><span class="tag">Pot B</span><span class="pot-t" data-i18n="pot.b">Challengers</span><b>16</b></div>
+        <div class="names" id="potB"></div>
+      </div>
+    </div>
+
+    <div class="pairs-head">
+      <h3 data-i18n="lu.ph">The pairs</h3>
+      <p class="prov" data-i18n="lu.pp">Pair names appear here once the draw is done. Tap a pair to see their matches and results.</p>
+    </div>
+    <div class="tabs" role="tablist">
       <button role="tab" data-pg="G1" aria-selected="true" data-i18n="g.a">Group A</button>
       <button role="tab" data-pg="G2" aria-selected="false" data-i18n="g.b">Group B</button>
     </div>
     <div class="pairs" id="pairs" data-group="G1"></div>
-
-    <div class="roster">
-      <p class="label" data-reveal data-i18n="lu.rk">The players</p>
-      <h3 data-reveal data-i18n="lu.rh">All <span class="y">24</span></h3>
-      <div class="names" id="names" data-reveal></div>
-    </div>
   </div>
 </section>
 <dialog class="profile" id="profile"></dialog>
@@ -247,7 +265,8 @@
       <h2 class="display" data-reveal="lines"><span class="ln" data-reveal-self><span style="--i:0" data-i18n="mc.h1">On court</span></span><span class="ln" data-reveal-self><span style="--i:1" class="y" data-i18n="mc.h2">right now.</span></span></h2>
     </div>
     <div class="courts" id="courts" data-reveal></div>
-    <div class="fx-tools">
+    <div class="recent" id="recent" hidden></div>
+    <div class="fx-tools" id="fixtures-anchor">
       <h3 data-i18n="mc.fx">Fixtures</h3>
       <div class="tabs" role="tablist">
         <button role="tab" data-fx="all" aria-selected="true" data-i18n="fx.all">All</button>
@@ -333,6 +352,14 @@
   </div>
 </section>
 </main>
+
+<nav class="tabbar" aria-label="Quick links">
+  <a href="#match-centre"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="2.4" fill="currentColor" stroke="none"/><path d="M6.2 6.2a5.4 5.4 0 0 0 0 7.6M13.8 6.2a5.4 5.4 0 0 1 0 7.6M3.6 3.6a9 9 0 0 0 0 12.8M16.4 3.6a9 9 0 0 1 0 12.8"/></svg><span data-i18n="tb.live">Live</span></a>
+  <a href="#fixtures-anchor"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h9"/></svg><span data-i18n="tb.fx">Fixtures</span></a>
+  <a href="#standings"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 4h14v12H3zM3 8h14M3 12h14M8 4v12"/></svg><span data-i18n="tb.table">Table</span></a>
+  <a href="#bracket-sec"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2 4h5v4H2M2 12h5v4H2M7 6h3v8H7M10 10h8"/></svg><span data-i18n="tb.bracket">Bracket</span></a>
+  <a href="#players"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="7.5" cy="7" r="3"/><path d="M2 17c0-3 2.4-5 5.5-5s5.5 2 5.5 5M13.5 4.3a3 3 0 0 1 0 5.4M15.5 12.3c1.6.7 2.5 2.4 2.5 4.7"/></svg><span data-i18n="tb.players">Players</span></a>
+</nav>
 
 <footer class="foot">
   <div class="wrap">

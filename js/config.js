@@ -32,16 +32,29 @@ export const RULES = {
   knockout: { bestOf: 3, target: 15, deuce: true, cap: 21 },
 };
 
-// Players (from the WhatsApp list). Names only.
-export const ROSTER = [
-  'Fareez', 'Aizat', 'Azlan', 'Soul', 'Nizam', 'Herman', 'Daus', 'Rosli',
-  'Rasheed', 'Samad', 'Syahir', 'Jai', 'Fauzie Gigi', 'Abdel', 'Nataman', 'Pok',
-  'Charlie', 'Syaqir', 'Abg Mie', 'Poknik', 'Adian', 'Muizz', 'Abn Fizan', null, // null = slot still open
-];
+// The 24 players, split into the two pots used to draw the pairs.
+// Pot A = past podium finishers (seeded). Titles: [place, edition], place 1 = champion, 2 = runner-up, 3 = third.
+export const POTS = {
+  A: [
+    { name: 'Rasheed', titles: [[1, '1.0']] },
+    { name: 'Jai', titles: [[1, '1.0'], [3, '2.0']] },
+    { name: 'Muizz', titles: [[1, '2.0']] },
+    { name: 'Daus', titles: [[1, '2.0']] },
+    { name: 'Aizat', titles: [[2, '2.0'], [3, '1.0']] },
+    { name: 'Soul', titles: [[2, '2.0']] },
+    { name: 'Herman', titles: [[2, '1.0']] },
+    { name: 'Syahir', titles: [[2, '1.0']] },
+  ],
+  B: [
+    'Fareez', 'Azlan', 'Nizam', 'Fauzie Gigi', 'Abdel', 'Nataman', 'Pok', 'Charlie',
+    'Syaqir', 'Abg Mie', 'Poknik', 'Adian', 'Abg Fizan', 'Satbeer', 'Samad', 'Rosli',
+  ].map(name => ({ name, titles: [] })),
+};
+export const ROSTER = [...POTS.A, ...POTS.B].map(p => p.name);
 
 // The draw. Until it is confirmed every pair is a placeholder.
 // When the draw is made, replace each entry with e.g.
-//   { id: 'g1p1', name: 'Pok & Daus', players: ['Pok', 'Daus'] }
+//   { id: 'g1p1', name: 'Rasheed & Pok', players: ['Rasheed', 'Pok'] }
 // and set DRAW_CONFIRMED = true.
 export const DRAW_CONFIRMED = false;
 
@@ -92,14 +105,14 @@ export const GOODY_BAG = 'Goody bag worth up to RM15 for every entry';
 
 export const HALL_OF_FAME = [
   { edition: '1.0', names: 'Rasheed & Jai', photo: 'assets/champions-e1.jpg' },
-  { edition: '2.0', names: 'Pok & Daus', photo: 'assets/e3/champions-e2.jpg' },
+  { edition: '2.0', names: 'Muizz & Daus', photo: 'assets/e3/champions-e2.jpg' },
 ];
 
 // Photos in assets/e3/. List a name here once its .jpg has been uploaded;
 // until then the page uses its own artwork (no broken images).
 //   hero          → assets/e3/hero.jpg            (wide action shot, landscape)
 //   story-1..3    → assets/e3/story-1.jpg …       (statement section backgrounds)
-//   champions-e2  → assets/e3/champions-e2.jpg    (Pok & Daus, portrait)
+//   champions-e2  → assets/e3/champions-e2.jpg    (Muizz & Daus, portrait)
 export const PHOTOS = [];
 // Gallery: number of files named assets/e3/gallery-01.jpg, gallery-02.jpg, …
 export const GALLERY_COUNT = 0;

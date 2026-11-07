@@ -90,7 +90,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 
 /* ── chrome: progress, nav, menu, cursor, top ───────────── */
 .progress { position: fixed; inset: 0 0 auto; height: 3px; z-index: 120; pointer-events: none; }
-.progress i { display: block; height: 100%; background: var(--y); transform-origin: left; transform: scaleX(var(--sp, 0)); }
+.progress i { display: block; height: 100%; background: var(--y); transform-origin: left; transform: scaleX(0); will-change: transform; }
 
 .nav {
   position: fixed; inset: 0 0 auto; z-index: 100; height: 68px; display: flex; align-items: center;
@@ -147,7 +147,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .to-top.show { opacity: 1; transform: none; pointer-events: auto; }
 .to-top:hover { background: var(--y); color: var(--black); }
 .to-top svg.ring { position: absolute; inset: -1px; width: calc(100% + 2px); height: calc(100% + 2px); transform: rotate(-90deg); }
-.to-top svg.ring circle { fill: none; stroke: var(--y); stroke-width: 2; stroke-dasharray: 163; stroke-dashoffset: calc(163 - 163 * var(--sp, 0)); }
+.to-top svg.ring circle { fill: none; stroke: var(--y); stroke-width: 2; stroke-dasharray: 163; stroke-dashoffset: 163; }
 .to-top .arrow { transition: transform .4s var(--ease); }
 .to-top:hover .arrow { transform: translateY(-3px); }
 
@@ -227,7 +227,7 @@ section { position: relative; }
 .band-wrap { position: relative; z-index: 2; overflow: hidden; padding: 3vw 0; margin: -3vw 0; pointer-events: none; }
 .band { background: var(--y); color: var(--black); overflow: hidden; padding: 14px 0; transform: rotate(-2deg); margin: 0 -4vw; }
 .band.dark { background: var(--black); color: var(--y); border-block: 1px solid var(--line-2); transform: rotate(2deg); }
-.band .track { display: flex; width: max-content; transform: translateX(var(--mx, 0px)); }
+.band .track { display: flex; width: max-content; will-change: transform; }
 .band span { font-family: var(--display); font-size: clamp(28px, 4.2vw, 64px); line-height: 1; text-transform: uppercase; white-space: nowrap; padding-right: .5em; }
 .band span::after { content: "✦"; font-size: .5em; vertical-align: .35em; padding-left: .5em; }
 
@@ -517,7 +517,7 @@ dialog.profile::backdrop { background: rgba(0,0,0,.8); }
 .finale { min-height: 100vh; min-height: 100svh; background: var(--y); color: var(--black); display: flex; flex-direction: column; justify-content: center; overflow: hidden; padding: 120px 0 60px; isolation: isolate; }
 .finale .display { font-size: clamp(64px, min(14vw, 17svh), 250px); }
 .finale .ln:nth-child(2) > span { color: transparent; -webkit-text-stroke: 2px var(--black); }
-.finale .crest { position: absolute; z-index: -1; right: -4vw; top: 50%; width: clamp(240px, 38vw, 620px); transform: translateY(calc(-50% + var(--p, 0) * -18%)) rotate(calc(var(--p, 0) * 12deg - 6deg)); opacity: .12; mix-blend-mode: multiply; }
+.finale .crest { position: absolute; z-index: -1; right: -4vw; top: 50%; width: clamp(240px, 38vw, 620px); transform: translateY(calc(-50% + var(--p, 0) * -18%)) rotate(calc(var(--p, 0) * 12deg - 6deg)); opacity: .1; }
 .finale .ed { display: flex; align-items: center; gap: 18px; margin-top: 28px; font-family: var(--display); font-size: clamp(28px, 3.4vw, 54px); text-transform: uppercase; }
 .finale .ed img { width: 56px; }
 .finale .btn-row { margin-top: 36px; }
@@ -707,3 +707,130 @@ html.modal-open { overflow: hidden; }
   .court-hd .cn { font-size: 34px; }
 }
 @media (max-width: 360px) { .hero-shuttle { display: none; } }
+
+/* ── round 3: smooth scrolling on phones ── */
+/* desktop: moving layers get their own GPU layer */
+html:not(.touch) .hero-bg, html:not(.touch) .hero-type, html:not(.touch) .hero-shuttle,
+html:not(.touch) .statement .ghost-num, html:not(.touch) .finale .crest, html:not(.touch) .def-photo img { will-change: transform; }
+/* touch: bands drift on their own (compositor-only), no scroll work */
+@keyframes marquee { to { transform: translate3d(-50%, 0, 0); } }
+html.touch .band .track { animation: marquee 28s linear infinite; }
+html.touch .band.dark .track { animation-direction: reverse; animation-duration: 34s; }
+/* the pinned statement uses the large viewport so nothing peeks through when Safari's toolbar hides */
+.statement .pin { height: 100vh; height: 100lvh; }
+.statement .meter { bottom: calc(24px + env(safe-area-inset-bottom)); }
+@media (max-width: 860px) { .statement { height: 300vh; } }
+@media (prefers-reduced-motion: reduce) { html.touch .band .track { animation: none !important; } }
+
+/* ── round 3: navigation alignment ─────────────────────── */
+.nav { height: 64px; }
+.nav .wrap { height: 100%; align-items: center; gap: 20px; }
+.nav .brand, .nav:not(.solid) .brand { opacity: 1; pointer-events: auto; }
+.brand { font-size: 19px; line-height: 1; white-space: nowrap; }
+.brand img { width: 24px; }
+.nav-links { gap: 24px; align-items: center; }
+.nav-links a { padding: 8px 0; line-height: 1; }
+.nav .live-pill.on, .lang { height: 32px; }
+.nav .live-pill.on { align-items: center; padding: 0 10px; }
+.lang button { min-height: 0; height: 100%; }
+.menu-btn { width: 40px; height: 40px; }
+.hero-top { padding-top: 88px; }
+@media (max-width: 1100px) {
+  .nav .wrap { gap: 8px; }
+  .nav .brand { margin-right: auto; }
+  .nav .lang, .nav .live-pill.on { margin-left: 0; }
+  .nav .live-pill.on + .lang { margin-left: 0; }
+}
+@media (max-width: 560px) { .nav .brand .bt { display: inline; } .brand { font-size: 17px; } }
+@media (max-width: 370px) { .nav .brand .bt { display: none; } }
+
+/* ── round 3: hero quick links ─────────────────────────── */
+.quick { display: grid; grid-template-columns: repeat(4, auto); gap: 6px 18px; margin-top: 20px; }
+.quick a { display: inline-flex; align-items: center; gap: 8px; padding: 6px 0; font-size: 12px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--silver); border-bottom: 1.5px solid var(--line-2); transition: color .25s, border-color .25s; }
+.quick a i { font-style: normal; color: var(--y); transition: transform .3s var(--ease); }
+.quick a:hover { color: var(--white); border-color: var(--y); }
+.quick a:hover i { transform: translateX(3px); }
+@media (max-width: 1100px) { .quick { grid-template-columns: repeat(4, auto); justify-content: start; } }
+@media (max-width: 560px) {
+  .quick { grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+  .quick a { justify-content: space-between; padding: 12px 14px; border: 1px solid var(--line-2); color: var(--white); min-height: 46px; }
+}
+
+/* ── round 3: phone tab bar ────────────────────────────── */
+.tabbar { display: none; }
+@media (max-width: 860px) {
+  .tabbar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 95; display: grid; grid-template-columns: repeat(5, 1fr);
+    background: rgba(5,5,5,.96); border-top: 1px solid var(--line-2);
+    padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
+    transform: translateY(110%); transition: transform .45s var(--ease);
+  }
+  .tabbar.show, .tabbar.always { transform: none; }
+  .tabbar a { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-height: 48px; font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--dim); }
+  .tabbar svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .tabbar a.active { color: var(--y); }
+  .menu-open .tabbar { transform: translateY(110%); }
+  body.tabbar-on .to-top { bottom: calc(82px + env(safe-area-inset-bottom)); }
+  body.tabbar-on .demo-banner { bottom: calc(82px + env(safe-area-inset-bottom)); }
+  body.tabbar-on .foot { padding-bottom: calc(100px + env(safe-area-inset-bottom)); }
+}
+
+/* ── round 3: pots ─────────────────────────────────────── */
+.pots { display: grid; grid-template-columns: 1fr 1.25fr; gap: clamp(20px, 3vw, 40px); margin-bottom: clamp(56px, 8vw, 100px); }
+.pot { border-top: 2px solid var(--line-2); padding-top: 16px; }
+.pot:first-child { border-top-color: var(--y); }
+.pot-hd { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+.pot-hd .pot-t { font-size: 12px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--silver); }
+.pot-hd b { margin-left: auto; font-family: var(--display); font-weight: 400; font-size: 34px; line-height: 1; color: var(--dim); }
+.pot:first-child .pot-hd b { color: var(--y); }
+.seeds { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.seed { background: var(--black); padding: 14px 14px 16px; display: flex; flex-direction: column; gap: 10px; transition: background .3s; }
+.seed:hover { background: var(--char); }
+.seed .sn { font-family: var(--display); font-size: clamp(28px, 2.6vw, 40px); line-height: 1; text-transform: uppercase; }
+.chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.chip { font-size: 10px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; padding: 4px 7px; border: 1px solid var(--line-2); color: var(--silver); white-space: nowrap; }
+.chip.c1 { background: var(--y); border-color: var(--y); color: var(--black); }
+.chip.c2 { border-color: var(--silver); color: var(--white); }
+.chip.c3 { border-color: var(--orange); color: var(--orange); }
+.pot .names { font-size: clamp(30px, 4vw, 62px); }
+.pot .names span { color: #4a4a4a; }
+.pot .names span.lit, .pot .names span:hover { color: var(--white); }
+.pairs-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 20px; margin-bottom: 16px; }
+.pairs-head h3 { margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(36px, 4vw, 60px); line-height: 1; text-transform: uppercase; }
+.pairs-head .prov { margin: 0; max-width: 52ch; }
+@media (max-width: 860px) { .pots { grid-template-columns: 1fr; } }
+
+/* ── round 3: latest results ───────────────────────────── */
+.recent { margin-top: 28px; }
+.recent .label { margin-bottom: 12px; }
+.recent-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.rc { background: var(--black); border: 1px solid var(--line-2); padding: 12px 14px; display: grid; grid-template-columns: 1fr auto; grid-template-areas: "l l" "a s" "b s"; gap: 4px 10px; align-items: center; }
+.rc-l { grid-area: l; font-size: 10px; font-weight: 800; letter-spacing: .14em; color: var(--dim); text-transform: uppercase; }
+.rc-n { font-size: 13px; font-weight: 700; text-transform: uppercase; color: var(--silver); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rc-n:nth-of-type(2) { grid-area: a; } .rc-n:nth-of-type(3) { grid-area: b; }
+.rc-n.w { color: var(--y); }
+.rc-s { grid-area: s; font-family: var(--display); font-size: 18px; text-align: right; }
+@media (max-width: 860px) {
+  .recent-row { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 72%; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; margin: 0 calc(-1 * var(--gut)); padding: 0 var(--gut); scroll-padding-inline: var(--gut); }
+  .recent-row::-webkit-scrollbar { display: none; }
+  .rc { scroll-snap-align: start; }
+}
+
+/* ── round 3: champion announcement ────────────────────── */
+.champ-banner { background: var(--y); color: var(--black); padding: 26px 0; position: relative; z-index: 3; }
+.champ-banner[hidden] { display: none; }
+.champ-banner .wrap { display: flex; align-items: center; gap: 18px; }
+.champ-banner img { width: 56px; height: auto; }
+.champ-banner .label { color: var(--black); }
+.champ-banner b { display: block; font-family: var(--display); font-weight: 400; font-size: clamp(38px, 7vw, 96px); line-height: .95; text-transform: uppercase; }
+
+/* ── round 3: qualification markers ────────────────────── */
+.qs { font-style: normal; font-size: 9.5px; font-weight: 800; letter-spacing: .1em; padding: 2px 5px; vertical-align: 2px; margin-left: 4px; text-transform: uppercase; }
+.qs.in { background: var(--y); color: var(--black); }
+.qs.out { border: 1px solid var(--line-2); color: var(--dim); }
+.tbl .r.is-out .nm, .tbl .r.is-out .pos { color: var(--dim); }
+.tbl .note.legend { margin-top: 6px; gap: 6px; flex-wrap: wrap; }
+.tbl .note.legend .qs { margin: 0 4px 0 0; }
+.live-hero .display { line-height: .92; }
+@media (min-width: 561px) { .quick { display: flex; flex-wrap: wrap; gap: 6px 20px; } .quick a { white-space: nowrap; } }
+@media (min-width: 1101px) { .hero-shuttle { top: 11%; } }

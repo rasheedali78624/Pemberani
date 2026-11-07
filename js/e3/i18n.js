@@ -19,6 +19,9 @@ const BM = {
   'hero.tag2': 'Fiercer · Grander · More competitive',
   'cta.enter': 'Ikuti kejohanan', 'cta.explore': 'Terokai kejohanan', 'cta.full': 'Pusat perlawanan penuh',
   'cta.standings': 'Lihat kedudukan',
+  'q.live': 'Skor langsung', 'q.table': 'Kedudukan',
+  'tb.live': 'Langsung', 'tb.fx': 'Jadual', 'tb.table': 'Kedudukan', 'tb.bracket': 'Carta', 'tb.players': 'Pemain',
+  'tb.courts': 'Gelanggang', 'tb.pairs': 'Pasangan',
   'k.date': 'Tarikh', 'k.time': 'Masa', 'k.venue': 'Lokasi', 'k.countdown': 'Kiraan detik', 'v.date': 'Sab 05.12.26',
 
   'st.k1': 'Kenyataan', 'st.1a': 'Ini bukan', 'st.1b': 'sekadar <span class="y">permainan.</span>',
@@ -48,8 +51,10 @@ const BM = {
   'fm.c4': 'Gelanggang C4', 'fm.c5': 'Gelanggang C5', 'g.a': 'Kumpulan A', 'g.b': 'Kumpulan B',
   'fm.gp': 'Enam pasangan, lima belas perlawanan, satu gelanggang. Empat teratas mara.',
 
-  'lu.k': 'Barisan Pemain', 'lu.h1': 'Dua belas pasangan.', 'lu.h2': 'Satu mahkota.',
-  'lu.lede': 'Tekan pasangan untuk melihat perlawanan dan keputusan mereka. Nama pasangan dipaparkan sebaik cabutan disahkan.',
+  'lu.k': 'Barisan Pemain', 'lu.h1': '24 pemain.', 'lu.h2': 'Satu mahkota.',
+  'lu.lede': 'Dua pot untuk cabutan pasangan. Pot A ialah semua pemain yang pernah naik podium; Pot B ialah mereka yang memburu gelaran pertama.',
+  'pot.a': 'Pilihan · pernah ke podium', 'pot.b': 'Pencabar', 'lu.ph': 'Pasangan',
+  'lu.pp': 'Nama pasangan dipaparkan sebaik cabutan selesai. Tekan pasangan untuk melihat perlawanan dan keputusan mereka.',
   'lu.rk': 'Para pemain', 'lu.rh': 'Kesemua <span class="y">24</span>',
 
   'mc.h1': 'Di gelanggang', 'mc.h2': 'sekarang.', 'mc.fx': 'Jadual',
@@ -91,6 +96,7 @@ const DYN = {
     demoSim: 'Demo · simulated results', demo: 'Demo mode · nothing is saved', sync: 'Live sync', reconnect: 'Reconnecting…', connecting: 'Connecting…',
     days: 'Days', hrs: 'Hrs', min: 'Min', sec: 'Sec', countdown: 'Countdown', status: 'Status', finished: 'Finished',
     happening: 'Happening now', seeYou: 'See you at 4.0', liveNow: n => `${n} live`, openSlot: 'Open slot', close: 'Close',
+    latest: 'Latest results', outTag: 'Out', qIn: 'sure of a quarter-final place', qOut: 'can no longer qualify', champ: 'Champion', ru: 'Runner-up', third: '3rd',
   },
   bm: {
     live: 'Langsung', upnext: 'Seterusnya', done: 'Selesai', ft: 'Tamat', court: 'Gelanggang', group: 'Kumpulan', match: 'Perlawanan',
@@ -105,6 +111,7 @@ const DYN = {
     demoSim: 'Demo · keputusan simulasi', demo: 'Mod demo · tiada yang disimpan', sync: 'Langsung', reconnect: 'Menyambung semula…', connecting: 'Menyambung…',
     days: 'Hari', hrs: 'Jam', min: 'Min', sec: 'Saat', countdown: 'Kiraan detik', status: 'Status', finished: 'Tamat',
     happening: 'Sedang berlangsung', seeYou: 'Jumpa di 4.0', liveNow: n => `${n} langsung`, openSlot: 'Slot kosong', close: 'Tutup',
+    latest: 'Keputusan terkini', outTag: 'Terkeluar', qIn: 'pasti ke suku akhir', qOut: 'tidak lagi boleh layak', champ: 'Juara', ru: 'Naib johan', third: 'Ketiga',
   },
 };
 
