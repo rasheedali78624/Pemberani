@@ -967,7 +967,7 @@ html.touch .podium.in .block b { opacity: 1; transform: none; }
 .hof-b .bar { position: absolute; left: 0; right: 16px; top: -1px; height: 2px; background: transparent; }
 .hof-b + .hof-b .bar { left: 16px; }
 .hof-b.on .bar { background: var(--y); transform-origin: left; }
-.hof-b.on .bar.run { animation: champBar 5s linear forwards; }
+.hof-b.on .bar.run { animation: champBar 4s linear forwards; }
 @keyframes champBar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 @media (prefers-reduced-motion: reduce) {
   .def-photo .sl, .def-slide { transition: none !important; }
