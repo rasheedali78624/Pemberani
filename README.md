@@ -10,8 +10,8 @@ Both Edition 3.0 pages have an **EN / BM** switch at the top. The choice is reme
 
 | Page | Who uses it |
 | --- | --- |
-| `index.html` | Everyone: the Edition 3.0 campaign (hero, statement, champions, format, line-up, live match centre, standings, bracket, prizes) |
-| `live.html` | Match day: fast page with live courts, fixtures, standings, bracket and pairs. No intro animation. Share this on the day |
+| `index.html` | Everyone: the Edition 3.0 story (hero, statement, champions, format, players and pots, prizes) with a short "on court now" strip linking to the Match Centre |
+| `live.html` | The Match Centre: live courts, latest results, match of the day, fixtures, standings with the qualification race, bracket and pairs. Share this on the day |
 | `score.html` | Umpires and committee: tap-to-score console (sign-in required) |
 | `edition2/` | Edition 2.0 site and e-certificates, kept as an archive (`cert.html` in the root redirects there) |
 | `family-scoreboard.html` | Thursday Family Night live scoreboard (currently #2, Diwali Edition) |
@@ -60,7 +60,12 @@ The pots are only used to draw the pairs. The tournament groups (A and B, six pa
 
 - **Phone tab bar** (Live, Fixtures, Table, Bracket, Players) on both pages, plus quick buttons in the hero.
 - **Latest results** strip in the Match Centre.
-- **Q / OUT markers** in the standings, shown only when a pair is mathematically sure of a quarter-final place, or can no longer reach one.
+- **Standings:** top four in gold, 5th and 6th dimmed, ▲▼ arrows for 8 seconds when a result changes the order, and any row opens that pair's match history.
+- **Qualification race** under each table: wins, losses and matches left for every pair, the current 4th-place line, and
+  Qualified / In the race / Eliminated. A pair is only marked qualified or eliminated when it is mathematically certain;
+  once the group is finished, the final table (with tiebreaks) decides.
+- **Match of the day** and highlight cards (closest finish, biggest comeback, longest match, biggest win), worked out from the
+  rally-by-rally scores the scorers enter. Each card shows a different match when there are enough to choose from.
 - **Champion announcement** appears automatically at the top of both pages when the final is scored.
 
 ## Before the day: what to update in `js/config.js`

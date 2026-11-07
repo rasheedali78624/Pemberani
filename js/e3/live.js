@@ -146,8 +146,23 @@ function renderFixtures() {
   }
 }
 
-// ── Standings (rows glide when the order changes) ────────────
+// ── Standings: gold top four, dimmed bottom two, movement arrows ──
 const ROW_H = 56;
+const prevRank = {};          // last rank shown for each pair
+const moved = {};             // pairId → { by, until }
+let baseline = false;         // arrows only for changes after the first real data arrives
+const maxW = r => r.w + (r.scheduled - r.p);
+// Certain outcomes only. Through: fewer than 4 other pairs can still reach this pair's wins.
+// Out: 4 or more pairs already have more wins than this pair can still reach.
+function qualStatus(list, r) {
+  // group finished: the final table (with tiebreaks) decides
+  if (list.every(o => o.p === o.scheduled)) return r.q ? 'in' : 'out';
+  const others = list.filter(o => o.id !== r.id);
+  if (r.p > 0 && others.filter(o => maxW(o) >= r.w).length < QUALIFIERS_PER_GROUP) return 'in';
+  if (others.filter(o => o.w > maxW(r)).length >= QUALIFIERS_PER_GROUP) return 'out';
+  return '';
+}
+
 function renderStandings() {
   const host = $('[data-standings]');
   if (!host) return;
@@ -156,40 +171,167 @@ function renderStandings() {
       <h3>${esc(groupName(g.id))} <small>${esc(courtName(g.court))}</small></h3>
       <div class="head"><span>#</span><span>${t('hPair')}</span><span>${t('hP')}</span><span>${t('hW')}</span><span>${t('hL')}</span><span>+/−</span><span>${t('hPts')}</span></div>
       <div class="rows" style="height:${g.pairs.length * ROW_H}px"></div>
-      <div class="note"><i></i>${t('top4')}</div><div class="note legend"><b class="qs in">Q</b> ${t('qIn')} &nbsp; <b class="qs out">${t('outTag')}</b> ${t('qOut')}</div></div>`).join('');
+      <div class="note"><i></i>${t('top4')}</div>
+      <div class="race" data-race="${g.id}"></div></div>`).join('');
     host.dataset.lang = t('pair');
   }
+  const now = Date.now();
   for (const g of GROUPS) {
     const rowsEl = $(`.tbl[data-g="${g.id}"] .rows`, host);
     const list = computeStandings(state, g.id);
-    // Certain outcomes only. Through: fewer than 4 other pairs can still reach this pair's wins.
-    // Out: 4 or more pairs already have more wins than this pair can still reach.
-    const maxW = r => r.w + (r.scheduled - r.p);
-    const status = r => {
-      const others = list.filter(o => o.id !== r.id);
-      if (others.filter(o => maxW(o) >= r.w).length < QUALIFIERS_PER_GROUP && r.p > 0) return 'in';
-      if (others.filter(o => o.w > maxW(r)).length >= QUALIFIERS_PER_GROUP) return 'out';
-      return '';
-    };
     list.forEach((r, i) => {
       let row = $(`[data-id="${r.id}"]`, rowsEl);
       if (!row) {
-        row = document.createElement('div');
+        row = document.createElement('button');
+        row.type = 'button';
         row.className = 'r'; row.dataset.id = r.id;
         rowsEl.append(row);
       }
+      // movement since the last update (shown for 8 seconds)
+      if (baseline && prevRank[r.id] && prevRank[r.id] !== r.rank) moved[r.id] = { by: prevRank[r.id] - r.rank, until: now + 8000 };
+      prevRank[r.id] = r.rank;
+      const mv = moved[r.id] && moved[r.id].until > now ? moved[r.id].by : 0;
       const sig = `${r.p}|${r.w}|${r.diff}`;
-      if (row.dataset.sig && row.dataset.sig !== sig) { row.classList.add('flash'); setTimeout(() => row.classList.remove('flash'), 1200); }
+      if (row.dataset.sig && row.dataset.sig !== sig) { row.classList.add('flash'); setTimeout(() => row.classList.remove('flash'), 1400); }
       row.dataset.sig = sig;
+      const qs = qualStatus(list, r);
       row.classList.toggle('q', r.q);
+      row.classList.toggle('dim', !r.q);
       row.classList.toggle('cut', i === QUALIFIERS_PER_GROUP - 1);
-      row.style.transform = `translateY(${i * ROW_H}px)`;
-      const qs = status(r);
       row.classList.toggle('is-in', qs === 'in'); row.classList.toggle('is-out', qs === 'out');
-      row.innerHTML = `<span class="pos">${r.rank}</span><span class="nm">${esc(name(r.id))}${qs ? ` <i class="qs ${qs}">${qs === 'in' ? 'Q' : t('outTag')}</i>` : ''}</span>
+      row.style.transform = `translateY(${i * ROW_H}px)`;
+      row.setAttribute('aria-label', `${name(r.id)}: ${t('record')}`);
+      row.innerHTML = `<span class="pos">${r.rank}${mv ? `<i class="mv ${mv > 0 ? 'up' : 'down'}">${mv > 0 ? '▲' : '▼'}${Math.abs(mv)}</i>` : ''}</span>
+        <span class="nm">${esc(name(r.id))}${qs ? ` <i class="qs ${qs}">${qs === 'in' ? 'Q' : t('outTag')}</i>` : ''}</span>
         <span>${r.p}</span><span>${r.w}</span><span>${r.l}</span><span>${r.diff > 0 ? '+' : ''}${r.diff}</span><span class="pts">${r.pts}</span>`;
     });
+    renderRace(g, list);
   }
+  // clear arrows once they expire
+  const next = Object.values(moved).filter(m => m.until > now).map(m => m.until - now);
+  if (next.length) { clearTimeout(renderStandings.timer); renderStandings.timer = setTimeout(renderStandings, Math.min(...next) + 50); }
+}
+
+// ── Qualification race: wins, losses and matches still to play ──
+function renderRace(g, list) {
+  const el = $(`[data-race="${g.id}"]`);
+  if (!el) return;
+  const per = g.pairs.length - 1;                       // matches per pair in the group
+  const left = FIXTURES.filter(f => f.group === g.id && statusOf(state, f.id) !== 'done').length;
+  const cutW = list[QUALIFIERS_PER_GROUP - 1]?.w ?? 0;   // wins of the pair currently 4th
+  el.innerHTML = `<div class="race-hd"><span class="label plain">${t('raceTitle')}</span>
+      <span class="race-left">${left ? t('groupLeft', left) : t('groupDone')}</span></div>
+    ${list.map(r => {
+      const qs = qualStatus(list, r);
+      const rem = r.scheduled - r.p;
+      const st = qs === 'in' ? `<b class="rs in">${t('qualified')}</b>`
+        : qs === 'out' ? `<b class="rs out">${t('eliminated')}</b>`
+        : `<b class="rs">${t('inRace')}</b>`;
+      const cells = [
+        ...Array(r.w).fill('w'), ...Array(r.l).fill('l'), ...Array(rem).fill('o'),
+      ].slice(0, per).map(c => `<i class="${c}"></i>`).join('');
+      return `<button type="button" class="race-row ${qs}" data-id="${r.id}">
+        <span class="rn">${esc(name(r.id))}</span>
+        <span class="rb" style="--cut:${cutW}">${cells}<em class="cutline" style="left:calc(${cutW} / ${per} * 100%)"></em></span>
+        <span class="rr">${st}<small>${rem ? t('left', rem) : ''}</small></span>
+      </button>`;
+    }).join('')}
+    <div class="race-key"><span><i class="w"></i>${t('kWin')}</span><span><i class="l"></i>${t('kLoss')}</span><span><i class="o"></i>${t('kLeft')}</span><span><em></em>${t('kCut')}</span></div>`;
+}
+
+// ── Match of the day + highlights, from the rally-by-rally record ──
+function matchStats(f) {
+  const rec = state.matches[f.id];
+  const r = rulesFor(f);
+  const ev = evalMatch(rec, r);
+  const games = ev.games.filter(g => g.a || g.b);
+  let margin = 0, rallies = 0, comeback = null, deuce = false;
+  games.forEach((g, gi) => {
+    margin += Math.abs(g.a - g.b);
+    rallies += g.a + g.b;
+    if (Math.max(g.a, g.b) > r.target) deuce = true;
+    if (!g.winner) return;
+    const W = g.winner, L = W === 'a' ? 'b' : 'a';
+    let a = 0, b = 0, worst = 0, at = null;
+    for (const c of g.seq) {
+      c === 'a' ? a++ : b++;
+      const s = { a, b };
+      const gap = s[L] - s[W];
+      if (gap > worst) { worst = gap; at = { w: s[W], l: s[L], game: gi + 1 }; }
+    }
+    if (worst > 0 && (!comeback || worst > comeback.gap)) comeback = { gap: worst, side: W, ...at };
+  });
+  const fromGameDown = games.length > 1 && games[0].winner && games[0].winner !== rec.winner;
+  // excitement: comebacks, tight finishes, deciding games and extra points all count
+  const score = (comeback ? comeback.gap * 2 : 0) + Math.max(0, 12 - margin) + (games.length === 3 ? 6 : 0) + (deuce ? 5 : 0) + (fromGameDown ? 4 : 0);
+  return { f, rec, games, margin, rallies, comeback, deuce, fromGameDown, score };
+}
+
+function renderHighlights() {
+  const el = $('#highlights');
+  if (!el) return;
+  const done = FIXTURES.filter(f => statusOf(state, f.id) === 'done').map(f => matchStats(res[f.id]));
+  if (!done.length) { el.innerHTML = `<p class="hl-empty">${t('hlEmpty')}</p>`; return; }
+  // each card features a different match whenever there are enough matches to choose from
+  const used = new Set();
+  const pick = (list, key) => {
+    const sorted = list.slice().sort((x, y) => key(y) - key(x) || (y.rec.endedAt || 0) - (x.rec.endedAt || 0));
+    const d = sorted.find(x => !used.has(x.f.id)) || sorted[0];
+    if (d) used.add(d.f.id);
+    return d;
+  };
+  const motd = pick(done, d => d.score);
+  const cb = pick(done.filter(d => d.comeback && d.comeback.gap >= 3), d => d.comeback.gap);
+  const closest = pick(done, d => -d.margin);
+  const longest = pick(done, d => d.rallies);
+  const bigwin = pick(done, d => d.margin);
+
+  const scoreTxt = d => d.games.map(g => `${g.a}–${g.b}`).join(' · ');
+  const winner = d => side(d.f, d.rec.winner);
+  const loser = d => side(d.f, d.rec.winner === 'a' ? 'b' : 'a');
+  const why = d => {
+    const bits = [];
+    if (d.comeback && d.comeback.gap >= 3) bits.push(t('fromDown', d.comeback.l, d.comeback.w));
+    if (d.fromGameDown) bits.push(t('fromGameDown'));
+    if (d.deuce) bits.push(t('wentLong'));
+    if (d.games.length === 3 && !d.fromGameDown) bits.push(t('decider'));
+    if (!bits.length) bits.push(t('margin', d.margin));
+    return bits.join(' · ');
+  };
+  const card = (label, d, big, extra) => `<button type="button" class="hl ${big ? 'motd' : ''}" data-id="${d.rec.winner === 'a' ? d.f.a : d.f.b}">
+      <span class="hl-k">${label}</span>
+      <span class="hl-m">${esc(fxLabel(d.f))} · ${esc(courtName(d.f.court))}</span>
+      <span class="hl-w">${esc(winner(d))}</span>
+      <span class="hl-v">${t('beat')} ${esc(loser(d))}</span>
+      <span class="hl-s">${scoreTxt(d)}</span>
+      <span class="hl-x">${extra}</span>
+    </button>`;
+  el.innerHTML = card(t('motd'), motd, true, why(motd))
+    + `<div class="hl-grid">`
+    + card(t('closest'), closest, false, t('margin', closest.margin))
+    + (cb ? card(t('comeback'), cb, false, t('fromDown', cb.comeback.l, cb.comeback.w)) : '')
+    + card(t('longest'), longest, false, t('rallies', longest.rallies))
+    + card(t('bigwin'), bigwin, false, t('margin', bigwin.margin))
+    + `</div>`;
+}
+
+// ── Homepage teaser: one line per court ──────────────────────
+function renderTeaser() {
+  const el = $('#mcTeaser');
+  if (!el) return;
+  el.innerHTML = [1, 2].map(n => {
+    const { live, next } = courtNow(state, n);
+    let body;
+    if (live) {
+      const { ev } = scoreLine(live);
+      body = `<span class="tag live">${t('live')}</span><span class="tz-m">${esc(side(live, 'a'))} <b>${ev.cur.a}–${ev.cur.b}</b> ${esc(side(live, 'b'))}</span>`;
+    } else if (next) {
+      body = `<span class="tag">${t('upnext')}</span><span class="tz-m">${esc(side(next, 'a'))} ${t('v')} ${esc(side(next, 'b'))} <small>≈ ${clock(approx[next.id])}</small></span>`;
+    } else {
+      body = `<span class="tag done">${t('done')}</span><span class="tz-m">${t('noMore')}</span>`;
+    }
+    return `<a class="tz" href="live.html#courts-sec"><span class="tz-c">${esc(COURT_LABEL[n])}</span>${body}</a>`;
+  }).join('');
 }
 
 // ── Bracket ──────────────────────────────────────────────────
@@ -267,7 +409,7 @@ function renderProfile() {
       <div class="meta" style="margin-top:8px">${p.players ? esc(p.players.join(' & ')) : t('playersTBA')}</div></div>
     <div class="pb">
       <div class="row"><span>${t('record')}</span><span class="res">${r.w}${t('hW')} – ${r.l}${t('hL')} · ${r.diff > 0 ? '+' : ''}${r.diff}</span></div>
-      <h4 class="label" style="margin:22px 0 4px">${t('groupMatches')}</h4>${rows}
+      <h4 class="label" style="margin:22px 0 4px">${t('matches')}</h4>${rows}
     </div>`;
 }
 function openProfile(id) {
@@ -333,6 +475,8 @@ function renderAll() {
   res = resolveFixtures(state);
   renderRecent();
   renderChampion();
+  renderTeaser();
+  renderHighlights();
   const courts = $('#courts');
   if (courts) courts.innerHTML = courtCard(1) + courtCard(2);
   renderFixtures();
@@ -390,7 +534,11 @@ export async function mountLive() {
     $$('[data-pg]').forEach(x => x.setAttribute('aria-selected', String(x === b)));
     renderPairs();
   }));
-  $('#pairs')?.addEventListener('click', e => { const c = e.target.closest('.pair'); if (c) openProfile(c.dataset.id); });
+  // any pair button (cards, standings rows, race rows, highlights) opens that pair's match history
+  document.addEventListener('click', e => {
+    const c = e.target.closest('.pair, [data-standings] .r, .race-row, .hl');
+    if (c?.dataset.id) openProfile(c.dataset.id);
+  });
   const dlg = $('#profile');
   dlg?.addEventListener('click', e => { if (e.target === dlg || e.target.closest('[data-close]')) closeProfile(); });
   dlg?.addEventListener('close', () => { openId = null; document.documentElement.classList.remove('modal-open'); });
@@ -406,6 +554,16 @@ export async function mountLive() {
     if (params.get('demo') === 'sim' && !localStorage.getItem(`${DB_ROOT}-demo-state`)) await simulate(store);
   }
   store.onConnection(ok => { connOk = ok; renderConn(); });
-  store.subscribe(s => { state = s || {}; renderAll(); });
+  let first = true;
+  store.subscribe(s => {
+    state = s || {}; renderAll(); baseline = true;
+    // links like live.html#standings-sec: jump again once the tables have their real height
+    if (first && location.hash) {
+      first = false;
+      const target = document.querySelector(location.hash);
+      if (target) requestAnimationFrame(() => target.scrollIntoView({ block: 'start' }));
+    }
+    first = false;
+  });
   return store;
 }
