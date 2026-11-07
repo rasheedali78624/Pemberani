@@ -66,23 +66,78 @@ function usePhotos() {
   });
 }
 
-// Gallery: the known photos, then any further gallery-NN.jpg found in order (stops at the first gap)
+// Gallery slideshow: one photo at a time in a fixed frame. Photos that don't match the frame
+// are shown whole on a soft blurred copy of themselves (nothing gets cropped off).
+// Swipe, arrows or dots; moves on by itself every 4 s while on screen, pausing after any touch.
+// Shows the known photos, then any further gallery-NN.jpg it finds in order (stops at the first gap).
+const GALLERY_MS = 4000;
 async function buildGallery() {
-  const track = $('#gTrack');
-  if (!track) return;
+  const show = $('#gShow'), track = $('#gTrack');
+  if (!show || !track) return;
   const src = n => `assets/e3/gallery-${String(n).padStart(2, '0')}.jpg`;
-  const item = s => `<figure class="g-item" style="margin:0"><img src="${s}" alt="Pemberani tournament moment" loading="lazy" draggable="false"></figure>`;
   const exists = s => new Promise(ok => { const i = new Image(); i.onload = () => ok(true); i.onerror = () => ok(false); i.src = s; });
+  // absolute URL: a CSS variable is resolved against the stylesheet's folder, not the page
+  const slide = (s, i) => `<figure class="gs-slide" style="--bg:url('${new URL(s, document.baseURI).href}')" aria-roledescription="slide">
+      <img src="${s}" alt="Pemberani tournament moment ${i + 1}" ${i > 1 ? 'loading="lazy"' : ''} draggable="false"></figure>`;
+  const slides = () => $$('.gs-slide', track);
+  const count = $('#gCount'), dots = $('#gDots');
+  let index = 0, timer = null, visible = false, pausedUntil = 0;
+
+  const paint = () => {
+    const all = slides(), n = all.length;
+    count.textContent = `${String(index + 1).padStart(2, '0')} / ${String(n).padStart(2, '0')}`;
+    if (dots.children.length !== n) {
+      dots.innerHTML = all.map((_, i) => `<button type="button" aria-label="Photo ${i + 1}"></button>`).join('');
+      [...dots.children].forEach((d, i) => d.addEventListener('click', () => { hold(); go(i); }));
+    }
+    [...dots.children].forEach((d, i) => d.classList.toggle('on', i === index));
+    all.forEach((el, i) => el.setAttribute('aria-hidden', String(i !== index)));
+  };
+  const go = (i, smooth = true) => {
+    const n = slides().length;
+    if (!n) return;
+    index = (i + n) % n;
+    track.scrollTo({ left: index * track.clientWidth, behavior: smooth && !reduced ? 'smooth' : 'auto' });
+    paint();
+  };
+  const hold = () => { pausedUntil = Date.now() + 10000; };
+  const tick = () => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      if (!reduced && visible && !document.hidden && Date.now() >= pausedUntil) go(index + 1);
+      tick();
+    }, GALLERY_MS);
+  };
+  // keep the counter/dots in step when someone swipes
+  let raf = 0;
+  track.addEventListener('scroll', () => {
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => {
+      const i = Math.round(track.scrollLeft / Math.max(1, track.clientWidth));
+      if (i !== index) { index = i; paint(); }
+    });
+  }, { passive: true });
+  ['pointerdown', 'touchstart', 'wheel'].forEach(ev => track.addEventListener(ev, hold, { passive: true }));
+  $('.gs-btn.prev', show).addEventListener('click', () => { hold(); go(index - 1); });
+  $('.gs-btn.next', show).addEventListener('click', () => { hold(); go(index + 1); });
+  show.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft') { hold(); go(index - 1); }
+    if (e.key === 'ArrowRight') { hold(); go(index + 1); }
+  });
+  addEventListener('resize', () => go(index, false));
+  new IntersectionObserver(([e]) => { visible = e.isIntersecting; }, { threshold: 0.4 }).observe(show);
+
   let n = 0;
   const known = [];
   while (n < GALLERY_COUNT) known.push(src(++n));
-  if (known.length) { track.innerHTML = known.map(item).join(''); $('#gallery').hidden = false; dragScroll(track); }
+  const reveal = () => { if ($('#gallery').hidden) { $('#gallery').hidden = false; tick(); } };
+  if (known.length) { track.innerHTML = known.map(slide).join(''); paint(); reveal(); }
   // look for newly uploaded photos once the page has settled
   await new Promise(r => setTimeout(r, 1500));
   while (n < 60 && await exists(src(n + 1))) {
+    track.insertAdjacentHTML('beforeend', slide(src(n + 1), n));
     n++;
-    track.insertAdjacentHTML('beforeend', item(src(n)));
-    if ($('#gallery').hidden) { $('#gallery').hidden = false; dragScroll(track); }
+    paint(); reveal();
   }
 }
 

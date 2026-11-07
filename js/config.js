@@ -114,7 +114,7 @@ export const HALL_OF_FAME = [
 //   story-1..3    → assets/e3/story-1.jpg …       (statement section backgrounds)
 //   story-4       → assets/e3/story-4.jpg         (group photo, printed into the yellow "This is Pemberani")
 //   champions-e2  → assets/e3/champions-e2.jpg    (Muizz & Daus, portrait)
-export const PHOTOS = ['champions-e2', 'story-1', 'story-2', 'story-4', 'hero']; // hero.jpg: shows automatically once uploaded
+export const PHOTOS = ['champions-e2', 'story-1', 'story-2', 'story-3', 'story-4', 'hero']; // hero.jpg: shows automatically once uploaded
 // Gallery: gallery-01.jpg, gallery-02.jpg, … The site also looks for the next numbers by itself,
 // so new photos appear as soon as they are uploaded with the next number.
 export const GALLERY_COUNT = 5;
