@@ -973,3 +973,9 @@ html.touch .podium.in .block b { opacity: 1; transform: none; }
   .def-photo .sl, .def-slide { transition: none !important; }
   .def-slide .ln > span { transform: none !important; }
 }
+
+/* ── gallery: photos keep their own shape ─────────────── */
+.g-item, .g-item:nth-child(3n+2) { aspect-ratio: auto; height: clamp(240px, 52vh, 520px); }
+.g-item img { width: auto; height: 100%; max-width: none; }
+html.touch .g-item img { filter: none; }
+@media (max-width: 860px) { .g-item, .g-item:nth-child(3n+2) { height: min(52vh, 62vw); } }

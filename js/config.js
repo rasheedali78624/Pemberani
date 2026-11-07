@@ -113,9 +113,9 @@ export const HALL_OF_FAME = [
 //   hero          → assets/e3/hero.jpg            (wide action shot, landscape)
 //   story-1..3    → assets/e3/story-1.jpg …       (statement section backgrounds)
 //   champions-e2  → assets/e3/champions-e2.jpg    (Muizz & Daus, portrait)
-export const PHOTOS = ['champions-e2'];
+export const PHOTOS = ['champions-e2', 'story-1', 'story-2', 'story-3', 'hero']; // hero.jpg: shows automatically once uploaded
 // Gallery: number of files named assets/e3/gallery-01.jpg, gallery-02.jpg, …
-export const GALLERY_COUNT = 0;
+export const GALLERY_COUNT = 4;
 
 // ── Derived lists (no need to edit below) ─────────────────────
 
