@@ -47,6 +47,8 @@ const BM = {
   'def.stamp': 'Juara Edisi 2.0', 'def.k': 'Juara Bertahan',
   'def.lede': 'Juara Edisi 2.0. Mereka datang sebagai satu daripada dua belas pasangan dan pulang membawa mahkota. Kini setiap pasangan mahu merampasnya.',
   'def.next': 'Nama anda pula?',
+  'def.stamp1': 'Juara Edisi 1.0', 'def.k1': 'Juara Pertama',
+  'def.lede1': 'Juara Edisi 1.0, kejohanan Pemberani yang pertama. Kedua-duanya kembali dalam Pot A untuk Edisi 3.0.',
 
   'b.g': 'Peringkat kumpulan', 'b.qf': 'Suku akhir', 'b.sf': 'Separuh akhir', 'b.f': 'Akhir', 'b.c': 'Juara',
   'fm.k': 'Format', 'fm.h1': 'Jalan ke', 'fm.h2': '<span class="y">puncak.</span>',

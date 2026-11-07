@@ -946,5 +946,30 @@ html.touch .podium.in .block b { opacity: 1; transform: none; }
 .hl-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
 .hl-empty { color: var(--silver); border: 1px dashed var(--line-2); padding: 22px; margin: 0; }
 @media (max-width: 860px) { .hl-grid { grid-template-columns: 1fr 1fr; } .hl { padding: 14px; } .hl-w { font-size: 24px; } }
-/* uploaded champions photo: keep both players and the trophy in frame */
-.def-photo > img { object-position: 50% 62%; }
+
+/* ── champions slideshow ───────────────────────────────── */
+.def-photo { position: relative; overflow: hidden; background: var(--char); }
+.def-photo .sl { position: absolute; inset: 0; opacity: 0; transition: opacity 1s var(--ease); }
+.def-photo .sl.on { opacity: 1; z-index: 1; }
+.def-photo .sl[data-slide="e2"] > img { object-position: 50% 62%; }
+.def-photo .sl[data-slide="e1"] > img { object-position: 50% 58%; }
+.def-slides { display: grid; }
+.def-slide { grid-area: 1 / 1; opacity: 0; visibility: hidden; transition: opacity .6s var(--ease), visibility 0s .6s; }
+.def-slide.on { opacity: 1; visibility: visible; transition: opacity .6s var(--ease) .15s, visibility 0s; }
+.def-slide .ln > span { transform: translateY(130%); transition: transform .9s var(--ease); transition-delay: calc(var(--i, 0) * 90ms + .1s); }
+.def-slide.on .ln.in > span { transform: none; }
+.def-slide:not(.on) .ln > span { transform: translateY(130%); transition-duration: .3s; transition-delay: 0s; }
+.hof-b { position: relative; text-align: left; background: none; border: 0; color: inherit; font: inherit; cursor: pointer; padding: 18px 16px 8px 0; }
+.hof > .hof-b + .hof-b, .hof > .hof-b + .next { border-left: 1px solid var(--line-2); padding-left: 16px; }
+.hof-b .e { color: var(--dim); transition: color .3s; }
+.hof-b.on .e { color: var(--y); }
+.hof-b:hover .e { color: var(--white); }
+.hof-b .bar { position: absolute; left: 0; right: 16px; top: -1px; height: 2px; background: transparent; }
+.hof-b + .hof-b .bar { left: 16px; }
+.hof-b.on .bar { background: var(--y); transform-origin: left; }
+.hof-b.on .bar.run { animation: champBar 5s linear forwards; }
+@keyframes champBar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@media (prefers-reduced-motion: reduce) {
+  .def-photo .sl, .def-slide { transition: none !important; }
+  .def-slide .ln > span { transform: none !important; }
+}

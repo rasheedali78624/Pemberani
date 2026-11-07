@@ -176,21 +176,36 @@
   </div>
 </section>
 
-<!-- ═════════ 04 · DEFENDING CHAMPIONS ═════════ -->
+<!-- ═════════ 04 · CHAMPIONS (rotates between Edition 2.0 and 1.0) ═════════ -->
 <section class="defending sec" id="champions" data-scene>
-  <div class="wrap def-grid">
-    <div class="photo def-photo missing">
-      <img data-photo="champions-e2" alt="Muizz and Daus, Edition 2.0 champions" loading="lazy">
-      <div class="fallback" aria-hidden="true"><span class="big">E2</span><img src="assets/e3/crest-480.webp" alt="" loading="lazy" width="480" height="669"></div>
-      <span class="stamp" data-i18n="def.stamp">Edition 2.0 champions</span>
+  <div class="wrap def-grid" data-champs>
+    <div class="def-photo">
+      <div class="photo sl on missing" data-slide="e2">
+        <img data-photo="champions-e2" alt="Muizz and Daus, Edition 2.0 champions" loading="lazy">
+        <div class="fallback" aria-hidden="true"><span class="big">E2</span><img src="assets/e3/crest-480.webp" alt="" loading="lazy" width="480" height="669"></div>
+        <span class="stamp" data-i18n="def.stamp">Edition 2.0 champions</span>
+      </div>
+      <div class="photo sl" data-slide="e1" aria-hidden="true">
+        <img src="assets/e3/champions-e1.jpg" alt="Rasheed and Jai, Edition 1.0 champions" loading="lazy" width="607" height="1080">
+        <span class="stamp" data-i18n="def.stamp1">Edition 1.0 champions</span>
+      </div>
     </div>
     <div class="def-copy">
-      <p class="label" data-reveal><b>02</b> <span data-i18n="def.k">The Defending Champions</span></p>
-      <h2 class="display" data-reveal="lines"><span class="ln" data-reveal-self><span style="--i:0">Muizz</span></span><span class="ln" data-reveal-self><span style="--i:1"><span class="y">&amp;</span> Daus</span></span></h2>
-      <p class="lede" data-reveal data-i18n="def.lede">Champions of Edition 2.0. They came in as one pair among twelve and left with the crown. Now every pair in the draw is coming for it.</p>
+      <div class="def-slides">
+        <div class="def-slide on" data-slide="e2">
+          <p class="label" data-reveal><b>02</b> <span data-i18n="def.k">The Defending Champions</span></p>
+          <h2 class="display" data-reveal="lines"><span class="ln" data-reveal-self><span style="--i:0">Muizz</span></span><span class="ln" data-reveal-self><span style="--i:1"><span class="y">&amp;</span> Daus</span></span></h2>
+          <p class="lede" data-reveal data-i18n="def.lede">Champions of Edition 2.0. They came in as one pair among twelve and left with the crown. Now every pair in the draw is coming for it.</p>
+        </div>
+        <div class="def-slide" data-slide="e1" aria-hidden="true">
+          <p class="label"><b>02</b> <span data-i18n="def.k1">The First Champions</span></p>
+          <h2 class="display"><span class="ln"><span style="--i:0">Rasheed</span></span><span class="ln"><span style="--i:1"><span class="y">&amp;</span> Jai</span></span></h2>
+          <p class="lede" data-i18n="def.lede1">Champions of Edition 1.0, the very first Pemberani tournament. Both are back in Pot A for Edition 3.0.</p>
+        </div>
+      </div>
       <div class="hof" data-reveal>
-        <div><div class="e">1.0</div><div class="nm">Rasheed &amp; Jai</div></div>
-        <div class="cur"><div class="e">2.0</div><div class="nm">Muizz &amp; Daus</div></div>
+        <button type="button" class="hof-b" data-show="e1" aria-pressed="false"><div class="e">1.0</div><div class="nm">Rasheed &amp; Jai</div><i class="bar"></i></button>
+        <button type="button" class="hof-b on" data-show="e2" aria-pressed="true"><div class="e">2.0</div><div class="nm">Muizz &amp; Daus</div><i class="bar"></i></button>
         <div class="next"><div class="e">3.0</div><div class="nm" data-i18n="def.next">Your name here?</div></div>
       </div>
     </div>
