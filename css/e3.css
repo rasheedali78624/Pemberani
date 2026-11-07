@@ -834,3 +834,27 @@ html.touch .band.dark .track { animation-direction: reverse; animation-duration:
 .live-hero .display { line-height: .92; }
 @media (min-width: 561px) { .quick { display: flex; flex-wrap: wrap; gap: 6px 20px; } .quick a { white-space: nowrap; } }
 @media (min-width: 1101px) { .hero-shuttle { top: 11%; } }
+
+/* ── round 4: animations that never miss on phones ─────── */
+/* restart the opening when Safari restores the page from memory */
+.restart .hero, .restart .hero *, .restart .nav { animation: none !important; }
+/* phone versions of the desktop scroll effects: they play when the section comes on screen */
+html.touch .hero-bg { animation: heroDrift 9s cubic-bezier(.2,.7,.2,1) both; }
+@keyframes heroDrift { from { transform: scale(1.14) translateY(-2%); } to { transform: none; } }
+html.touch .def-photo img { transform: scale(1.18); transition: transform 1.8s var(--ease) .15s; }
+html.touch .def-grid.in .def-photo img { transform: none; }
+html.touch .def-photo .fallback .big { transform: translateY(16%); transition: transform 1.6s var(--ease) .2s; }
+html.touch .def-grid.in .def-photo .fallback .big { transform: none; }
+html.touch .def-photo .fallback img { opacity: 0; transform: translate(-50%, -38%) scale(.85); transition: opacity 1s .5s, transform 1.4s var(--ease) .5s; }
+html.touch .def-grid.in .def-photo .fallback img { opacity: 1; transform: translate(-50%, -50%); }
+html.touch .finale .crest { opacity: 0; transform: translateY(-36%) rotate(-16deg) scale(.9); transition: opacity 1.2s, transform 1.8s var(--ease); }
+html.touch .finale.in .crest { opacity: .1; transform: translateY(-50%) rotate(-5deg); }
+html.touch .statement .ghost-num { transform: translateY(calc(var(--ph, 0) * -9%)); transition: transform 1.1s var(--ease); }
+html.touch .podium .block b { opacity: 0; transform: translateY(30%); transition: opacity .8s .5s, transform 1s var(--ease) .5s; }
+html.touch .podium.in .block b { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  html.touch .hero-bg { animation: none !important; }
+  html.touch .def-photo img, html.touch .def-photo .fallback .big, html.touch .podium .block b { transform: none !important; opacity: 1 !important; }
+  html.touch .def-photo .fallback img { transform: translate(-50%, -50%) !important; opacity: 1 !important; }
+  html.touch .finale .crest { transform: translateY(-50%) rotate(-5deg) !important; opacity: .1 !important; }
+}

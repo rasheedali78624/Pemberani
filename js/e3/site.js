@@ -29,7 +29,8 @@ renderPots();
 addEventListener('langchange', renderPots);
 if (names && !reduced) {
   // a slow spotlight that wanders across the names once they are on screen
-  (names.closest('.pot') || names).addEventListener('reveal', () => {
+  (names.closest('.pot') || names).addEventListener('reveal', function start() {
+    this.removeEventListener('reveal', start);
     let i = 0;
     setInterval(() => {
       const spans = $$('span:not(.open)', names);
