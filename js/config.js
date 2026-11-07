@@ -104,7 +104,7 @@ export const PRIZES = [
 export const GOODY_BAG = 'Goody bag worth up to RM15 for every entry';
 
 export const HALL_OF_FAME = [
-  { edition: '1.0', names: 'Rasheed & Jai', photo: 'assets/champions-e1.jpg' },
+  { edition: '1.0', names: 'Rasheed & Jai', photo: 'assets/e3/champions-e1.jpg' },
   { edition: '2.0', names: 'Muizz & Daus', photo: 'assets/e3/champions-e2.jpg' },
 ];
 
@@ -113,7 +113,7 @@ export const HALL_OF_FAME = [
 //   hero          → assets/e3/hero.jpg            (wide action shot, landscape)
 //   story-1..3    → assets/e3/story-1.jpg …       (statement section backgrounds)
 //   champions-e2  → assets/e3/champions-e2.jpg    (Muizz & Daus, portrait)
-export const PHOTOS = [];
+export const PHOTOS = ['champions-e2'];
 // Gallery: number of files named assets/e3/gallery-01.jpg, gallery-02.jpg, …
 export const GALLERY_COUNT = 0;
 

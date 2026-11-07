@@ -946,3 +946,5 @@ html.touch .podium.in .block b { opacity: 1; transform: none; }
 .hl-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
 .hl-empty { color: var(--silver); border: 1px dashed var(--line-2); padding: 22px; margin: 0; }
 @media (max-width: 860px) { .hl-grid { grid-template-columns: 1fr 1fr; } .hl { padding: 14px; } .hl-w { font-size: 24px; } }
+/* uploaded champions photo: keep both players and the trophy in frame */
+.def-photo > img { object-position: 50% 62%; }
