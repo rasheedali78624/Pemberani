@@ -967,7 +967,7 @@ html.touch .podium.in .block b { opacity: 1; transform: none; }
 .hof-b .bar { position: absolute; left: 0; right: 16px; top: -1px; height: 2px; background: transparent; }
 .hof-b + .hof-b .bar { left: 16px; }
 .hof-b.on .bar { background: var(--y); transform-origin: left; }
-.hof-b.on .bar.run { animation: champBar 4s linear forwards; }
+.hof-b.on .bar.run { animation: champBar 3s linear forwards; }
 @keyframes champBar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 @media (prefers-reduced-motion: reduce) {
   .def-photo .sl, .def-slide { transition: none !important; }
@@ -979,3 +979,10 @@ html.touch .podium.in .block b { opacity: 1; transform: none; }
 .g-item img { width: auto; height: 100%; max-width: none; }
 html.touch .g-item img { filter: none; }
 @media (max-width: 860px) { .g-item, .g-item:nth-child(3n+2) { height: min(52vh, 62vw); } }
+
+/* ── "This is Pemberani": group photo printed into the yellow ── */
+.statement[data-phase="3"] .bgs .photo.s3 { opacity: .38; }
+.statement .bgs .photo.duo::after { background: var(--y); mix-blend-mode: multiply; }
+.statement .bgs .photo.duo img { filter: grayscale(1) contrast(1.15) brightness(1.2); }
+@media (max-width: 860px) { .statement[data-phase="3"] .bgs .photo.s3 { opacity: .3; } }
+.statement .bgs .photo.s3 img { object-position: 50% 85%; }

@@ -66,17 +66,28 @@ function usePhotos() {
   });
 }
 
-function buildGallery() {
+// Gallery: the known photos, then any further gallery-NN.jpg found in order (stops at the first gap)
+async function buildGallery() {
   const track = $('#gTrack');
-  if (!track || !GALLERY_COUNT) return;
-  const list = Array.from({ length: GALLERY_COUNT }, (_, i) => `assets/e3/gallery-${String(i + 1).padStart(2, '0')}.jpg`);
-  track.innerHTML = list.map(src => `<figure class="g-item" style="margin:0"><img src="${src}" alt="Pemberani tournament moment" loading="lazy" draggable="false"></figure>`).join('');
-  $('#gallery').hidden = false;
-  dragScroll(track);
+  if (!track) return;
+  const src = n => `assets/e3/gallery-${String(n).padStart(2, '0')}.jpg`;
+  const item = s => `<figure class="g-item" style="margin:0"><img src="${s}" alt="Pemberani tournament moment" loading="lazy" draggable="false"></figure>`;
+  const exists = s => new Promise(ok => { const i = new Image(); i.onload = () => ok(true); i.onerror = () => ok(false); i.src = s; });
+  let n = 0;
+  const known = [];
+  while (n < GALLERY_COUNT) known.push(src(++n));
+  if (known.length) { track.innerHTML = known.map(item).join(''); $('#gallery').hidden = false; dragScroll(track); }
+  // look for newly uploaded photos once the page has settled
+  await new Promise(r => setTimeout(r, 1500));
+  while (n < 60 && await exists(src(n + 1))) {
+    n++;
+    track.insertAdjacentHTML('beforeend', item(src(n)));
+    if ($('#gallery').hidden) { $('#gallery').hidden = false; dragScroll(track); }
+  }
 }
 
-// Champions: rotate Edition 2.0 ⇄ 1.0 every 4 s while on screen; tap 1.0 / 2.0 to choose
-const CHAMP_MS = 4000;
+// Champions: rotate Edition 2.0 ⇄ 1.0 every 3 s while on screen; tap 1.0 / 2.0 to choose
+const CHAMP_MS = 3000;
 function wireChampions() {
   const box = $('[data-champs]');
   if (!box) return;
