@@ -5,7 +5,7 @@ import {
 } from './motion.js';
 import { mountLive } from './live.js';
 import { wireLang, t } from './i18n.js';
-import { TOURNAMENT, ROSTER, PHOTOS, GALLERY_COUNT } from '../config.js';
+import { TOURNAMENT, POTS, PHOTOS, GALLERY_COUNT } from '../config.js';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -14,17 +14,22 @@ const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '
 // Language first, so everything below renders in the right one
 wireLang();
 
-// The players wall
-const names = $('#names');
-function renderNames() {
-  if (!names) return;
-  names.innerHTML = ROSTER.map(n => n ? `<span>${esc(n)}</span>` : `<span class="open">${esc(t('openSlot'))}</span>`).join('');
+// The two pots: Pot A with each player's titles, Pot B as a wall of names
+const potA = $('#potA');
+const names = $('#potB');
+const titleText = ([place, ed]) => `${t(place === 1 ? 'champ' : place === 2 ? 'ru' : 'third')} ${ed}`;
+function renderPots() {
+  if (potA) potA.innerHTML = POTS.A.map(p => `<div class="seed">
+      <span class="sn">${esc(p.name)}</span>
+      <span class="chips">${p.titles.map(tt => `<span class="chip c${tt[0]}">${esc(titleText(tt))}</span>`).join('')}</span>
+    </div>`).join('');
+  if (names) names.innerHTML = POTS.B.map(p => `<span>${esc(p.name)}</span>`).join('');
 }
-renderNames();
-addEventListener('langchange', renderNames);
+renderPots();
+addEventListener('langchange', renderPots);
 if (names && !reduced) {
   // a slow spotlight that wanders across the names once they are on screen
-  names.addEventListener('reveal', () => {
+  (names.closest('.pot') || names).addEventListener('reveal', () => {
     let i = 0;
     setInterval(() => {
       const spans = $$('span:not(.open)', names);
@@ -38,12 +43,16 @@ if (names && !reduced) {
 // Format road: line fills as the section scrolls through, stages light up
 const road = $('#road');
 const stages = road ? $$('.stage', road) : [];
+let lastRp = -1;
 const onScrollExtra = () => {
   if (!road) return;
   const r = road.getBoundingClientRect();
   const vh = innerHeight;
-  const p = Math.min(1, Math.max(0, (vh * 0.75 - r.top) / (r.height + vh * 0.2)));
-  road.style.setProperty('--rp', p.toFixed(3));
+  if (r.bottom < -vh || r.top > vh * 1.5) return;
+  const p = Math.round(Math.min(1, Math.max(0, (vh * 0.75 - r.top) / (r.height + vh * 0.2))) * 100) / 100;
+  if (p === lastRp) return;
+  lastRp = p;
+  road.style.setProperty('--rp', p);
   stages.forEach((s, i) => s.classList.toggle('lit', p >= i / (stages.length - 1) * 0.92));
 };
 

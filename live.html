@@ -52,10 +52,13 @@
     </div>
   </section>
 
+  <div class="champ-banner" data-champion hidden></div>
+
   <section class="mc sec" id="courts-sec">
     <div class="wrap">
       <div class="sec-head"><p class="label" data-i18n="lv.oc">On court</p><h2 class="display" data-i18n="lv.now">Right <span class="y">now.</span></h2></div>
       <div class="courts" id="courts"></div>
+      <div class="recent" id="recent" hidden></div>
     </div>
   </section>
 
@@ -103,6 +106,14 @@
   </section>
   <dialog class="profile" id="profile"></dialog>
 </main>
+
+<nav class="tabbar always" aria-label="Quick links">
+  <a href="#courts-sec"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="2.4" fill="currentColor" stroke="none"/><path d="M6.2 6.2a5.4 5.4 0 0 0 0 7.6M13.8 6.2a5.4 5.4 0 0 1 0 7.6M3.6 3.6a9 9 0 0 0 0 12.8M16.4 3.6a9 9 0 0 1 0 12.8"/></svg><span data-i18n="tb.courts">Courts</span></a>
+  <a href="#fixtures-sec"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h9"/></svg><span data-i18n="tb.fx">Fixtures</span></a>
+  <a href="#standings-sec"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 4h14v12H3zM3 8h14M3 12h14M8 4v12"/></svg><span data-i18n="tb.table">Table</span></a>
+  <a href="#bracket-sec"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2 4h5v4H2M2 12h5v4H2M7 6h3v8H7M10 10h8"/></svg><span data-i18n="tb.bracket">Bracket</span></a>
+  <a href="#players"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="7.5" cy="7" r="3"/><path d="M2 17c0-3 2.4-5 5.5-5s5.5 2 5.5 5M13.5 4.3a3 3 0 0 1 0 5.4M15.5 12.3c1.6.7 2.5 2.4 2.5 4.7"/></svg><span data-i18n="tb.pairs">Pairs</span></a>
+</nav>
 
 <footer class="foot">
   <div class="wrap">

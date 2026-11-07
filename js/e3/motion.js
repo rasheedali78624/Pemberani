@@ -43,40 +43,51 @@ export function observeReveals(root = document) {
 }
 
 // ── Scroll loop ──────────────────────────────────────────────
-// [data-scene]      → --p : 0 when the element enters, 1 when it leaves
-// [data-pin]        → --p : 0..1 across the pinned distance, plus data-phase
-// .band .track      → --mx: marquee offset tied to scroll
-// html              → --sp: whole-page progress
+// Kept deliberately cheap so phones scroll smoothly:
+//  - the progress bar and back-to-top ring are updated directly (no page-wide CSS variable)
+//  - on touch screens there is no per-frame parallax; sections animate when they come
+//    into view instead, and the marquee bands run on a CSS loop
+//  - on desktop, [data-scene] gets --p (0 → 1 as it passes) and bands follow the scroll
+export const touch = matchMedia('(hover: none), (pointer: coarse)').matches;
+if (touch) document.documentElement.classList.add('touch');
+
 export function startScroll({ onScroll } = {}) {
-  const scenes = $$('[data-scene]');
+  const scrub = !reduced && !touch;
+  const scenes = scrub ? $$('[data-scene]') : [];
+  const bands = scrub ? $$('.band .track') : [];
   const pins = $$('[data-pin]');
-  const bands = $$('.band .track');
+  const bar = $('.progress i');
+  const ring = $('.to-top .ring circle');
   const root = document.documentElement;
-  let ticking = false, lastY = scrollY;
+  let ticking = false, lastY = scrollY, lastP = -1;
 
   const update = () => {
     ticking = false;
     const vh = innerHeight, y = scrollY;
     const max = root.scrollHeight - vh;
-    root.style.setProperty('--sp', max > 0 ? (y / max).toFixed(4) : 0);
-    if (!reduced) {
-      for (const el of scenes) {
-        const r = el.getBoundingClientRect();
-        if (r.bottom < -vh || r.top > vh * 2) continue;
-        el.style.setProperty('--p', clamp((vh - r.top) / (r.height + vh)).toFixed(4));
-      }
-      bands.forEach((t, i) => {
-        const w = t.scrollWidth / 2 || 1;
-        const off = (y * 0.45) % w;
-        t.style.setProperty('--mx', `${i % 2 ? off - w : -off}px`);
-      });
+    const sp = max > 0 ? Math.round(y / max * 500) / 500 : 0;
+    if (sp !== lastP) {
+      lastP = sp;
+      if (bar) bar.style.transform = `scaleX(${sp})`;
+      if (ring) ring.style.strokeDashoffset = String(163 - 163 * sp);
     }
+    for (const el of scenes) {
+      const r = el.getBoundingClientRect();
+      if (r.bottom < 0 || r.top > vh) continue;
+      el.style.setProperty('--p', clamp((vh - r.top) / (r.height + vh)).toFixed(3));
+    }
+    bands.forEach((t, i) => {
+      const w = t.scrollWidth / 2 || 1;
+      const off = (y * 0.45) % w;
+      t.style.transform = `translate3d(${i % 2 ? off - w : -off}px,0,0)`;
+    });
     for (const el of pins) {
       const r = el.getBoundingClientRect();
+      if (r.bottom < -vh || r.top > vh) continue;
       const p = clamp(-r.top / Math.max(1, r.height - vh));
-      el.style.setProperty('--p', p.toFixed(4));
+      if (scrub) el.style.setProperty('--p', p.toFixed(3));
       const n = +el.dataset.steps || 1;
-      const phase = Math.min(n - 1, Math.floor(p * n * 0.999 + (p > 0 ? 0 : 0)));
+      const phase = Math.min(n - 1, Math.floor(p * n * 0.999));
       if (el.dataset.phase !== String(phase)) {
         el.dataset.phase = phase;
         el.dispatchEvent(new CustomEvent('phase', { detail: phase }));
@@ -110,19 +121,31 @@ export function wireNav() {
   const nav = $('.nav');
   if (!nav) return;
   const hero = $('.hero') || $('.live-hero');
-  const links = $$('.nav-links a[href^="#"], .menu a[href^="#"]');
+  const links = $$('.nav-links a[href^="#"], .menu a[href^="#"], .tabbar a[href^="#"]');
+  const tabbar = $('.tabbar');
   const targets = links.map(a => $(a.getAttribute('href'))).filter(Boolean);
-  let dir = 0;
+  let travel = 0, hidden = false;
   const onScroll = (y, dy) => {
     const heroH = hero ? hero.offsetHeight * 0.6 : 80;
     nav.classList.toggle('solid', y > 40);
-    if (Math.abs(dy) > 4) dir = dy;
-    nav.classList.toggle('hidden', !document.body.classList.contains('menu-open') && y > heroH && dir > 0);
+    // hysteresis: hide only after ~40px of deliberate downward scrolling, show after ~20px up
+    // (iPhone momentum/bounce produces tiny back-and-forth deltas that made the bar flicker)
+    if (Math.sign(dy) !== Math.sign(travel)) travel = 0;
+    travel += dy;
+    if (travel > 40) hidden = true;
+    if (travel < -20 || y < heroH) hidden = false;
+    nav.classList.toggle('hidden', !document.body.classList.contains('menu-open') && hidden);
     // active section
-    let cur = null;
-    for (const t of targets) if (t.getBoundingClientRect().top < innerHeight * 0.4) cur = t.id;
+    // the section whose top most recently passed 40% of the screen
+    let cur = null, best = -Infinity;
+    for (const t of targets) {
+      const top = t.getBoundingClientRect().top;
+      if (top < innerHeight * 0.4 && top > best) { best = top; cur = t.id; }
+    }
     links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + cur));
     $('.to-top')?.classList.toggle('show', y > innerHeight * 1.2);
+    if (tabbar && !tabbar.classList.contains('always')) tabbar.classList.toggle('show', y > heroH * 0.5);
+    document.body.classList.toggle('tabbar-on', !!tabbar && (tabbar.classList.contains('always') || tabbar.classList.contains('show')));
   };
   // mobile menu
   const btn = $('.menu-btn');
