@@ -30,8 +30,8 @@
   <div class="wrap">
     <a class="brand" href="#top"><img src="assets/icon.png" alt=""><span class="bt">Pemberani <em>3.0</em></span></a>
     <nav class="nav-links" aria-label="Sections">
-      <a href="#top" data-i18n="nav.home">Home</a><a href="#event" data-i18n="nav.event">The Event</a><a href="#players" data-i18n="nav.players">Players</a>
-      <a href="#match-centre" data-i18n="nav.mc">Match Centre</a><a href="#standings" data-i18n="nav.standings">Standings</a><a href="#bracket-sec" data-i18n="nav.bracket">Bracket</a><a href="#prizes" data-i18n="nav.prizes">Prizes</a>
+      <a href="#top" data-i18n="nav.home">Home</a><a href="#event" data-i18n="nav.event">The Event</a><a href="#champions" data-i18n="nav.champs">Champions</a><a href="#format" data-i18n="nav.format">Format</a><a href="#players" data-i18n="nav.players">Players</a><a href="#prizes" data-i18n="nav.prizes">Prizes</a>
+      <a class="nav-cta" href="live.html" data-i18n="nav.open">Match Centre</a>
     </nav>
     <span class="tag live live-pill">Live</span>
     <div class="lang" role="group" aria-label="Language">
@@ -43,11 +43,11 @@
 <div class="menu" id="menu" aria-hidden="true">
   <a href="#top"><span class="ln"><span style="--i:0" data-i18n="nav.home">Home</span></span></a>
   <a href="#event"><span class="ln"><span style="--i:1" data-i18n="nav.event">The Event</span></span></a>
-  <a href="#players"><span class="ln"><span style="--i:2" data-i18n="nav.players">Players</span></span></a>
-  <a href="#match-centre"><span class="ln"><span style="--i:3" data-i18n="nav.mc">Match Centre</span></span></a>
-  <a href="#standings"><span class="ln"><span style="--i:4" data-i18n="nav.standings">Standings</span></span></a>
-  <a href="#bracket-sec"><span class="ln"><span style="--i:5" data-i18n="nav.bracket">Bracket</span></span></a>
-  <a href="#prizes"><span class="ln"><span style="--i:6" data-i18n="nav.prizes">Prizes</span></span></a>
+  <a href="#champions"><span class="ln"><span style="--i:2" data-i18n="nav.champs">Champions</span></span></a>
+  <a href="#format"><span class="ln"><span style="--i:3" data-i18n="nav.format">Format</span></span></a>
+  <a href="#players"><span class="ln"><span style="--i:4" data-i18n="nav.players">Players</span></span></a>
+  <a href="#prizes"><span class="ln"><span style="--i:5" data-i18n="nav.prizes">Prizes</span></span></a>
+  <a href="live.html" class="menu-mc"><span class="ln"><span style="--i:6"><span data-i18n="nav.open">Match Centre</span> →</span></span></a>
   <div class="menu-foot" data-i18n="meta.line">Sat 05.12.2026 · Andalas Sports Complex</div>
 </div>
 
@@ -108,10 +108,10 @@
         <a class="btn ghost magnetic" href="#statement"><span data-i18n="cta.explore">Explore the tournament</span> <span class="arr">↓</span></a>
       </div>
         <nav class="quick" aria-label="Quick links">
-          <a href="#match-centre"><span data-i18n="q.live">Live scores</span><i>→</i></a>
-          <a href="#fixtures-anchor"><span data-i18n="tb.fx">Fixtures</span><i>→</i></a>
-          <a href="#standings"><span data-i18n="q.table">Standings</span><i>→</i></a>
-          <a href="#bracket-sec"><span data-i18n="tb.bracket">Bracket</span><i>→</i></a>
+          <a href="live.html#courts-sec"><span data-i18n="q.live">Live scores</span><i>→</i></a>
+          <a href="live.html#fixtures-sec"><span data-i18n="tb.fx">Fixtures</span><i>→</i></a>
+          <a href="live.html#standings-sec"><span data-i18n="q.table">Standings</span><i>→</i></a>
+          <a href="live.html#bracket-sec"><span data-i18n="tb.bracket">Bracket</span><i>→</i></a>
         </nav>
     </div>
   </div>
@@ -244,75 +244,34 @@
       </div>
     </div>
 
-    <div class="pairs-head">
-      <h3 data-i18n="lu.ph">The pairs</h3>
-      <p class="prov" data-i18n="lu.pp">Pair names appear here once the draw is done. Tap a pair to see their matches and results.</p>
-    </div>
-    <div class="tabs" role="tablist">
-      <button role="tab" data-pg="G1" aria-selected="true" data-i18n="g.a">Group A</button>
-      <button role="tab" data-pg="G2" aria-selected="false" data-i18n="g.b">Group B</button>
-    </div>
-    <div class="pairs" id="pairs" data-group="G1"></div>
   </div>
 </section>
-<dialog class="profile" id="profile"></dialog>
 
-<!-- ═════════ 07 · MATCH CENTRE ═════════ -->
-<section class="mc sec" id="match-centre">
+
+<!-- ═════════ 07 · MATCH CENTRE TEASER (full version: live.html) ═════════ -->
+<section class="mc-teaser sec" id="match-centre">
   <div class="wrap">
     <div class="sec-head">
-      <p class="label" data-reveal><b>05</b> <span data-i18n="nav.mc">Match Centre</span> <span class="conn"><i></i><span>…</span></span></p>
-      <h2 class="display" data-reveal="lines"><span class="ln" data-reveal-self><span style="--i:0" data-i18n="mc.h1">On court</span></span><span class="ln" data-reveal-self><span style="--i:1" class="y" data-i18n="mc.h2">right now.</span></span></h2>
+      <p class="label" data-reveal><b>05</b> <span data-i18n="mt.k">Match Centre</span> <span class="conn"><i></i><span>…</span></span></p>
+      <h2 class="display" data-reveal="lines"><span class="ln" data-reveal-self><span style="--i:0" data-i18n="mt.h1">Every rally.</span></span><span class="ln" data-reveal-self><span style="--i:1" class="y" data-i18n="mt.h2">Live.</span></span></h2>
+      <p class="lede" data-reveal data-i18n="mt.lede">Live courts, fixtures, standings, the qualification race and the knockout bracket, updated after every rally. Open it on match day.</p>
     </div>
-    <div class="courts" id="courts" data-reveal></div>
-    <div class="recent" id="recent" hidden></div>
-    <div class="fx-tools" id="fixtures-anchor">
-      <h3 data-i18n="mc.fx">Fixtures</h3>
-      <div class="tabs" role="tablist">
-        <button role="tab" data-fx="all" aria-selected="true" data-i18n="fx.all">All</button>
-        <button role="tab" data-fx="G1" aria-selected="false" data-i18n="g.a">Group A</button>
-        <button role="tab" data-fx="G2" aria-selected="false" data-i18n="g.b">Group B</button>
-        <button role="tab" data-fx="ko" aria-selected="false" data-i18n="fx.ko">Knockout</button>
-        <button role="tab" data-fx="results" aria-selected="false" data-i18n="fx.res">Results</button>
-      </div>
+    <div class="teaser" id="mcTeaser" data-reveal></div>
+    <div class="mt-tiles">
+      <a class="mt-tile" href="live.html#courts-sec" data-reveal><span class="n">01</span><span data-i18n="mt.t1">Live courts</span><i>→</i></a>
+      <a class="mt-tile" href="live.html#fixtures-sec" data-reveal style="--i:1"><span class="n">02</span><span data-i18n="mt.t2">Fixtures &amp; results</span><i>→</i></a>
+      <a class="mt-tile" href="live.html#standings-sec" data-reveal style="--i:2"><span class="n">03</span><span data-i18n="mt.t3">Standings &amp; qualification</span><i>→</i></a>
+      <a class="mt-tile" href="live.html#bracket-sec" data-reveal style="--i:3"><span class="n">04</span><span data-i18n="mt.t4">Knockout bracket</span><i>→</i></a>
     </div>
-    <div class="fx-list" id="fixtures" data-limit="8"></div>
-    <div class="btn-row more">
-      <button class="btn ghost" id="fxMore"><span class="t">All matches</span></button>
-      <a class="btn" href="live.html"><span data-i18n="cta.full">Full match centre</span> <span class="arr">→</span></a>
-    </div>
+    <a class="btn magnetic mt-cta" href="live.html"><span data-i18n="mt.cta">Open the Match Centre</span> <span class="arr">→</span></a>
   </div>
 </section>
 
-<!-- ═════════ 08 · STANDINGS ═════════ -->
-<section class="standings sec" id="standings">
-  <div class="wrap">
-    <div class="sec-head">
-      <p class="label" data-reveal><b>06</b> <span data-i18n="sd.k">Group Standings</span></p>
-      <h2 class="display" data-reveal="lines"><span class="ln" data-reveal-self><span style="--i:0" data-i18n="sd.h1">Earn</span></span><span class="ln" data-reveal-self><span style="--i:1" data-i18n="sd.h2">your <span class="y">place.</span></span></span></h2>
-      <p class="lede" data-reveal data-i18n="sd.lede">Ranked by wins, then point difference, then points scored, then head-to-head. Updates live after every match.</p>
-    </div>
-    <div class="tables" data-standings></div>
-  </div>
-</section>
-
-<!-- ═════════ 09 · BRACKET ═════════ -->
-<section class="bracket-sec sec" id="bracket-sec">
-  <div class="wrap">
-    <div class="sec-head">
-      <p class="label" data-reveal><b>07</b> <span data-i18n="bk.k">Knockouts</span></p>
-      <h2 class="display" data-reveal="lines"><span class="ln" data-reveal-self><span style="--i:0" data-i18n="bk.h1">Eight pairs.</span></span><span class="ln" data-reveal-self><span style="--i:1" data-i18n="bk.h2">No <span class="y">second chances.</span></span></span></h2>
-    </div>
-    <p class="swipe-hint" data-i18n="bk.swipe">Swipe to follow the bracket →</p>
-    <div class="bracket-scroll" id="bracketScroll"><div class="bracket" id="bracket"></div></div>
-  </div>
-</section>
-
-<!-- ═════════ 10 · REWARDS ═════════ -->
+<!-- ═════════ 08 · REWARDS ═════════ -->
 <section class="rewards sec" id="prizes">
   <div class="wrap">
     <div class="sec-head">
-      <p class="label" data-reveal><b>08</b> <span data-i18n="pz.k">The Rewards</span></p>
+      <p class="label" data-reveal><b>06</b> <span data-i18n="pz.k">The Rewards</span></p>
       <h2 class="display" data-reveal="lines"><span class="ln" data-reveal-self><span style="--i:0" data-i18n="pz.h1">Play for</span></span><span class="ln" data-reveal-self><span style="--i:1" class="y" data-i18n="pz.h2">something.</span></span></h2>
     </div>
     <div class="podium" id="podium">
@@ -330,13 +289,13 @@
 <!-- ═════════ GALLERY (only shown when photos exist) ═════════ -->
 <section class="gallery sec" id="gallery" hidden>
   <div class="wrap"><div class="sec-head">
-    <p class="label"><b>09</b> <span data-i18n="gl.k">Moments</span></p>
+    <p class="label"><b>07</b> <span data-i18n="gl.k">Moments</span></p>
     <h2 class="display"><span class="ln in"><span data-i18n="gl.h1">The story</span></span><span class="ln in"><span class="y" data-i18n="gl.h2">so far.</span></span></h2>
   </div></div>
   <div class="g-track" id="gTrack"></div>
 </section>
 
-<!-- ═════════ 11 · FINALE ═════════ -->
+<!-- ═════════ 09 · FINALE ═════════ -->
 <section class="finale" data-scene>
   <img class="crest" src="assets/e3/crest-480.webp" alt="" loading="lazy" width="480" height="669">
   <div class="wrap">
@@ -347,17 +306,17 @@
     <div class="ed" data-reveal><img src="assets/e3/crest-240.webp" alt="" loading="lazy" width="240" height="335">Pemberani 3.0 · 05.12.2026</div>
     <div class="btn-row">
       <a class="btn dark magnetic" href="live.html"><span data-i18n="cta.enter">Enter the championship</span> <span class="arr">→</span></a>
-      <a class="btn ghost magnetic on-yellow" href="#standings"><span data-i18n="cta.standings">See the standings</span></a>
+      <a class="btn ghost magnetic on-yellow" href="live.html#standings-sec"><span data-i18n="cta.standings">See the standings</span></a>
     </div>
   </div>
 </section>
 </main>
 
 <nav class="tabbar" aria-label="Quick links">
-  <a href="#match-centre"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="2.4" fill="currentColor" stroke="none"/><path d="M6.2 6.2a5.4 5.4 0 0 0 0 7.6M13.8 6.2a5.4 5.4 0 0 1 0 7.6M3.6 3.6a9 9 0 0 0 0 12.8M16.4 3.6a9 9 0 0 1 0 12.8"/></svg><span data-i18n="tb.live">Live</span></a>
-  <a href="#fixtures-anchor"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h9"/></svg><span data-i18n="tb.fx">Fixtures</span></a>
-  <a href="#standings"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 4h14v12H3zM3 8h14M3 12h14M8 4v12"/></svg><span data-i18n="tb.table">Table</span></a>
-  <a href="#bracket-sec"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2 4h5v4H2M2 12h5v4H2M7 6h3v8H7M10 10h8"/></svg><span data-i18n="tb.bracket">Bracket</span></a>
+  <a href="live.html#courts-sec"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="2.4" fill="currentColor" stroke="none"/><path d="M6.2 6.2a5.4 5.4 0 0 0 0 7.6M13.8 6.2a5.4 5.4 0 0 1 0 7.6M3.6 3.6a9 9 0 0 0 0 12.8M16.4 3.6a9 9 0 0 1 0 12.8"/></svg><span data-i18n="tb.live">Live</span></a>
+  <a href="live.html#fixtures-sec"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h9"/></svg><span data-i18n="tb.fx">Fixtures</span></a>
+  <a href="live.html#standings-sec"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 4h14v12H3zM3 8h14M3 12h14M8 4v12"/></svg><span data-i18n="tb.table">Table</span></a>
+  <a href="live.html#bracket-sec"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2 4h5v4H2M2 12h5v4H2M7 6h3v8H7M10 10h8"/></svg><span data-i18n="tb.bracket">Bracket</span></a>
   <a href="#players"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="7.5" cy="7" r="3"/><path d="M2 17c0-3 2.4-5 5.5-5s5.5 2 5.5 5M13.5 4.3a3 3 0 0 1 0 5.4M15.5 12.3c1.6.7 2.5 2.4 2.5 4.7"/></svg><span data-i18n="tb.players">Players</span></a>
 </nav>
 

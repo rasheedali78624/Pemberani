@@ -25,7 +25,7 @@
   <div class="wrap">
     <a class="brand" href="index.html"><img src="assets/icon.png" alt=""><span class="bt">Pemberani <em>3.0</em></span></a>
     <nav class="nav-links" aria-label="Sections">
-      <a href="#courts-sec" data-i18n="nav.courts">Courts</a><a href="#fixtures-sec" data-i18n="nav.fixtures">Fixtures</a><a href="#standings-sec" data-i18n="nav.standings">Standings</a><a href="#bracket-sec" data-i18n="nav.bracket">Bracket</a><a href="#players" data-i18n="nav.pairs">Pairs</a><a href="index.html" data-i18n="nav.campaign">The Campaign</a>
+      <a href="#courts-sec" data-i18n="nav.courts">Courts</a><a href="#highlights-sec" data-i18n="nav.hl">Highlights</a><a href="#fixtures-sec" data-i18n="nav.fixtures">Fixtures</a><a href="#standings-sec" data-i18n="nav.standings">Standings</a><a href="#bracket-sec" data-i18n="nav.bracket">Bracket</a><a href="#players" data-i18n="nav.pairs">Pairs</a><a href="index.html" data-i18n="nav.campaign">The Campaign</a>
     </nav>
     <span class="tag live live-pill">Live</span>
     <div class="lang" role="group" aria-label="Language">
@@ -36,6 +36,7 @@
 </header>
 <div class="menu" id="menu" aria-hidden="true">
   <a href="#courts-sec"><span class="ln"><span style="--i:0" data-i18n="nav.courts">Courts</span></span></a>
+  <a href="#highlights-sec"><span class="ln"><span style="--i:1" data-i18n="nav.hl">Highlights</span></span></a>
   <a href="#fixtures-sec"><span class="ln"><span style="--i:1" data-i18n="nav.fixtures">Fixtures</span></span></a>
   <a href="#standings-sec"><span class="ln"><span style="--i:2" data-i18n="nav.standings">Standings</span></span></a>
   <a href="#bracket-sec"><span class="ln"><span style="--i:3" data-i18n="nav.bracket">Bracket</span></span></a>
@@ -62,6 +63,14 @@
     </div>
   </section>
 
+  <section class="hl-sec sec" id="highlights-sec">
+    <div class="wrap">
+      <div class="sec-head"><p class="label" data-i18n="hl.k">Highlights</p><h2 class="display" data-i18n="hl.h">Match of the <span class="y">day.</span></h2>
+        <p class="lede" data-i18n="hl.lede">Picked automatically from the real rally-by-rally scores: comebacks, tight finishes and deciding games.</p></div>
+      <div id="highlights"></div>
+    </div>
+  </section>
+
   <section class="sec" id="fixtures-sec" style="background:var(--black)">
     <div class="wrap">
       <div class="fx-tools" style="margin-top:0">
@@ -81,7 +90,7 @@
 
   <section class="standings sec" id="standings-sec">
     <div class="wrap">
-      <div class="sec-head"><p class="label" data-i18n="lv.sk">Group standings</p><h2 class="display" data-i18n="lv.sh">The <span class="y">table.</span></h2></div>
+      <div class="sec-head"><p class="label" data-i18n="lv.sk">Group standings</p><h2 class="display" data-i18n="lv.sh">The <span class="y">table.</span></h2><p class="lede" data-i18n="lv.race">Standings and the qualification race. Tap any pair to see their matches.</p></div>
       <div class="tables" data-standings></div>
     </div>
   </section>
