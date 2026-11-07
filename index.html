@@ -308,7 +308,14 @@
     <p class="label"><b>07</b> <span data-i18n="gl.k">Moments</span></p>
     <h2 class="display"><span class="ln in"><span data-i18n="gl.h1">The story</span></span><span class="ln in"><span class="y" data-i18n="gl.h2">so far.</span></span></h2>
   </div></div>
-  <div class="g-track" id="gTrack"></div>
+  <div class="wrap">
+    <div class="gs" id="gShow" role="region" aria-roledescription="carousel" aria-label="Photo slideshow">
+      <div class="gs-track" id="gTrack"></div>
+      <button type="button" class="gs-btn prev" aria-label="Previous photo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <button type="button" class="gs-btn next" aria-label="Next photo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+    </div>
+    <div class="gs-ui"><span class="gs-count" id="gCount"></span><div class="gs-dots" id="gDots"></div><span class="gs-hint" data-i18n="gl.hint">Swipe or use the arrows</span></div>
+  </div>
 </section>
 
 <!-- ═════════ 09 · FINALE ═════════ -->

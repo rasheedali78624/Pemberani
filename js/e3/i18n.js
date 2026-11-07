@@ -82,7 +82,7 @@ const BM = {
   'pz.gh': 'Setiap penyertaan<br>dapat goody bag.',
   'pz.gp': 'Bernilai sehingga RM15 setiap penyertaan. Jumlah hadiah akan diumumkan kemudian.',
 
-  'gl.k': 'Detik', 'gl.h1': 'Kisah', 'gl.h2': 'setakat ini.',
+  'gl.k': 'Detik', 'gl.hint': 'Leret atau guna anak panah', 'gl.h1': 'Kisah', 'gl.h2': 'setakat ini.',
   'fn.1': 'Bermain dengan berani.', 'fn.2': 'Menang dengan bangga.',
   'ft.e2': 'Edisi 2.0', 'ft.score': 'Pencatat skor',
 
