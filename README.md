@@ -127,6 +127,30 @@ If Firebase can't be reached, the pages fall back to demo mode and show a yellow
 
 ## Thursday Family Night
 
+**Firebase rule for the family scoreboard.** In the Firebase console go to **Realtime Database → Rules** and make sure
+this block is inside `"rules": { … }`, next to `pt2` / `pt3` (don't remove the others), then click **Publish**:
+
+```json
+"familyNight": {
+  ".read": true,
+  "scores": {
+    "$round": {
+      ".write": "$round.beginsWith('n')",
+      ".validate": "newData.hasChildren(['a', 'b'])",
+      "a": { ".validate": "newData.isString() && newData.val().matches(/^([0-9]|[12][0-9]|30)?$/)" },
+      "b": { ".validate": "newData.isString() && newData.val().matches(/^([0-9]|[12][0-9]|30)?$/)" },
+      "t": { ".validate": "newData.isNumber()" },
+      "$other": { ".validate": false }
+    }
+  }
+}
+```
+
+Anyone with the link can enter scores (no sign-in), but only scores 0–30 for Night #2 onwards; Night #1's results are
+read-only. If saving is refused anyway, the page says why (e.g. `PERMISSION_DENIED`) and keeps every score on that phone,
+then sends them by itself once the database accepts them.
+
+
 `family-scoreboard.html` is the link that gets shared, so it always holds the latest night.
 When a night is over, copy it to `family-night-N.html`, make the inputs read-only, and build the next one in its place.
 
