@@ -130,7 +130,7 @@ If Firebase can't be reached, the pages fall back to demo mode and show a yellow
 `family-scoreboard.html` is the link that gets shared, so it always holds the latest night.
 When a night is over, copy it to `family-night-N.html`, make the inputs read-only, and build the next one in its place.
 
-- **Night #2 · Diwali (5 Nov 2026):** 15 rounds = every possible 2-vs-2 match-up of the 5 players exactly once.
+- **Night #2 · Diwali (19 Nov 2026, moved from a cancelled 5 Nov):** 15 rounds = every possible 2-vs-2 match-up of the 5 players exactly once.
   Three sets of five; each player sits out once per set and never twice in a row. After round 10 every pair has
   partnered twice (a fair place to stop); after round 15, three times. Scores are stored under
-  `familyNight/scores/n2r0` … `n2r14`. Night #1 used `r0` … `r9` in the same node, so no rule changes are needed.
+  `familyNight/scores/n2b0` … `n2b14` (the cancelled 5 Nov date used `n2r`). Night #1 used `r0` … `r9` in the same node, so no rule changes are needed.

@@ -9,7 +9,7 @@
 <!-- Open Graph tags: rich preview card on WhatsApp / Telegram / iMessage -->
 <meta property="og:title" content="Thursday Family Night · Diwali Edition 🪔">
 <meta property="og:description" content="Five diyas, one shuttle. Live scores for the Diwali family badminton night at Andalas Court. Tap in and watch the standings update instantly.">
-<meta property="og:image" content="https://rasheedali78624.github.io/Pemberani/assets/family-night-diwali.jpg">
+<meta property="og:image" content="https://rasheedali78624.github.io/Pemberani/assets/family-night-2.jpg">
 <meta property="og:url" content="https://rasheedali78624.github.io/Pemberani/family-scoreboard.html">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
@@ -299,7 +299,7 @@
   <h1>Thursday Family Night</h1>
   <div class="edition">Diwali Edition</div>
   <div class="meta">
-    <span class="chip">📅 Thu, 5 Nov 2026</span>
+    <span class="chip">📅 Thu, 19 Nov 2026</span>
     <span class="chip">🕗 8:00 – 10:00 PM</span>
     <span class="chip">📍 Andalas Court</span>
     <span class="chip">🏸 15 rounds · first to 21</span>
@@ -361,9 +361,10 @@ const firebaseConfig = {
 };
 
 // Same node as Night #1 (so the existing Firebase rules already allow it),
-// but every Night #2 key is prefixed "n2r" so Night #1's r0–r9 stay untouched.
+// Night #2 was first planned for 5 Nov (cancelled; it may have used "n2r" keys) and moved to 19 Nov.
+// Tonight's keys are prefixed "n2b" so the board starts empty and Night #1's r0–r9 stay untouched.
 const DB_PATH = 'familyNight/scores';
-const KEY = i => 'n2r' + i;
+const KEY = i => 'n2b' + i;
 
 // ============================================================
 // THE SCHEDULE
@@ -872,7 +873,7 @@ async function boot(){
     onValue(ref(db, DB_PATH), snap => {
       const all = snap.val() || {};
       scores = {};
-      for(const k in all) if(k.startsWith('n2r')) scores[k] = all[k];
+      for(const k in all) if(k.startsWith('n2b')) scores[k] = all[k];
       setStatus(true, 'Live — syncing for everyone');
       render();
     }, err => {
