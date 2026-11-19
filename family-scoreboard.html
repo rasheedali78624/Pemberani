@@ -636,13 +636,44 @@ async function onScoreChange(e){
   const complete = cur.a !== '' && cur.b !== '' && filled(cur.a) && filled(cur.b) && Number(cur.a) !== Number(cur.b);
   // timestamp the moment a round is finished, for the pace tracker
   cur.t = complete ? (cur.t || Date.now()) : null;
-  if(!db){ scores[KEY(i)] = cur; render(); return; }   // demo mode
+  if(!db && demo){ scores[KEY(i)] = cur; render(); return; }   // demo mode
+  // 1) keep it on this phone straight away (works even if Firebase refuses or the signal drops)
+  scores[KEY(i)] = cur;
+  local[KEY(i)] = { ...cur, pend: true };
+  saveLocal();
+  render();
+  // 2) then send it to everyone else
+  push(KEY(i));
+}
+
+// ── Local safety net ─────────────────────────────────────────
+// Every score is stored on the phone first. Scores Firebase has not accepted yet are marked
+// "pend" and re-sent whenever the connection comes back or the page reloads.
+const LOCAL = 'fn2b-scores';
+let local = (() => { try { return JSON.parse(localStorage.getItem(LOCAL)) || {}; } catch(e){ return {}; } })();
+function saveLocal(){ try { localStorage.setItem(LOCAL, JSON.stringify(local)); } catch(e){} }
+const clean = v => { const { pend, ...rest } = v; return rest; };
+const errCode = err => String((err && (err.code || err.message)) || 'unknown error').split(':')[0].trim();
+let warned = false, online = null;
+async function push(k){
+  if(!db || !local[k]) return;
   try{
-    await update(ref(db, `${DB_PATH}/${KEY(i)}`), cur);
+    await update(ref(db, `${DB_PATH}/${k}`), clean(local[k]));
+    if(local[k]) { local[k].pend = false; saveLocal(); }
+    syncStatus();
   }catch(err){
     console.error(err);
-    alert("Couldn't save — check your connection.");
+    const code = errCode(err);
+    setStatus(false, `Not syncing (${code}) — scores are saved on this phone`);
+    if(!warned){ warned = true; alert(`Couldn't send the score to the others (${code}).\n\nIt IS saved on this phone, so keep scoring here.\nIt will sync by itself once the database accepts it.`); }
   }
+}
+function pushPending(){ Object.keys(local).filter(k => local[k].pend).forEach(push); }
+function syncStatus(){
+  const waiting = Object.values(local).filter(v => v.pend).length;
+  if(online === false) setStatus(false, `Offline — ${waiting ? waiting + ' score(s) saved on this phone, will sync' : 'scores are saved on this phone'}`);
+  else if(waiting) setStatus(false, `Sending ${waiting} score(s)…`);
+  else setStatus(true, 'Live — syncing for everyone');
 }
 
 // ---------- pace tracker ----------
@@ -870,21 +901,31 @@ async function boot(){
     const app = initializeApp(firebaseConfig);
     const getDatabase = dbMod.getDatabase;
     db = getDatabase(app);
+    onValue(ref(db, '.info/connected'), snap => { online = !!snap.val(); if(online) pushPending(); syncStatus(); });
     onValue(ref(db, DB_PATH), snap => {
       const all = snap.val() || {};
-      scores = {};
-      for(const k in all) if(k.startsWith('n2b')) scores[k] = all[k];
-      setStatus(true, 'Live — syncing for everyone');
+      // everyone's scores, except ones this phone is still waiting to send (those win)
+      const merged = {};
+      for(const k in all) if(k.startsWith('n2b')) merged[k] = all[k];
+      for(const k in local) if(local[k].pend) merged[k] = clean(local[k]);
+      scores = merged;
+      for(const k in merged) local[k] = { ...merged[k], pend: !!(local[k] && local[k].pend) };
+      saveLocal();
+      syncStatus();
       render();
+      pushPending();
     }, err => {
       console.error(err);
-      setStatus(false, 'Connection issue — check Database rules');
+      setStatus(false, `Can't read scores (${errCode(err)}) — showing this phone's copy`);
     });
   }catch(err){
     console.error(err);
-    setStatus(false, 'Could not connect to Firebase');
+    setStatus(false, "Can't reach the database — scores are saved on this phone");
   }
 }
+// show this phone's saved scores immediately, before (or without) Firebase
+if(!demo){ for(const k in local) scores[k] = clean(local[k]); render(); }
+addEventListener('online', () => pushPending());
 boot();
 </script>
 </body>
