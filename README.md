@@ -154,7 +154,6 @@ then sends them by itself once the database accepts them.
 
 `family/` holds the latest session; `family-scoreboard.html` redirects there so old links keep working.
 When a session is over, copy `family/index.html` to `family-night-N.html` (make the inputs read-only) and build the next one in `family/`.
-When a night is over, copy it to `family-night-N.html`, make the inputs read-only, and build the next one in its place.
 
 - **Night #2 · Diwali (19 Nov 2026, moved from a cancelled 5 Nov):** 15 rounds = every possible 2-vs-2 match-up of the 5 players exactly once.
   Three sets of five; each player sits out once per set and never twice in a row. After round 10 every pair has
