@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#2B1055">
+<title>Sunset Smash · Family Badminton</title>
+<meta property="og:title" content="Sunset Smash · Family Badminton ☀️">
+<meta property="og:description" content="Sat 21 Nov · 5–7 PM · Andalas Sports Complex. Six players, twelve rounds, live scores.">
+<meta property="og:image" content="https://rasheedali78624.github.io/Pemberani/family/sunset-smash.jpg">
+<meta property="og:url" content="https://rasheedali78624.github.io/Pemberani/family/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Righteous&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sky0:#1A0B2E; --sky1:#2B1055; --sky2:#5B1E78; --sky3:#9A2F7E;
+    --sun0:#FFE08A; --sun1:#FFB547; --sun2:#FF7A3D; --pink:#FF4F81;
+    --cream:#FFF3E6; --muted:#D5BFE0; --faint:#9C83B4;
+    --card:rgba(30,12,52,.78); --card2:rgba(20,8,36,.86); --line:rgba(255,181,71,.18); --line2:rgba(213,191,224,.16);
+    --win:#FFC857; --red:#FF6B6B;
+  }
+  *{ box-sizing:border-box; }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; font-family:Inter, system-ui, sans-serif; color:var(--cream); min-height:100vh; overflow-x:hidden;
+    background:linear-gradient(180deg, var(--sky1) 0%, var(--sky0) 55%, #12071F 100%);
+  }
+  a{ color:var(--sun1); }
+
+  /* ── hero: retro sun setting behind the net ── */
+  .hero{ position:relative; overflow:hidden; text-align:center; padding:42px 18px 0;
+    background:linear-gradient(180deg, #24104A 0%, var(--sky2) 52%, var(--sky3) 78%, #E0567A 100%); }
+  .stars{ position:absolute; inset:0 0 40% 0; pointer-events:none; opacity:.8;
+    background-image:radial-gradient(1.5px 1.5px at 12% 18%, #fff8, transparent), radial-gradient(1px 1px at 28% 8%, #fff7, transparent),
+      radial-gradient(1.5px 1.5px at 72% 14%, #fff8, transparent), radial-gradient(1px 1px at 86% 26%, #fff6, transparent),
+      radial-gradient(1px 1px at 46% 22%, #fff6, transparent), radial-gradient(1.5px 1.5px at 92% 6%, #fff7, transparent); }
+  .eyebrow{ position:relative; font-size:12.5px; font-weight:800; letter-spacing:4px; color:var(--sun0); text-transform:uppercase; }
+  h1{ position:relative; font-family:Righteous, Inter, sans-serif; font-weight:400; font-size:clamp(46px, 13vw, 76px); line-height:.95; margin:10px 0 4px;
+    background:linear-gradient(180deg, #FFF6D8 0%, var(--sun1) 55%, var(--sun2) 100%); -webkit-background-clip:text; background-clip:text; color:transparent;
+    filter:drop-shadow(0 3px 0 rgba(90,20,60,.6)); }
+  .session{ position:relative; font-weight:700; color:var(--cream); opacity:.9; font-size:15px; letter-spacing:.5px; }
+  .meta{ position:relative; display:flex; flex-wrap:wrap; justify-content:center; gap:7px 8px; margin:16px auto 0; max-width:520px; }
+  .chip{ font-size:12.5px; font-weight:700; padding:7px 11px; border-radius:999px; background:rgba(26,11,46,.45); border:1px solid rgba(255,243,230,.18); white-space:nowrap; }
+  .newbie{ position:relative; display:inline-flex; align-items:center; gap:8px; margin-top:14px; padding:7px 14px; border-radius:999px;
+    background:linear-gradient(90deg, var(--pink), var(--sun2)); color:#fff; font-weight:800; font-size:13px; letter-spacing:.4px; box-shadow:0 6px 18px rgba(255,79,129,.35); }
+  .scene{ position:relative; height:170px; margin-top:10px; }
+  .meta, .newbie, .eyebrow, h1, .session{ z-index:2; }
+  .sun{ position:absolute; left:50%; bottom:-14px; width:200px; height:200px; margin-left:-100px; border-radius:50%;
+    background:linear-gradient(180deg, var(--sun0) 0%, var(--sun1) 35%, var(--sun2) 62%, var(--pink) 100%);
+    -webkit-mask-image:linear-gradient(180deg,#000 0 52%,transparent 52% 56%,#000 56% 63%,transparent 63% 68%,#000 68% 74%,transparent 74% 80%,#000 80% 85%,transparent 85% 92%,#000 92%);
+            mask-image:linear-gradient(180deg,#000 0 52%,transparent 52% 56%,#000 56% 63%,transparent 63% 68%,#000 68% 74%,transparent 74% 80%,#000 80% 85%,transparent 85% 92%,#000 92%);
+    box-shadow:0 0 80px rgba(255,122,61,.55); animation:sunset 2.4s cubic-bezier(.2,.7,.2,1) both; }
+  @keyframes sunset{ from{ transform:translateY(-40px); } }
+  .ground{ position:absolute; left:0; right:0; bottom:0; height:30px; background:#12071F; }
+  .net{ position:absolute; left:8%; right:8%; bottom:30px; height:44px; border-top:3px solid #12071F;
+    background:repeating-linear-gradient(90deg, rgba(18,7,31,.85) 0 2px, transparent 2px 12px), repeating-linear-gradient(0deg, rgba(18,7,31,.85) 0 2px, transparent 2px 12px); }
+  .net::before, .net::after{ content:""; position:absolute; bottom:-30px; width:6px; height:84px; background:#12071F; }
+  .net::before{ left:-3px; } .net::after{ right:-3px; }
+
+  /* ── layout ── */
+  main{ max-width:600px; margin:0 auto; padding:0 16px 40px; }
+  .status{ display:flex; align-items:center; justify-content:center; gap:8px; font-size:12.5px; color:var(--muted); padding:14px 0 4px; text-align:center; }
+  .dot{ width:9px; height:9px; border-radius:50%; background:var(--sun1); flex:none; animation:pulse 1.8s infinite; }
+  .dot.err{ background:var(--red); animation:none; }
+  @keyframes pulse{ 0%{ box-shadow:0 0 0 0 rgba(255,181,71,.6); } 70%{ box-shadow:0 0 0 8px rgba(255,181,71,0); } 100%{ box-shadow:0 0 0 0 rgba(255,181,71,0); } }
+  .title{ font-family:Righteous, Inter, sans-serif; font-size:26px; color:var(--sun1); text-align:center; margin:30px 0 4px; font-weight:400; }
+  .sub{ text-align:center; font-size:13px; color:var(--muted); margin-bottom:14px; line-height:1.5; }
+
+  /* players */
+  .players{ display:grid; grid-template-columns:repeat(6, 1fr); gap:6px; margin-top:12px; }
+  .pl{ text-align:center; }
+  .av{ width:46px; height:46px; margin:0 auto; border-radius:50%; display:grid; place-items:center; font-family:Righteous, Inter, sans-serif; font-size:20px; color:#2B1055;
+    background:linear-gradient(180deg, var(--sun0), var(--sun2)); box-shadow:0 0 0 3px rgba(255,181,71,.25); transition:opacity .3s, filter .3s; }
+  .pl.lead .av{ box-shadow:0 0 0 3px var(--sun0), 0 0 18px rgba(255,200,87,.6); }
+  .pl.rest .av{ filter:grayscale(.85); opacity:.55; }
+  .pl .nm{ font-size:12.5px; font-weight:800; margin-top:6px; }
+  .pl .rec{ font-size:11px; color:var(--muted); font-variant-numeric:tabular-nums; }
+  .pl.rest .nm::after{ content:" 💤"; font-size:10px; }
+  .pl.new .nm{ color:var(--pink); }
+
+  /* pace */
+  .pace{ display:flex; gap:12px; align-items:center; margin-top:18px; padding:12px 14px; border-radius:14px; font-size:13px; line-height:1.45;
+    background:linear-gradient(135deg, rgba(255,181,71,.14), rgba(255,79,129,.10)); border:1px solid rgba(255,181,71,.35); }
+  .pace .ico{ font-size:22px; } .pace b{ color:var(--sun0); }
+  .pace.warn{ border-color:rgba(255,107,107,.55); background:linear-gradient(135deg, rgba(255,107,107,.16), rgba(255,79,129,.08)); }
+
+  /* sets + rounds */
+  .set-head{ display:flex; align-items:center; gap:10px; margin:26px 0 8px; }
+  .set-num{ font-family:Righteous, Inter, sans-serif; font-size:14px; color:#2B1055; padding:5px 12px 4px; border-radius:999px; background:linear-gradient(90deg, var(--sun0), var(--sun1)); white-space:nowrap; }
+  .set-name{ font-family:Righteous, Inter, sans-serif; font-size:20px; white-space:nowrap; }
+  .set-line{ flex:1; height:1px; background:linear-gradient(90deg, var(--line2), transparent); }
+  .pips{ display:flex; gap:4px; } .pip{ width:8px; height:8px; border-radius:50%; background:var(--line2); } .pip.on{ background:var(--sun1); box-shadow:0 0 6px var(--sun1); }
+  .set-note{ font-size:12px; color:var(--muted); margin:-2px 0 10px; }
+  .list{ display:flex; flex-direction:column; gap:12px; }
+  .card{ position:relative; overflow:hidden; background:linear-gradient(150deg, var(--card), var(--card2)); border:1px solid var(--line2); border-radius:16px; padding:14px 16px 12px; box-shadow:0 8px 20px rgba(0,0,0,.3); }
+  .card::before{ content:""; position:absolute; left:0; top:0; bottom:0; width:5px; background:linear-gradient(180deg, var(--sun1), var(--pink)); }
+  .card.done::before{ background:linear-gradient(180deg, var(--sun0), var(--sun1)); }
+  .card.now{ border-color:rgba(255,181,71,.8); box-shadow:0 0 0 1px rgba(255,181,71,.35), 0 0 26px rgba(255,122,61,.25), 0 8px 20px rgba(0,0,0,.3); }
+  .top{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; gap:8px; }
+  .badge{ font-weight:800; font-size:12px; padding:4px 11px; border-radius:999px; letter-spacing:.6px; color:var(--sun0); background:rgba(255,255,255,.06); border:1px solid var(--line2); }
+  .card.now .badge{ background:linear-gradient(90deg, var(--sun0), var(--sun1)); color:#2B1055; border-color:transparent; }
+  .tag{ font-size:11px; font-weight:800; letter-spacing:1px; text-transform:uppercase; }
+  .tag.now{ color:var(--sun1); } .tag.next{ color:var(--muted); } .tag.done{ color:var(--faint); }
+  .time{ font-size:12.5px; color:var(--muted); font-weight:600; font-variant-numeric:tabular-nums; }
+  .team{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding:6px 0; }
+  .tn{ font-size:16px; font-weight:600; flex:1; min-width:0; }
+  .team.win .tn{ color:var(--win); font-weight:800; } .team.lose .tn{ color:var(--muted); }
+  .score{ width:60px; text-align:center; font-size:20px; font-weight:800; padding:8px 0; border-radius:10px; border:1px solid var(--line2); background:#160826; color:var(--cream); font-family:inherit; -moz-appearance:textfield; }
+  .score::-webkit-inner-spin-button, .score::-webkit-outer-spin-button{ -webkit-appearance:none; margin:0; }
+  .score:focus{ outline:none; border-color:var(--sun1); box-shadow:0 0 0 3px rgba(255,181,71,.25); }
+  .team.win .score{ border-color:rgba(255,200,87,.6); color:var(--win); }
+  .vs{ display:flex; align-items:center; gap:10px; font-size:10.5px; color:var(--faint); font-weight:800; letter-spacing:2px; }
+  .vs::before, .vs::after{ content:""; flex:1; height:1px; background:var(--line2); }
+  .rest{ font-size:12px; color:var(--muted); margin-top:6px; } .rest b{ color:var(--pink); font-weight:700; }
+  .checkpoint{ text-align:center; font-size:12.5px; color:var(--sun0); border:1px dashed rgba(255,224,138,.45); border-radius:12px; padding:9px 12px; margin:14px 0 2px; background:rgba(255,224,138,.05); }
+
+  /* standings */
+  .locked{ text-align:center; font-size:13px; color:var(--muted); line-height:1.55; background:rgba(255,255,255,.03); border:1px dashed var(--line2); border-radius:16px; padding:20px 18px; }
+  .locked b{ color:var(--sun0); }
+  .table{ background:linear-gradient(150deg, var(--card), var(--card2)); border:1px solid var(--line2); border-radius:16px; padding:4px 14px; }
+  .tr{ display:grid; grid-template-columns:30px 1fr 44px 56px 56px; align-items:center; gap:4px; padding:10px 0; border-bottom:1px solid var(--line2); font-size:14.5px; font-weight:700; }
+  .tr:last-child{ border-bottom:0; }
+  .tr.h{ font-size:10.5px; letter-spacing:1.5px; color:var(--faint); font-weight:800; padding:9px 0; }
+  .tr span:nth-child(n+3){ text-align:center; font-variant-numeric:tabular-nums; }
+  .tr .rk{ font-family:Righteous, Inter, sans-serif; color:var(--sun1); font-size:17px; }
+  .tr.first .nm{ color:var(--sun0); }
+  .counted{ text-align:center; font-size:12px; color:var(--faint); margin-top:8px; }
+
+  /* poster */
+  .poster-box{ margin-top:30px; text-align:center; padding:20px 16px; border-radius:18px; background:linear-gradient(135deg, rgba(255,181,71,.12), rgba(255,79,129,.10)); border:1px solid rgba(255,181,71,.3); }
+  .btn{ display:inline-flex; align-items:center; justify-content:center; gap:10px; min-height:52px; padding:0 24px; border:0; border-radius:999px; cursor:pointer;
+    font:800 15px Inter, sans-serif; letter-spacing:.5px; color:#2B1055; background:linear-gradient(90deg, var(--sun0), var(--sun1) 50%, var(--sun2)); box-shadow:0 8px 22px rgba(255,122,61,.35); }
+  .btn[disabled]{ opacity:.45; cursor:not-allowed; box-shadow:none; }
+  .btn.ghost{ background:transparent; color:var(--cream); border:1px solid rgba(255,243,230,.35); box-shadow:none; }
+  .poster-box p{ font-size:12.5px; color:var(--muted); margin:10px 0 0; line-height:1.5; }
+  .modal{ position:fixed; inset:0; z-index:50; background:rgba(10,4,20,.92); display:none; flex-direction:column; align-items:center; justify-content:flex-start; padding:18px 14px calc(18px + env(safe-area-inset-bottom)); overflow:auto; }
+  .modal.open{ display:flex; }
+  .modal img{ width:min(100%, 460px); height:auto; border-radius:12px; box-shadow:0 20px 50px rgba(0,0,0,.5); }
+  .modal .row{ display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin:14px 0 6px; }
+  .modal .hint{ font-size:12.5px; color:var(--muted); text-align:center; max-width:420px; }
+
+  footer{ text-align:center; font-size:12.5px; color:var(--faint); padding:34px 20px 10px; line-height:1.7; }
+  footer a{ color:var(--muted); }
+  @media (max-width:380px){ .tn{ font-size:15px; } .av{ width:40px; height:40px; font-size:18px; } .pl .nm{ font-size:11.5px; } }
+  @media (prefers-reduced-motion: reduce){ .sun, .dot{ animation:none; } }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="stars"></div>
+  <div class="eyebrow">Family Badminton · Session #3</div>
+  <h1>Sunset Smash</h1>
+  <div class="session">Six players · twelve rounds · one golden hour</div>
+  <div class="meta">
+    <span class="chip">📅 Sat, 21 Nov 2026</span>
+    <span class="chip">🕔 5:00 – 7:00 PM</span>
+    <span class="chip">📍 Andalas Sports Complex</span>
+    <span class="chip">🏸 First to 21</span>
+  </div>
+  <div class="newbie">☀️ New challenger: Cikgu</div>
+  <div class="scene" aria-hidden="true"><div class="sun"></div><div class="net"></div><div class="ground"></div></div>
+</header>
+
+<main>
+  <div class="status"><span class="dot" id="statusDot"></span><span id="statusText">Warming up&hellip;</span></div>
+  <div class="players" id="players"></div>
+  <div id="pace"></div>
+
+  <div class="title">Match by Match</div>
+  <div class="sub">Tap a score box to update; everyone watching sees it instantly.<br>
+    Each round 4 play and 2 rest. Everyone plays 8 and rests 4: once in every set, never twice in a row.</div>
+  <div id="list"></div>
+
+  <div class="title">☀️ Standings</div>
+  <div class="sub" id="standSub">Counted after each complete set, so everyone has played the same number of games</div>
+  <div id="stand"></div>
+
+  <div class="poster-box">
+    <button class="btn" id="makePoster" disabled>🎨 Generate tonight's poster</button>
+    <p id="posterNote">Unlocks after the first complete set. It builds a results poster from the real scores: champion, podium, highlights and the full table.</p>
+  </div>
+</main>
+
+<footer>
+  Scores sync live for everyone, and are also kept on your phone if the signal drops.<br>
+  Past sessions: <a href="../family-night-2.html">#2 Diwali Edition</a> · <a href="../family-night-1.html">#1</a>
+</footer>
+
+<div class="modal" id="modal" role="dialog" aria-label="Poster preview">
+  <img id="posterImg" alt="Sunset Smash results poster">
+  <div class="row">
+    <button class="btn" id="sharePoster">📤 Share</button>
+    <a class="btn ghost" id="savePoster" download="Sunset-Smash-Results.png">⬇️ Save image</a>
+    <button class="btn ghost" id="closePoster">Close</button>
+  </div>
+  <div class="hint">On iPhone you can also press and hold the poster, then tap “Save to Photos”.</div>
+</div>
+
+<script type="module">
+// ─────────────────────────────────────────────────────────────
+//  Sunset Smash · Family Badminton Session #3 · Sat 21 Nov 2026
+// ─────────────────────────────────────────────────────────────
+const firebaseConfig = {
+  apiKey: "AIzaSyA9NZSPbMVI0KuvfSMKxmDRiZA7ToKdk4U",
+  authDomain: "pemberani-badminton.firebaseapp.com",
+  databaseURL: "https://pemberani-badminton-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "pemberani-badminton",
+  storageBucket: "pemberani-badminton.firebasestorage.app",
+  messagingSenderId: "140352380730",
+  appId: "1:140352380730:web:da3333873dc4115ec13a03"
+};
+// Same node as the earlier family nights (the database rules already allow it).
+// This session's keys are "n3r0" … "n3r11", so earlier nights stay untouched.
+const DB_PATH = 'familyNight/scores';
+const KEY = i => 'n3r' + i;
+const LOCAL = 'fn3-scores';
+
+const START = { h: 17, m: 0 };     // 5:00 PM first serve
+const END   = { h: 19, m: 0 };     // 7:00 PM court booking ends
+const SLOT_MIN = 9;                // last session averaged ~9 minutes per round
+const PER_SET = 3;
+
+const PLAYERS = ["Mama", "Kishan", "Jishnu", "Rasheed", "Geeta", "Cikgu"];
+const NEW_PLAYER = "Cikgu";
+// 12 rounds, checked by script: everyone plays 8 and rests 4 (once per set, never twice in a row),
+// all 12 resting pairs different, every two players partner 1–2 times and face each other 3–4 times.
+const rounds = [
+  { a:["Jishnu","Mama"],   b:["Cikgu","Rasheed"],  sit:["Geeta","Kishan"]   },
+  { a:["Geeta","Mama"],    b:["Cikgu","Kishan"],   sit:["Jishnu","Rasheed"] },
+  { a:["Geeta","Kishan"],  b:["Jishnu","Rasheed"], sit:["Cikgu","Mama"]     },
+
+  { a:["Cikgu","Mama"],    b:["Kishan","Rasheed"], sit:["Geeta","Jishnu"]   },
+  { a:["Cikgu","Jishnu"],  b:["Geeta","Rasheed"],  sit:["Kishan","Mama"]    },
+  { a:["Kishan","Mama"],   b:["Geeta","Jishnu"],   sit:["Cikgu","Rasheed"]  },
+
+  { a:["Jishnu","Kishan"], b:["Cikgu","Rasheed"],  sit:["Geeta","Mama"]     },
+  { a:["Geeta","Mama"],    b:["Kishan","Rasheed"], sit:["Cikgu","Jishnu"]   },
+  { a:["Jishnu","Mama"],   b:["Cikgu","Geeta"],    sit:["Kishan","Rasheed"] },
+
+  { a:["Cikgu","Kishan"],  b:["Geeta","Rasheed"],  sit:["Jishnu","Mama"]    },
+  { a:["Kishan","Mama"],   b:["Cikgu","Jishnu"],   sit:["Geeta","Rasheed"]  },
+  { a:["Mama","Rasheed"],  b:["Geeta","Jishnu"],   sit:["Cikgu","Kishan"]   },
+];
+const SETS = [
+  { name:"Golden Hour", note:"Everyone rests once." },
+  { name:"Sunset",      note:"Everyone rests once. A fair place to stop: all six have played 4." },
+  { name:"Dusk",        note:"Everyone rests once." },
+  { name:"Twilight",    note:"The full night: everyone has played 8 and rested 4." },
+];
+const N = rounds.length;
+
+let ref, onValue, update, db = null;
+let scores = {};
+let prevDone = null;
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const amp = t => t.map(esc).join(' &amp; ');
+const fmtClock = d => d.toLocaleTimeString('en-MY', { hour:'numeric', minute:'2-digit' });
+function plannedTime(i){
+  const mins = START.h*60 + START.m + i*SLOT_MIN;
+  const d = new Date(); d.setHours(Math.floor(mins/60), mins%60, 0, 0);
+  return fmtClock(d);
+}
+const filled = v => v !== '' && v !== undefined && v !== null && !isNaN(Number(v));
+function result(i){
+  const s = scores[KEY(i)];
+  if(!s || !filled(s.a) || !filled(s.b) || s.a === '' || s.b === '' || Number(s.a) === Number(s.b)) return null;
+  return { a:Number(s.a), b:Number(s.b), aWin:Number(s.a) > Number(s.b), t:s.t || null };
+}
+const doneCount = () => rounds.reduce((n,_,i) => n + (result(i) ? 1 : 0), 0);
+const firstOpen = () => rounds.findIndex((_,i) => !result(i));
+// complete sets only, so everyone has played the same number of games
+const completeSets = () => SETS.map((_, s) => [0,1,2].every(k => result(s*PER_SET + k))).map((ok, s) => ok ? s : -1).filter(s => s >= 0);
+function setStatus(ok, text){ $('statusDot').classList.toggle('err', !ok); $('statusText').textContent = text; }
+
+// ── players strip ──
+function renderPlayers(){
+  const tally = Object.fromEntries(PLAYERS.map(p => [p, { w:0, l:0 }]));
+  rounds.forEach((r,i) => { const res = result(i); if(!res) return;
+    r.a.forEach(p => res.aWin ? tally[p].w++ : tally[p].l++); r.b.forEach(p => res.aWin ? tally[p].l++ : tally[p].w++); });
+  const maxW = Math.max(0, ...PLAYERS.map(p => tally[p].w));
+  const open = firstOpen(); const resting = open >= 0 ? rounds[open].sit : [];
+  $('players').innerHTML = PLAYERS.map(p => `<div class="pl ${maxW > 0 && tally[p].w === maxW ? 'lead' : ''} ${resting.includes(p) ? 'rest' : ''} ${p === NEW_PLAYER ? 'new' : ''}">
+    <div class="av">${esc(p[0])}</div><div class="nm">${esc(p)}</div><div class="rec">${tally[p].w}W – ${tally[p].l}L</div></div>`).join('');
+}
+
+// ── rounds ──
+function render(){
+  const open = firstOpen();
+  let html = '';
+  rounds.forEach((r, i) => {
+    const s = Math.floor(i / PER_SET);
+    if(i % PER_SET === 0){
+      const pips = [0,1,2].map(k => `<span class="pip ${result(s*PER_SET+k) ? 'on' : ''}"></span>`).join('');
+      html += `<div class="set-head"><span class="set-num">Set ${s+1}</span><span class="set-name">${SETS[s].name}</span><span class="set-line"></span><span class="pips">${pips}</span></div>
+        <div class="set-note">${SETS[s].note}</div><div class="list">`;
+    }
+    const sc = scores[KEY(i)] || {};
+    const sa = filled(sc.a) ? sc.a : '', sb = filled(sc.b) ? sc.b : '';
+    const res = result(i);
+    const aC = res ? (res.aWin ? 'win' : 'lose') : '', bC = res ? (res.aWin ? 'lose' : 'win') : '';
+    const state = res ? 'done' : (i === open ? 'now' : (i === open + 1 ? 'next' : ''));
+    const tag = state === 'now' ? '<span class="tag now">● On court</span>' : state === 'next' ? '<span class="tag next">Up next</span>' : state === 'done' ? '<span class="tag done">Final</span>' : '';
+    html += `<div class="card ${state}" id="card-${i}">
+      <div class="top"><span class="badge">ROUND ${i+1}</span>${tag}<span class="time">~${plannedTime(i)}</span></div>
+      <div class="team ${aC}"><span class="tn">${amp(r.a)}${aC === 'win' ? ' ☀️' : ''}</span>
+        <input class="score" type="number" inputmode="numeric" min="0" max="30" aria-label="Round ${i+1} ${r.a.join(' and ')}" data-i="${i}" data-side="a" value="${esc(sa)}"></div>
+      <div class="vs">VS</div>
+      <div class="team ${bC}"><span class="tn">${amp(r.b)}${bC === 'win' ? ' ☀️' : ''}</span>
+        <input class="score" type="number" inputmode="numeric" min="0" max="30" aria-label="Round ${i+1} ${r.b.join(' and ')}" data-i="${i}" data-side="b" value="${esc(sb)}"></div>
+      <div class="rest">Resting: <b>${amp(r.sit)}</b></div></div>`;
+    if(i % PER_SET === PER_SET - 1){
+      html += '</div>';
+      if(i === 5) html += '<div class="checkpoint">✦ Halfway ✦ After round 6 all six have played 4 and rested 2: a fair place to stop if time runs short.</div>';
+    }
+  });
+  const active = document.activeElement;
+  const keep = active && active.classList.contains('score') ? { i:active.dataset.i, side:active.dataset.side, v:active.value } : null;
+  $('list').innerHTML = html;
+  if(keep){ const el = document.querySelector(`.score[data-i="${keep.i}"][data-side="${keep.side}"]`); if(el){ el.value = keep.v; el.focus(); } }
+  document.querySelectorAll('.score').forEach(inp => {
+    inp.addEventListener('change', onScoreChange);
+    inp.addEventListener('keydown', e => { if(e.key === 'Enter') e.target.blur(); });
+  });
+  renderPlayers(); renderPace(); renderStandings();
+  prevDone = doneCount();
+}
+
+// ── saving: phone first, then everyone ──
+let local = (() => { try { return JSON.parse(localStorage.getItem(LOCAL)) || {}; } catch(e){ return {}; } })();
+function saveLocal(){ try { localStorage.setItem(LOCAL, JSON.stringify(local)); } catch(e){} }
+const clean = v => { const { pend, ...rest } = v; return rest; };
+const errCode = err => String((err && (err.code || err.message)) || 'unknown error').split(':')[0].trim();
+let warned = false, online = null;
+const demo = new URLSearchParams(location.search).has('demo');
+
+function onScoreChange(e){
+  const i = Number(e.target.dataset.i), side = e.target.dataset.side;
+  let val = e.target.value.trim();
+  if(val !== ''){ val = Math.max(0, Math.min(30, Math.round(Number(val)))); if(isNaN(val)) val = ''; }
+  const cur = { a:'', b:'', ...(scores[KEY(i)] || {}) };
+  cur[side] = val === '' ? '' : String(val);
+  const complete = cur.a !== '' && cur.b !== '' && filled(cur.a) && filled(cur.b) && Number(cur.a) !== Number(cur.b);
+  cur.t = complete ? (cur.t || Date.now()) : null;     // when the round finished, for the pace tracker
+  scores[KEY(i)] = cur;
+  if(demo){ render(); return; }
+  local[KEY(i)] = { ...cur, pend:true }; saveLocal(); render(); push(KEY(i));
+}
+async function push(k){
+  if(!db || !local[k]) return;
+  try{
+    await update(ref(db, `${DB_PATH}/${k}`), clean(local[k]));
+    if(local[k]){ local[k].pend = false; saveLocal(); }
+    syncStatus();
+  }catch(err){
+    console.error(err);
+    const code = errCode(err);
+    setStatus(false, `Not syncing (${code}): scores are saved on this phone`);
+    if(!warned){ warned = true; alert(`Couldn't send the score to the others (${code}).\n\nIt IS saved on this phone, so keep scoring here.\nIt will sync by itself once the database accepts it.`); }
+  }
+}
+function pushPending(){ Object.keys(local).filter(k => local[k].pend).forEach(push); }
+function syncStatus(){
+  const waiting = Object.values(local).filter(v => v.pend).length;
+  if(online === false) setStatus(false, `Offline: ${waiting ? waiting + ' score(s) saved on this phone, will sync' : 'scores are saved on this phone'}`);
+  else if(waiting) setStatus(false, `Sending ${waiting} score(s)…`);
+  else setStatus(true, 'Live: syncing for everyone');
+}
+
+// ── pace tracker ──
+function renderPace(){
+  const box = $('pace');
+  const done = rounds.map((_,i) => result(i)).filter(Boolean);
+  const stamps = done.map(r => r.t).filter(Boolean).sort((x,y) => x - y);
+  const d = done.length;
+  const end = new Date(); end.setHours(END.h, END.m, 0, 0);
+  if(d === N){ box.innerHTML = `<div class="pace"><span class="ico">🌅</span><div>All <b>12 rounds</b> done! Scroll down for the standings and tonight's poster.</div></div>`; return; }
+  if(stamps.length < 2){ box.innerHTML = `<div class="pace"><span class="ico">⏱️</span><div>Planned at <b>${SLOT_MIN} min</b> a round (last session's pace): all 12 rounds finish around <b>${plannedTime(N)}</b>, with time to spare before 7:00. Once two rounds are in, this tracks the real pace.</div></div>`; return; }
+  const per = (stamps[stamps.length-1] - stamps[0]) / (stamps.length - 1);
+  const last = stamps[stamps.length-1];
+  const finish = new Date(last + per * (N - d));
+  const ok = finish <= end;
+  // last full set that still fits before 7:00
+  let fitSets = 0;
+  for(let s = 1; s <= SETS.length; s++){ const need = s*PER_SET - d; if(need <= 0 || new Date(last + per*need) <= end) fitSets = s; }
+  const msg = ok
+    ? `Pace <b>${(per/60000).toFixed(1)} min</b>/round. All 12 rounds should finish around <b>${fmtClock(finish)}</b>. 🎉`
+    : `Pace <b>${(per/60000).toFixed(1)} min</b>/round. All 12 would run to about <b>${fmtClock(finish)}</b>, past 7:00. Stop after <b>Set ${fitSets}</b> (round ${fitSets*PER_SET}) to keep everyone's games equal.`;
+  box.innerHTML = `<div class="pace ${ok ? '' : 'warn'}"><span class="ico">${ok ? '⏱️' : '⚠️'}</span><div>${msg}</div></div>`;
+}
+
+// ── standings + stats (complete sets only) ──
+function stats(){
+  const sets = completeSets();
+  const idx = sets.flatMap(s => [0,1,2].map(k => s*PER_SET + k));
+  if(!idx.length) return null;
+  const P = Object.fromEntries(PLAYERS.map(p => [p, { name:p, w:0, l:0, pf:0, pa:0, seq:[] }]));
+  const pairs = {}; const games = [];
+  for(const i of idx){
+    const r = rounds[i], res = result(i);
+    games.push({ i, r, a:res.a, b:res.b, margin:Math.abs(res.a - res.b), aWin:res.aWin });
+    [[r.a, res.a, res.b, res.aWin], [r.b, res.b, res.a, !res.aWin]].forEach(([team, f, g, won]) => {
+      team.forEach(p => { P[p].pf += f; P[p].pa += g; won ? P[p].w++ : P[p].l++; P[p].seq.push(won ? 'W' : 'L'); });
+      const k = team.slice().sort().join(' & ');
+      pairs[k] ||= { names:team.slice().sort(), w:0, p:0, diff:0 };
+      pairs[k].p++; pairs[k].diff += f - g; if(won) pairs[k].w++;
+    });
+  }
+  const list = Object.values(P).map(p => ({ ...p, diff:p.pf - p.pa, played:p.w + p.l,
+    best:p.seq.reduce((a, x) => { a.c = x === 'W' ? a.c + 1 : 0; a.b = Math.max(a.b, a.c); return a; }, { c:0, b:0 }).b,
+    tail:(() => { let n = 0; for(let k = p.seq.length - 1; k >= 0 && p.seq[k] === 'W'; k--) n++; return n; })() }))
+    .sort((x,y) => y.w - x.w || y.diff - x.diff || y.pf - x.pf || x.name.localeCompare(y.name));
+  list.forEach((p, k) => p.rank = k && list[k-1].w === p.w && list[k-1].diff === p.diff && list[k-1].pf === p.pf ? list[k-1].rank : k + 1);
+  return { sets, idx, list, pairs:Object.values(pairs), games, points:games.reduce((n,g) => n + g.a + g.b, 0) };
+}
+function renderStandings(){
+  const st = stats();
+  const btn = $('makePoster');
+  if(!st){
+    $('stand').innerHTML = `<div class="locked">🔒 <b>${doneCount()} of 3</b> rounds of Set 1 scored.<br>Standings appear when the first set is complete.</div>`;
+    btn.disabled = true; return;
+  }
+  btn.disabled = false;
+  $('posterNote').textContent = st.sets.length === SETS.length
+    ? 'All 12 rounds are in. Tap to build the results poster.'
+    : `Counts the ${st.idx.length} rounds in complete sets so far. Generate again later for the full night.`;
+  $('standSub').textContent = st.sets.length === SETS.length ? 'Final: all 12 rounds' : `After ${st.sets.length} complete set${st.sets.length > 1 ? 's' : ''} (${st.idx.length} rounds): everyone has played the same number of games`;
+  const sg = n => (n > 0 ? '+' : '') + n;
+  $('stand').innerHTML = `<div class="table"><div class="tr h"><span>#</span><span>PLAYER</span><span>P</span><span>W–L</span><span>+/−</span></div>
+    ${st.list.map((p, k) => `<div class="tr ${k === 0 ? 'first' : ''}"><span class="rk">${p.rank}</span><span class="nm">${esc(p.name)}</span><span>${p.played}</span><span>${p.w}–${p.l}</span><span>${sg(p.diff)}</span></div>`).join('')}
+  </div><div class="counted">Ranked by wins, then points difference, then points scored.</div>`;
+}
+
+// ── poster (drawn on a canvas, so it works on every phone) ──
+function highlights(st){
+  const used = new Set();
+  const pick = (arr, key) => { const s = arr.slice().sort((x,y) => key(y) - key(x)); const g = s.find(x => !used.has(x.i)) || s[0]; used.add(g.i); return g; };
+  const motn = pick(st.games, g => -g.margin * 10 + (Math.max(g.a, g.b) > 21 ? 30 : 0) + (g.a + g.b) / 100);
+  const big = pick(st.games, g => g.margin);
+  const beat = g => g.aWin ? [g.r.a, g.r.b, `${g.a} – ${g.b}`] : [g.r.b, g.r.a, `${g.b} – ${g.a}`];
+  const pair = st.pairs.slice().sort((x,y) => (y.w / y.p) - (x.w / x.p) || y.w - x.w || y.diff - x.diff)[0];
+  const unlucky = st.list.filter(p => p.w < p.l && p.diff > 0).sort((x,y) => y.diff - x.diff)[0];
+  const top = st.list.slice().sort((x,y) => y.pf - x.pf)[0];
+  return { motn, big, beat, pair, unlucky, top };
+}
+function story(c){
+  if(c.tail >= 3) return `Closed the night on ${c.tail} straight wins.`;
+  if(c.best >= 3) return `Best run: ${c.best} wins in a row.`;
+  if(c.l === 0) return `Unbeaten all night.`;
+  return `Won ${c.w} of ${c.played} games.`;
+}
+async function drawPoster(){
+  const st = stats(); if(!st) return null;
+  const H = highlights(st);
+  await Promise.all(['400 90px Righteous', '800 20px Inter', '700 20px Inter', '600 20px Inter', '900 20px Inter'].map(f => document.fonts.load(f)));
+  const W = 1080, HT = 1830, S = 2;
+  const cv = document.createElement('canvas'); cv.width = W * S; cv.height = HT * S;
+  const x = cv.getContext('2d'); x.scale(S, S);
+  const font = (w, px, fam = 'Inter') => x.font = `${w} ${px}px ${fam === 'R' ? 'Righteous' : 'Inter'}, sans-serif`;
+  const rr = (X, Y, w, h, r) => { x.beginPath(); x.moveTo(X + r, Y); x.arcTo(X + w, Y, X + w, Y + h, r); x.arcTo(X + w, Y + h, X, Y + h, r); x.arcTo(X, Y + h, X, Y, r); x.arcTo(X, Y, X + w, Y, r); x.closePath(); };
+  const text = (t, X, Y, align = 'left', color = '#FFF3E6') => { x.textAlign = align; x.fillStyle = color; x.fillText(t, X, Y); };
+  const fit = (t, maxW) => { while(x.measureText(t).width > maxW && t.length > 3) t = t.slice(0, -2) + '…'; return t; };
+  const card = (X, Y, w, h, glow) => {
+    x.save(); rr(X, Y, w, h, 22); const g = x.createLinearGradient(X, Y, X + w, Y + h); g.addColorStop(0, glow ? '#4A1C5E' : 'rgba(40,16,66,.92)'); g.addColorStop(1, glow ? '#2A1046' : 'rgba(22,9,40,.95)');
+    x.fillStyle = g; x.fill(); x.lineWidth = glow ? 2.5 : 1.2; x.strokeStyle = glow ? 'rgba(255,200,87,.7)' : 'rgba(213,191,224,.18)'; x.stroke(); x.restore();
+  };
+  const sg = n => (n > 0 ? '+' : n < 0 ? '−' : '') + Math.abs(n);
+
+  // sky
+  let g = x.createLinearGradient(0, 0, 0, HT);
+  g.addColorStop(0, '#2B1055'); g.addColorStop(.22, '#5B1E78'); g.addColorStop(.36, '#3A1360'); g.addColorStop(1, '#14081F');
+  x.fillStyle = g; x.fillRect(0, 0, W, HT);
+  // stars
+  let seed = 7; const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+  for(let k = 0; k < 140; k++){ x.globalAlpha = .15 + rnd() * .5; x.fillStyle = rnd() < .75 ? '#FFF3E6' : '#FFB547'; x.beginPath(); x.arc(rnd() * W, rnd() * HT, rnd() * 1.6 + .4, 0, 7); x.fill(); }
+  x.globalAlpha = 1;
+  // retro sun behind the title
+  const HZ = 300;                                                   // horizon line
+  g = x.createRadialGradient(W / 2, HZ, 60, W / 2, HZ, 420); g.addColorStop(0, 'rgba(255,122,61,.45)'); g.addColorStop(1, 'rgba(255,122,61,0)');
+  x.fillStyle = g; x.fillRect(0, 0, W, HZ);
+  x.save(); x.beginPath(); x.rect(0, 0, W, HZ); x.clip(); x.beginPath(); x.arc(W / 2, HZ + 20, 170, 0, Math.PI * 2); x.clip();
+  g = x.createLinearGradient(0, HZ - 150, 0, HZ); g.addColorStop(0, '#FFE08A'); g.addColorStop(.45, '#FFB547'); g.addColorStop(.8, '#FF7A3D'); g.addColorStop(1, '#FF4F81');
+  x.fillStyle = g; x.fillRect(W / 2 - 180, HZ - 160, 360, 180);
+  x.globalCompositeOperation = 'destination-out';
+  [[HZ - 70, 6], [HZ - 48, 8], [HZ - 26, 10], [HZ - 6, 12]].forEach(([y, h]) => x.fillRect(W / 2 - 180, y, 360, h));
+  x.restore();
+  g = x.createLinearGradient(0, HZ, 0, HZ + 220); g.addColorStop(0, '#2A0F45'); g.addColorStop(1, 'rgba(42,15,69,0)');
+  x.fillStyle = g; x.fillRect(0, HZ, W, 220);
+  x.fillStyle = '#FFB547'; x.globalAlpha = .55; x.fillRect(80, HZ, W - 160, 2); x.globalAlpha = 1;   // horizon glow line
+
+  // header
+  font(800, 18); x.letterSpacing = '6px'; text('FAMILY BADMINTON · SESSION #3 · RESULTS', W / 2, 92, 'center', '#FFE08A'); x.letterSpacing = '0px';
+  font(400, 104, 'R'); x.save(); x.shadowColor = 'rgba(60,10,40,.75)'; x.shadowOffsetY = 5; x.shadowBlur = 0;
+  g = x.createLinearGradient(0, 320, 0, 410); g.addColorStop(0, '#FFF6D8'); g.addColorStop(.6, '#FFB547'); g.addColorStop(1, '#FF7A3D');
+  x.textAlign = 'center'; x.fillStyle = g; x.fillText('Sunset Smash', W / 2, 405); x.restore();
+  font(700, 21); text('Saturday 21 November 2026 · Andalas Sports Complex', W / 2, 446, 'center', '#E9D8F2');
+
+  // champion
+  const champ = st.list[0]; const joint = st.list.filter(p => p.rank === 1);
+  let Y = 490; card(60, Y, 960, 250, true);
+  // medal sun
+  x.save(); x.beginPath(); x.arc(170, Y + 125, 78, 0, 7); g = x.createLinearGradient(0, Y + 47, 0, Y + 203); g.addColorStop(0, '#FFE08A'); g.addColorStop(.6, '#FFB547'); g.addColorStop(1, '#FF7A3D'); x.fillStyle = g;
+  x.shadowColor = 'rgba(255,181,71,.6)'; x.shadowBlur = 40; x.fill(); x.restore();
+  font(400, 70, 'R'); text('1', 170, Y + 150, 'center', '#3A1360');
+  font(800, 17); x.letterSpacing = '6px'; text(joint.length > 1 ? 'JOINT CHAMPIONS' : 'CHAMPION OF THE NIGHT', 286, Y + 62, 'left', '#FFB547'); x.letterSpacing = '0px';
+  font(400, joint.length > 1 ? 62 : 86, 'R'); g = x.createLinearGradient(0, Y + 80, 0, Y + 160); g.addColorStop(0, '#FFF6D8'); g.addColorStop(1, '#FFB547');
+  x.fillStyle = g; x.textAlign = 'left'; x.fillText(fit(joint.map(p => p.name).join(' & '), 700), 284, Y + 150);
+  font(800, 25); text(`${champ.w} wins – ${champ.l} losses  ·  ${sg(champ.diff)} points`, 286, Y + 194, 'left', '#FFE08A');
+  font(500, 20); text(joint.length > 1 ? 'Level on wins and points: they share the night.' : story(champ), 286, Y + 228, 'left', '#D5BFE0');
+
+  // podium 2 + 3
+  Y += 272;
+  const rest = st.list.filter(p => p.rank !== 1);
+  [[rest[0], 60], [rest[1], 552]].forEach(([p, X]) => { if(!p) return; card(X, Y, 468, 108);
+    font(400, 54, 'R'); text(String(p.rank), X + 44, Y + 72, 'center', p.rank === 2 ? '#FFE08A' : '#FF9F6B');
+    font(400, 40, 'R'); text(fit(p.name, 330), X + 90, Y + 56, 'left');
+    font(700, 19); text(`${p.w}–${p.l} · ${p.diff === 0 ? 'level on points' : sg(p.diff) + ' points'}`, X + 92, Y + 86, 'left', '#D5BFE0'); });
+
+  // highlights
+  Y += 158; font(400, 38, 'R'); text('☀  Highlights of the night', W / 2, Y, 'center', '#FFB547');
+  Y += 24;
+  const [mw, ml, ms] = H.beat(H.motn), [bw, bl, bs] = H.beat(H.big);
+  const cards = [
+    ['MATCH OF THE NIGHT · R' + (H.motn.i + 1), ms, `${mw.join(' & ')} beat ${ml.join(' & ')}`, Math.max(H.motn.a, H.motn.b) > 21 ? 'Went past 21' : `Decided by ${H.motn.margin} point${H.motn.margin === 1 ? '' : 's'}`],
+    ['BIGGEST WIN · R' + (H.big.i + 1), bs, `${bw.join(' & ')} beat ${bl.join(' & ')}`, `A ${H.big.margin}-point statement`],
+    ['BEST PARTNERSHIP', H.pair.names.join(' & '), H.pair.w === H.pair.p ? `Unbeaten together · ${H.pair.w} from ${H.pair.p}` : `${H.pair.w} wins from ${H.pair.p} together`, `${sg(H.pair.diff)} points across their games`],
+    H.unlucky
+      ? ['UNLUCKIEST RECORD', H.unlucky.name, `${H.unlucky.w}–${H.unlucky.l} record, yet ${sg(H.unlucky.diff)} on points`, `${H.unlucky.pf} points scored`]
+      : ['TOP SCORER', H.top.name, `${H.top.pf} points scored`, `Across ${H.top.played} games`],
+  ];
+  cards.forEach(([k, v, t1, t2], n) => {
+    const X = n % 2 ? 552 : 60, YY = Y + Math.floor(n / 2) * 186;
+    card(X, YY, 468, 170);
+    x.save(); rr(X, YY, 8, 170, 4); g = x.createLinearGradient(0, YY, 0, YY + 170); g.addColorStop(0, '#FFB547'); g.addColorStop(1, '#FF4F81'); x.fillStyle = g; x.fill(); x.restore();
+    font(800, 15); x.letterSpacing = '3px'; text(k, X + 30, YY + 38, 'left', '#FFB547'); x.letterSpacing = '0px';
+    font(400, 44, 'R'); text(fit(v, 410), X + 28, YY + 88, 'left', '#FFE08A');
+    font(700, 19); text(fit(t1, 418), X + 30, YY + 122, 'left');
+    font(500, 17); text(fit(t2, 418), X + 30, YY + 150, 'left', '#D5BFE0');
+  });
+
+  // table
+  Y += 2 * 186 + 18;
+  const rowH = 44, th = 40 + rowH * st.list.length + 10;
+  card(60, Y, 960, th);
+  font(800, 14); x.letterSpacing = '2px';
+  const cols = [[98, 'left', '#'], [146, 'left', 'PLAYER'], [700, 'center', 'PLAYED'], [820, 'center', 'W–L'], [940, 'center', 'POINTS +/−']];
+  cols.forEach(([cx, al, t]) => text(t, cx, Y + 32, al, '#9C83B4')); x.letterSpacing = '0px';
+  st.list.forEach((p, k) => {
+    const ry = Y + 40 + k * rowH;
+    x.fillStyle = 'rgba(213,191,224,.14)'; x.fillRect(84, ry, 912, 1);
+    font(400, 24, 'R'); text(String(p.rank), 98, ry + 31, 'left', '#FFB547');
+    font(700, 21); text(p.name + (p.name === NEW_PLAYER ? '  ☀ new' : ''), 146, ry + 30, 'left', k === 0 ? '#FFE08A' : '#FFF3E6');
+    text(String(p.played), 700, ry + 30, 'center'); text(`${p.w}–${p.l}`, 820, ry + 30, 'center'); text(sg(p.diff) || '0', 940, ry + 30, 'center');
+  });
+
+  // footer
+  Y += th + 44;
+  const close2 = st.games.filter(gm => gm.margin <= 2).length;
+  const chips = [`${st.games.length} games`, `${st.points} points`, `${close2} decided by 2 or fewer`];
+  font(700, 19); const widths = chips.map(c => x.measureText(c).width + 44); let cx = (W - widths.reduce((a, b) => a + b + 14, -14)) / 2;
+  chips.forEach((c, n) => { x.save(); rr(cx, Y - 30, widths[n], 44, 22); x.fillStyle = 'rgba(255,255,255,.07)'; x.fill(); x.strokeStyle = 'rgba(213,191,224,.22)'; x.stroke(); x.restore();
+    text(c, cx + widths[n] / 2, Y - 1, 'center', '#FFE08A'); cx += widths[n] + 14; });
+  font(500, 15); text(st.sets.length === SETS.length ? 'All 12 rounds · everyone played 8 and rested 4 · ranked by wins, then points difference'
+    : `${st.idx.length} rounds in ${st.sets.length} complete set${st.sets.length > 1 ? 's' : ''} · everyone played the same number of games`, W / 2, Y + 42, 'center', '#9C83B4');
+  font(400, 24, 'R'); text('See you at the next session ☀', W / 2, Y + 84, 'center', '#FF7A9E');
+  return cv;
+}
+async function openPoster(){
+  const btn = $('makePoster'); btn.disabled = true; btn.textContent = '🎨 Drawing…';
+  try{
+    const cv = await drawPoster();
+    const blob = await new Promise(r => cv.toBlob(r, 'image/png'));
+    const url = URL.createObjectURL(blob);
+    $('posterImg').src = url; $('savePoster').href = url;
+    const file = new File([blob], 'Sunset-Smash-Results.png', { type:'image/png' });
+    const canShare = navigator.canShare && navigator.canShare({ files:[file] });
+    $('sharePoster').style.display = canShare ? '' : 'none';
+    $('sharePoster').onclick = () => navigator.share({ files:[file], title:'Sunset Smash results' }).catch(() => {});
+    $('modal').classList.add('open');
+  } finally { btn.disabled = false; btn.textContent = "🎨 Generate tonight's poster"; }
+}
+$('makePoster').addEventListener('click', openPoster);
+$('closePoster').addEventListener('click', () => $('modal').classList.remove('open'));
+window.__drawPoster = drawPoster;   // used by the automated check
+
+// ── boot ──
+async function boot(){
+  if(demo){
+    const now = Date.now(); const fake = [[21,17],[15,21],[21,19],[22,20],[21,12],[18,21],[21,16],[19,21],[21,14],[17,21],[21,18],[21,13]];
+    fake.forEach(([a, b], i) => { if(i < (Number(new URLSearchParams(location.search).get('demo')) || 12)) scores[KEY(i)] = { a:String(a), b:String(b), t: now - (12 - i) * 9 * 60000 }; });
+    setStatus(true, 'Demo mode: nothing is saved'); render(); return;
+  }
+  for(const k in local) scores[k] = clean(local[k]);
+  render();
+  try{
+    const [{ initializeApp }, dbMod] = await Promise.all([
+      import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"),
+      import("https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"),
+    ]);
+    ({ ref, onValue, update } = dbMod);
+    db = dbMod.getDatabase(initializeApp(firebaseConfig));
+    onValue(ref(db, '.info/connected'), snap => { online = !!snap.val(); if(online) pushPending(); syncStatus(); });
+    onValue(ref(db, DB_PATH), snap => {
+      const all = snap.val() || {};
+      const merged = {};
+      for(const k in all) if(k.startsWith('n3r')) merged[k] = all[k];
+      for(const k in local) if(local[k].pend) merged[k] = clean(local[k]);
+      scores = merged;
+      for(const k in merged) local[k] = { ...merged[k], pend: !!(local[k] && local[k].pend) };
+      saveLocal(); syncStatus(); render(); pushPending();
+    }, err => { console.error(err); setStatus(false, `Can't read scores (${errCode(err)}): showing this phone's copy`); });
+  }catch(err){
+    console.error(err); setStatus(false, "Can't reach the database: scores are saved on this phone");
+  }
+}
+addEventListener('online', () => pushPending());
+boot();
+</script>
+</body>
+</html>

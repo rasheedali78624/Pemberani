@@ -15,7 +15,8 @@ Both Edition 3.0 pages have an **EN / BM** switch at the top. The choice is reme
 | `score.html` | Umpires and committee: tap-to-score console (sign-in required) |
 | `draw/` | The live group draw: audience screen (`draw/`) and organiser panel (`draw/control.html`). See `draw/README.md` |
 | `edition2/` | Edition 2.0 site and e-certificates, kept as an archive (`cert.html` in the root redirects there) |
-| `family-scoreboard.html` | Thursday Family Night live scoreboard (currently #2, Diwali Edition) |
+| `family/` | Family Badminton: the latest session (currently #3 "Sunset Smash", Sat 21 Nov 2026). `family-scoreboard.html` redirects here |
+| `family-night-2.html` | Family Night #2 (Diwali Edition, 19 Nov 2026), read-only archive |
 | `family-night-1.html` | Family Night #1 (8 Oct 2026), read-only archive |
 
 ## Files
@@ -151,10 +152,16 @@ read-only. If saving is refused anyway, the page says why (e.g. `PERMISSION_DENI
 then sends them by itself once the database accepts them.
 
 
-`family-scoreboard.html` is the link that gets shared, so it always holds the latest night.
-When a night is over, copy it to `family-night-N.html`, make the inputs read-only, and build the next one in its place.
+`family/` holds the latest session; `family-scoreboard.html` redirects there so old links keep working.
+When a session is over, copy `family/index.html` to `family-night-N.html` (make the inputs read-only) and build the next one in `family/`.
 
 - **Night #2 · Diwali (19 Nov 2026, moved from a cancelled 5 Nov):** 15 rounds = every possible 2-vs-2 match-up of the 5 players exactly once.
   Three sets of five; each player sits out once per set and never twice in a row. After round 10 every pair has
   partnered twice (a fair place to stop); after round 15, three times. Scores are stored under
   `familyNight/scores/n2b0` … `n2b14` (the cancelled 5 Nov date used `n2r`). Night #1 used `r0` … `r9` in the same node, so no rule changes are needed.
+
+- **Session #3 · Sunset Smash (Sat 21 Nov 2026, 5–7 PM, Andalas Sports Complex):** six players (adds Cikgu), 12 rounds at
+  ~9 min (finishes ~6:48 PM). Each round 4 play and 2 rest; everyone plays 8 and rests 4, once per set of 3 rounds and never
+  twice in a row; all 12 resting pairs differ; every two players partner 1–2 times and face each other 3–4 times. Standings
+  count complete sets only. "Generate tonight's poster" draws the results poster on the phone (share or save). Scores under
+  `familyNight/scores/n3r0` … `n3r11`; the existing rules already allow them.
