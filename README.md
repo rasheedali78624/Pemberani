@@ -160,8 +160,9 @@ When a session is over, copy `family/index.html` to `family-night-N.html` (make 
   partnered twice (a fair place to stop); after round 15, three times. Scores are stored under
   `familyNight/scores/n2b0` … `n2b14` (the cancelled 5 Nov date used `n2r`). Night #1 used `r0` … `r9` in the same node, so no rule changes are needed.
 
-- **Session #3 · Sunset Smash (Sat 21 Nov 2026, 5–7 PM, Andalas Sports Complex):** six players (adds Cikgu), 12 rounds at
-  ~9 min (finishes ~6:48 PM). Each round 4 play and 2 rest; everyone plays 8 and rests 4, once per set of 3 rounds and never
-  twice in a row; all 12 resting pairs differ; every two players partner 1–2 times and face each other 3–4 times. Standings
-  count complete sets only. "Generate tonight's poster" draws the results poster on the phone (share or save). Scores under
-  `familyNight/scores/n3r0` … `n3r11`; the existing rules already allow them.
+- **Session #3 · Sunset Smash (Sat 21 Nov 2026, 5–7 PM, Andalas Sports Complex):** the usual five (Cikgu couldn't make it).
+  Main event: 10 rounds at ~9 min (finishes ~6:30 PM). Each round 4 play and 1 rests; everyone plays 8 and rests 2, once per
+  set of 5 rounds and never twice in a row; every two players partner exactly twice and face each other 4 times. Optional
+  bonus set (rounds 11–15) only if the pace tracker says it fits before 7:00. Standings count complete sets only.
+  "Generate tonight's poster" draws the results poster on the phone (share or save). Scores under
+  `familyNight/scores/n3b0` … `n3b14` (the six-player plan used `n3r`); the existing rules already allow them.

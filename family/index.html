@@ -6,8 +6,8 @@
 <meta name="theme-color" content="#DCCDF6">
 <title>Sunset Smash · Family Badminton</title>
 <meta property="og:title" content="Sunset Smash · Family Badminton ☀️">
-<meta property="og:description" content="Sat 21 Nov · 5–7 PM · Andalas Sports Complex. Six players, twelve rounds, live scores.">
-<meta property="og:image" content="https://rasheedali78624.github.io/familybadminton/family/sunset-smash.jpg">
+<meta property="og:description" content="Sat 21 Nov · 5–7 PM · Andalas Sports Complex. Five players, ten rounds, live scores.">
+<meta property="og:image" content="https://rasheedali78624.github.io/familybadminton/family/sunset-smash.jpg?v=5">
 <meta property="og:url" content="https://rasheedali78624.github.io/familybadminton/family/">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
@@ -65,7 +65,7 @@
   .sub{ text-align:center; font-size:13px; color:var(--ink2); margin-bottom:14px; line-height:1.5; }
 
   /* players: each has a pastel colour */
-  .players{ display:grid; grid-template-columns:repeat(6, 1fr); gap:6px; margin-top:12px; }
+  .players{ display:grid; grid-template-columns:repeat(5, 1fr); gap:6px; margin-top:12px; }
   .pl{ text-align:center; }
   .av{ width:46px; height:46px; margin:0 auto; border-radius:50%; display:grid; place-items:center; font-family:Righteous, Inter, sans-serif; font-size:20px; color:var(--ink);
     background:var(--c, var(--peach)); box-shadow:0 0 0 3px #fff, 0 4px 12px rgba(120,90,160,.15); transition:opacity .3s, filter .3s; }
@@ -74,7 +74,6 @@
   .pl .nm{ font-size:12.5px; font-weight:800; margin-top:7px; }
   .pl .rec{ font-size:11px; color:var(--ink2); font-variant-numeric:tabular-nums; }
   .pl.rest .nm::after{ content:" 💤"; font-size:10px; }
-  .pl.new .nm{ color:var(--mint2); }
 
   /* pace */
   .pace{ display:flex; gap:12px; align-items:center; margin-top:18px; padding:12px 14px; border-radius:16px; font-size:13px; line-height:1.45; color:var(--ink);
@@ -149,14 +148,13 @@
   <div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div>
   <div class="eyebrow">Family Badminton · Session #3</div>
   <h1>Sunset Smash</h1>
-  <div class="session">Six players · twelve rounds · one golden hour</div>
+  <div class="session">Five players · ten rounds · one golden hour</div>
   <div class="meta">
     <span class="chip">📅 Sat, 21 Nov 2026</span>
     <span class="chip">🕔 5:00 – 7:00 PM</span>
     <span class="chip">📍 Andalas Sports Complex</span>
     <span class="chip">🏸 First to 21</span>
   </div>
-  <div class="newbie">🌸 New challenger: Cikgu</div>
   <div class="scene" aria-hidden="true"><div class="sun"></div><div class="net"></div><div class="ground"></div></div>
 </header>
 
@@ -167,7 +165,7 @@
 
   <div class="title">Match by Match</div>
   <div class="sub">Tap a score box to update; everyone watching sees it instantly.<br>
-    Each round 4 play and 2 rest. Everyone plays 8 and rests 4: once in every set, never twice in a row.</div>
+    Each round 4 play and 1 rests. In the main 10 rounds everyone plays 8 and rests 2: once in every set, never twice in a row.</div>
   <div id="list"></div>
 
   <div class="title">☀️ Standings</div>
@@ -209,44 +207,47 @@ const firebaseConfig = {
   appId: "1:140352380730:web:da3333873dc4115ec13a03"
 };
 // Same node as the earlier family nights (the database rules already allow it).
-// This session's keys are "n3r0" … "n3r11", so earlier nights stay untouched.
+// This session's keys are "n3b0" … "n3b14" (the six-player plan used "n3r"), so earlier nights stay untouched.
 const DB_PATH = 'familyNight/scores';
-const KEY = i => 'n3r' + i;
-const LOCAL = 'fn3-scores';
+const KEY = i => 'n3b' + i;
+const LOCAL = 'fn3b-scores';
 
 const START = { h: 17, m: 0 };     // 5:00 PM first serve
 const END   = { h: 19, m: 0 };     // 7:00 PM court booking ends
 const SLOT_MIN = 9;                // last session averaged ~9 minutes per round
-const PER_SET = 3;
+const PER_SET = 5;
+const MAIN = 10;                   // the main event: 2 sets; set 3 is a bonus
 
-const PLAYERS = ["Mama", "Kishan", "Jishnu", "Rasheed", "Geeta", "Cikgu"];
-const NEW_PLAYER = "Cikgu";
-const PCOL = { Mama:"#FFCDB5", Kishan:"#A8E6CF", Jishnu:"#BFE2F6", Rasheed:"#C9B6F2", Geeta:"#F8BBD0", Cikgu:"#FFE7A3" };
-const SETCOL = ["#FFE7A3", "#FFCDB5", "#F8BBD0", "#C9B6F2"];
-// 12 rounds, checked by script: everyone plays 8 and rests 4 (once per set, never twice in a row),
-// all 12 resting pairs different, every two players partner 1–2 times and face each other 3–4 times.
+const PLAYERS = ["Mama", "Kishan", "Jishnu", "Rasheed", "Geeta"];
+const NEW_PLAYER = null;
+const PCOL = { Mama:"#FFCDB5", Kishan:"#A8E6CF", Jishnu:"#BFE2F6", Rasheed:"#C9B6F2", Geeta:"#F8BBD0" };
+const SETCOL = ["#FFE7A3", "#FFCDB5", "#C9B6F2"];
+// 15 rounds, checked by script. Main event = rounds 1–10: everyone plays 8 and rests 2 (once per set,
+// never twice in a row), every two players partner exactly twice and face each other exactly 4 times.
+// Bonus set = rounds 11–15: after it, everyone has played 12, rested 3, partnered each other 3 times.
 const rounds = [
-  { a:["Jishnu","Mama"],   b:["Cikgu","Rasheed"],  sit:["Geeta","Kishan"]   },
-  { a:["Geeta","Mama"],    b:["Cikgu","Kishan"],   sit:["Jishnu","Rasheed"] },
-  { a:["Geeta","Kishan"],  b:["Jishnu","Rasheed"], sit:["Cikgu","Mama"]     },
+  { a:["Mama","Rasheed"], b:["Jishnu","Kishan"], sit:["Geeta"] },
+  { a:["Kishan","Mama"], b:["Geeta","Rasheed"], sit:["Jishnu"] },
+  { a:["Kishan","Rasheed"], b:["Geeta","Jishnu"], sit:["Mama"] },
+  { a:["Jishnu","Mama"], b:["Geeta","Rasheed"], sit:["Kishan"] },
+  { a:["Geeta","Mama"], b:["Jishnu","Kishan"], sit:["Rasheed"] },
 
-  { a:["Cikgu","Mama"],    b:["Kishan","Rasheed"], sit:["Geeta","Jishnu"]   },
-  { a:["Cikgu","Jishnu"],  b:["Geeta","Rasheed"],  sit:["Kishan","Mama"]    },
-  { a:["Kishan","Mama"],   b:["Geeta","Jishnu"],   sit:["Cikgu","Rasheed"]  },
+  { a:["Mama","Rasheed"], b:["Geeta","Kishan"], sit:["Jishnu"] },
+  { a:["Jishnu","Mama"], b:["Kishan","Rasheed"], sit:["Geeta"] },
+  { a:["Geeta","Kishan"], b:["Jishnu","Rasheed"], sit:["Mama"] },
+  { a:["Kishan","Mama"], b:["Geeta","Jishnu"], sit:["Rasheed"] },
+  { a:["Geeta","Mama"], b:["Jishnu","Rasheed"], sit:["Kishan"] },
 
-  { a:["Jishnu","Kishan"], b:["Cikgu","Rasheed"],  sit:["Geeta","Mama"]     },
-  { a:["Geeta","Mama"],    b:["Kishan","Rasheed"], sit:["Cikgu","Jishnu"]   },
-  { a:["Jishnu","Mama"],   b:["Cikgu","Geeta"],    sit:["Kishan","Rasheed"] },
-
-  { a:["Cikgu","Kishan"],  b:["Geeta","Rasheed"],  sit:["Jishnu","Mama"]    },
-  { a:["Kishan","Mama"],   b:["Cikgu","Jishnu"],   sit:["Geeta","Rasheed"]  },
-  { a:["Mama","Rasheed"],  b:["Geeta","Jishnu"],   sit:["Cikgu","Kishan"]   },
+  { a:["Jishnu","Mama"], b:["Geeta","Kishan"], sit:["Rasheed"] },
+  { a:["Geeta","Mama"], b:["Kishan","Rasheed"], sit:["Jishnu"] },
+  { a:["Mama","Rasheed"], b:["Geeta","Jishnu"], sit:["Kishan"] },
+  { a:["Jishnu","Kishan"], b:["Geeta","Rasheed"], sit:["Mama"] },
+  { a:["Kishan","Mama"], b:["Jishnu","Rasheed"], sit:["Geeta"] },
 ];
 const SETS = [
   { name:"Golden Hour", note:"Everyone rests once." },
-  { name:"Sunset",      note:"Everyone rests once. A fair place to stop: all six have played 4." },
-  { name:"Dusk",        note:"Everyone rests once." },
-  { name:"Twilight",    note:"The full night: everyone has played 8 and rested 4." },
+  { name:"Sunset",      note:"Everyone rests once. After this set everyone has played 8, rested 2 and partnered each other twice: the main event ends here." },
+  { name:"Twilight · bonus", note:"Bonus set: only start it if the pace tracker says it fits before 7:00, and play all five rounds. Standings only count complete sets.", bonus:true },
 ];
 const N = rounds.length;
 
@@ -272,7 +273,7 @@ function result(i){
 const doneCount = () => rounds.reduce((n,_,i) => n + (result(i) ? 1 : 0), 0);
 const firstOpen = () => rounds.findIndex((_,i) => !result(i));
 // complete sets only, so everyone has played the same number of games
-const completeSets = () => SETS.map((_, s) => [0,1,2].every(k => result(s*PER_SET + k))).map((ok, s) => ok ? s : -1).filter(s => s >= 0);
+const completeSets = () => SETS.map((_, s) => Array.from({ length: PER_SET }, (_, k) => k).every(k => result(s*PER_SET + k))).map((ok, s) => ok ? s : -1).filter(s => s >= 0);
 function setStatus(ok, text){ $('statusDot').classList.toggle('err', !ok); $('statusText').textContent = text; }
 
 // ── players strip ──
@@ -293,7 +294,7 @@ function render(){
   rounds.forEach((r, i) => {
     const s = Math.floor(i / PER_SET);
     if(i % PER_SET === 0){
-      const pips = [0,1,2].map(k => `<span class="pip ${result(s*PER_SET+k) ? 'on' : ''}"></span>`).join('');
+      const pips = Array.from({ length: PER_SET }, (_, k) => k).map(k => `<span class="pip ${result(s*PER_SET+k) ? 'on' : ''}"></span>`).join('');
       html += `<div class="set-head" style="--setc:${SETCOL[s]}"><span class="set-num">Set ${s+1}</span><span class="set-name">${SETS[s].name}</span><span class="set-line"></span><span class="pips">${pips}</span></div>
         <div class="set-note">${SETS[s].note}</div><div class="list">`;
     }
@@ -313,7 +314,7 @@ function render(){
       <div class="rest">Resting: <b>${amp(r.sit)}</b></div></div>`;
     if(i % PER_SET === PER_SET - 1){
       html += '</div>';
-      if(i === 5) html += '<div class="checkpoint">✦ Halfway ✦ After round 6 all six have played 4 and rested 2: a fair place to stop if time runs short.</div>';
+      if(i === MAIN - 1) html += '<div class="checkpoint">✦ Main event complete ✦ After round 10 everyone has played 8, rested 2, and partnered each other twice. Stop here, or play the whole bonus set if there is time.</div>';
     }
   });
   const active = document.activeElement;
@@ -376,25 +377,29 @@ function renderPace(){
   const stamps = done.map(r => r.t).filter(Boolean).sort((x,y) => x - y);
   const d = done.length;
   const end = new Date(); end.setHours(END.h, END.m, 0, 0);
-  if(d === N){ box.innerHTML = `<div class="pace"><span class="ico">🌅</span><div>All <b>12 rounds</b> done! Scroll down for the standings and tonight's poster.</div></div>`; return; }
-  if(stamps.length < 2){ box.innerHTML = `<div class="pace"><span class="ico">⏱️</span><div>Planned at <b>${SLOT_MIN} min</b> a round (last session's pace): all 12 rounds finish around <b>${plannedTime(N)}</b>, with time to spare before 7:00. Once two rounds are in, this tracks the real pace.</div></div>`; return; }
+  const show = (ok, ico, msg) => box.innerHTML = `<div class="pace ${ok ? '' : 'warn'}"><span class="ico">${ico}</span><div>${msg}</div></div>`;
+  if(d === N) return show(true, '🌅', 'All <b>15 rounds</b> done, bonus set included! Scroll down for the standings and the poster.');
+  if(stamps.length < 2) return show(true, '⏱️', `Planned at <b>${SLOT_MIN} min</b> a round (last session's pace): the main <b>10 rounds</b> finish around <b>${plannedTime(MAIN)}</b>. The bonus set would need until about <b>${plannedTime(N)}</b>, so only start it if you are running faster. Once two rounds are in, this tracks the real pace.`);
   const per = (stamps[stamps.length-1] - stamps[0]) / (stamps.length - 1);
   const last = stamps[stamps.length-1];
-  const finish = new Date(last + per * (N - d));
-  const ok = finish <= end;
-  // last full set that still fits before 7:00
-  let fitSets = 0;
-  for(let s = 1; s <= SETS.length; s++){ const need = s*PER_SET - d; if(need <= 0 || new Date(last + per*need) <= end) fitSets = s; }
-  const msg = ok
-    ? `Pace <b>${(per/60000).toFixed(1)} min</b>/round. All 12 rounds should finish around <b>${fmtClock(finish)}</b>. 🎉`
-    : `Pace <b>${(per/60000).toFixed(1)} min</b>/round. All 12 would run to about <b>${fmtClock(finish)}</b>, past 7:00. Stop after <b>Set ${fitSets}</b> (round ${fitSets*PER_SET}) to keep everyone's games equal.`;
-  box.innerHTML = `<div class="pace ${ok ? '' : 'warn'}"><span class="ico">${ok ? '⏱️' : '⚠️'}</span><div>${msg}</div></div>`;
+  const at = n => new Date(last + per * Math.max(0, n - d));
+  const pace = `Pace <b>${(per/60000).toFixed(1)} min</b>/round.`;
+  const bonusFits = at(N) <= end;
+  if(d < MAIN){
+    const mainOk = at(MAIN) <= end;
+    return show(mainOk, mainOk ? '⏱️' : '⚠️', mainOk
+      ? `${pace} The main 10 rounds should finish around <b>${fmtClock(at(MAIN))}</b>. ${bonusFits ? `At this pace the bonus set fits too (done ≈ <b>${fmtClock(at(N))}</b>). 🎉` : `The bonus set would run to about <b>${fmtClock(at(N))}</b>, past 7:00, so skip it unless you speed up.`}`
+      : `${pace} The main 10 rounds would run to about <b>${fmtClock(at(MAIN))}</b>, past 7:00. Stop after <b>Set 1</b> (round 5) if needed: it is still fair.`);
+  }
+  return show(bonusFits, bonusFits ? '🎉' : '✋', bonusFits
+    ? `${pace} Main event done. The bonus set should finish around <b>${fmtClock(at(N))}</b>, before 7:00. Play all five rounds.`
+    : `${pace} Main event done. The bonus set would run to about <b>${fmtClock(at(N))}</b>, past 7:00. Best to stop here. If you start it anyway, it only counts once all five rounds are played.`);
 }
 
 // ── standings + stats (complete sets only) ──
 function stats(){
   const sets = completeSets();
-  const idx = sets.flatMap(s => [0,1,2].map(k => s*PER_SET + k));
+  const idx = sets.flatMap(s => Array.from({ length: PER_SET }, (_, k) => k).map(k => s*PER_SET + k));
   if(!idx.length) return null;
   const P = Object.fromEntries(PLAYERS.map(p => [p, { name:p, w:0, l:0, pf:0, pa:0, seq:[] }]));
   const pairs = {}; const games = [];
@@ -419,14 +424,14 @@ function renderStandings(){
   const st = stats();
   const btn = $('makePoster');
   if(!st){
-    $('stand').innerHTML = `<div class="locked">🔒 <b>${doneCount()} of 3</b> rounds of Set 1 scored.<br>Standings appear when the first set is complete.</div>`;
+    $('stand').innerHTML = `<div class="locked">🔒 <b>${[0,1,2,3,4].filter(i => result(i)).length} of 5</b> rounds of Set 1 scored.<br>Standings appear when the first set is complete.</div>`;
     btn.disabled = true; return;
   }
   btn.disabled = false;
   $('posterNote').textContent = st.sets.length === SETS.length
-    ? 'All 12 rounds are in. Tap to build the results poster.'
+    ? 'All 15 rounds are in. Tap to build the results poster.'
     : `Counts the ${st.idx.length} rounds in complete sets so far. Generate again later for the full night.`;
-  $('standSub').textContent = st.sets.length === SETS.length ? 'Final: all 12 rounds' : `After ${st.sets.length} complete set${st.sets.length > 1 ? 's' : ''} (${st.idx.length} rounds): everyone has played the same number of games`;
+  $('standSub').textContent = st.sets.length === SETS.length ? 'Final: all 15 rounds, bonus set included' : st.idx.length === MAIN ? 'Main event complete: 10 rounds, everyone played 8 and rested 2' : `After ${st.sets.length} complete set${st.sets.length > 1 ? 's' : ''} (${st.idx.length} rounds): everyone has played the same number of games`;
   const sg = n => (n > 0 ? '+' : '') + n;
   $('stand').innerHTML = `<div class="table"><div class="tr h"><span>#</span><span>PLAYER</span><span>P</span><span>W–L</span><span>+/−</span></div>
     ${st.list.map((p, k) => `<div class="tr ${k === 0 ? 'first' : ''}"><span class="rk">${p.rank}</span><span class="nm">${esc(p.name)}</span><span>${p.played}</span><span>${p.w}–${p.l}</span><span>${sg(p.diff)}</span></div>`).join('')}
@@ -555,7 +560,7 @@ async function drawPoster(){
     const ry = Y + 40 + k * rowH;
     x.fillStyle = 'rgba(201,182,242,.35)'; x.fillRect(84, ry, 912, 1);
     font(400, 24, 'R'); text(String(p.rank), 98, ry + 31, 'left', C.coral1);
-    font(700, 21); text(p.name + (p.name === NEW_PLAYER ? '  · new' : ''), 146, ry + 30, 'left', k === 0 ? C.coral : C.ink);
+    font(700, 21); text(p.name + (NEW_PLAYER && p.name === NEW_PLAYER ? '  · new' : ''), 146, ry + 30, 'left', k === 0 ? C.coral : C.ink);
     text(String(p.played), 700, ry + 30, 'center'); text(`${p.w}–${p.l}`, 820, ry + 30, 'center'); text(sg(p.diff) || '0', 940, ry + 30, 'center');
   });
 
@@ -567,7 +572,7 @@ async function drawPoster(){
   font(700, 19); const widths = chips.map(c => x.measureText(c).width + 44); let cx = (W - widths.reduce((a, b) => a + b + 14, -14)) / 2;
   chips.forEach((c, n) => { x.save(); rr(cx, Y - 30, widths[n], 44, 22); x.fillStyle = chipBg[n]; x.globalAlpha = .7; x.fill(); x.restore();
     text(c, cx + widths[n] / 2, Y - 1, 'center', C.ink); cx += widths[n] + 14; });
-  font(500, 15); text(st.sets.length === SETS.length ? 'All 12 rounds · everyone played 8 and rested 4 · ranked by wins, then points difference'
+  font(500, 15); text(st.idx.length >= MAIN ? `${st.idx.length} rounds · everyone played ${st.idx.length * 4 / 5} and rested ${st.idx.length / 5} · ranked by wins, then points difference`
     : `${st.idx.length} rounds in ${st.sets.length} complete set${st.sets.length > 1 ? 's' : ''} · everyone played the same number of games`, W / 2, Y + 42, 'center', C.faint);
   font(400, 24, 'R'); text('See you at the next session ☀', W / 2, Y + 84, 'center', C.pink);
   return cv;
@@ -593,8 +598,8 @@ window.__drawPoster = drawPoster;   // used by the automated check
 // ── boot ──
 async function boot(){
   if(demo){
-    const now = Date.now(); const fake = [[21,17],[15,21],[21,19],[22,20],[21,12],[18,21],[21,16],[19,21],[21,14],[17,21],[21,18],[21,13]];
-    fake.forEach(([a, b], i) => { if(i < (Number(new URLSearchParams(location.search).get('demo')) || 12)) scores[KEY(i)] = { a:String(a), b:String(b), t: now - (12 - i) * 9 * 60000 }; });
+    const now = Date.now(); const fake = [[21,17],[15,21],[21,19],[22,20],[21,12],[18,21],[21,16],[19,21],[21,14],[17,21],[21,18],[21,13],[19,21],[21,15],[20,22]];
+    fake.forEach(([a, b], i) => { if(i < (Number(new URLSearchParams(location.search).get('demo')) || 15)) scores[KEY(i)] = { a:String(a), b:String(b), t: now - (15 - i) * 9 * 60000 }; });
     setStatus(true, 'Demo mode: nothing is saved'); render(); return;
   }
   for(const k in local) scores[k] = clean(local[k]);
@@ -610,7 +615,7 @@ async function boot(){
     onValue(ref(db, DB_PATH), snap => {
       const all = snap.val() || {};
       const merged = {};
-      for(const k in all) if(k.startsWith('n3r')) merged[k] = all[k];
+      for(const k in all) if(k.startsWith('n3b')) merged[k] = all[k];
       for(const k in local) if(local[k].pend) merged[k] = clean(local[k]);
       scores = merged;
       for(const k in merged) local[k] = { ...merged[k], pend: !!(local[k] && local[k].pend) };
