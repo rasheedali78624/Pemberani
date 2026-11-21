@@ -163,6 +163,7 @@ When a session is over, copy `family/index.html` to `family-night-N.html` (make 
 - **Session #3 · Sunset Smash (Sat 21 Nov 2026, 5–7 PM, Andalas Sports Complex):** the usual five (Cikgu couldn't make it).
   Main event: 10 rounds at ~9 min (finishes ~6:30 PM). Each round 4 play and 1 rests; everyone plays 8 and rests 2, once per
   set of 5 rounds and never twice in a row; every two players partner exactly twice and face each other 4 times. Optional
-  bonus set (rounds 11–15) only if the pace tracker says it fits before 7:00. Standings count complete sets only.
+  bonus set (rounds 11–15) as time allows: once the main event is complete, every bonus game counts, even if only one
+  or two are played (the standings and poster then say who played how many).
   "Generate tonight's poster" draws the results poster on the phone (share or save). Scores under
   `familyNight/scores/n3b0` … `n3b14` (the six-player plan used `n3r`); the existing rules already allow them.

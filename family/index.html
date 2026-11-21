@@ -247,7 +247,7 @@ const rounds = [
 const SETS = [
   { name:"Golden Hour", note:"Everyone rests once." },
   { name:"Sunset",      note:"Everyone rests once. After this set everyone has played 8, rested 2 and partnered each other twice: the main event ends here." },
-  { name:"Twilight · bonus", note:"Bonus set: only start it if the pace tracker says it fits before 7:00, and play all five rounds. Standings only count complete sets.", bonus:true },
+  { name:"Twilight · bonus", note:"Bonus set: only start it if the pace tracker says it fits before 7:00, and play as many rounds as time allows. Every bonus game counts, even if you only manage one or two.", bonus:true },
 ];
 const N = rounds.length;
 
@@ -392,14 +392,16 @@ function renderPace(){
       : `${pace} The main 10 rounds would run to about <b>${fmtClock(at(MAIN))}</b>, past 7:00. Stop after <b>Set 1</b> (round 5) if needed: it is still fair.`);
   }
   return show(bonusFits, bonusFits ? '🎉' : '✋', bonusFits
-    ? `${pace} Main event done. The bonus set should finish around <b>${fmtClock(at(N))}</b>, before 7:00. Play all five rounds.`
-    : `${pace} Main event done. The bonus set would run to about <b>${fmtClock(at(N))}</b>, past 7:00. Best to stop here. If you start it anyway, it only counts once all five rounds are played.`);
+    ? `${pace} Main event done. The bonus set should finish around <b>${fmtClock(at(N))}</b>, before 7:00. Play as many as you like: every bonus game counts.`
+    : `${pace} Main event done. The bonus set would run to about <b>${fmtClock(at(N))}</b>, past 7:00. If you want one or two more games anyway, go ahead: every bonus game counts.`);
 }
 
-// ── standings + stats (complete sets only) ──
+// ── standings + stats: complete main sets, plus every bonus game that was played ──
 function stats(){
   const sets = completeSets();
-  const idx = sets.flatMap(s => Array.from({ length: PER_SET }, (_, k) => k).map(k => s*PER_SET + k));
+  const idx = sets.filter(s => s*PER_SET < MAIN).flatMap(s => Array.from({ length: PER_SET }, (_, k) => k).map(k => s*PER_SET + k));
+  const bonus = rounds.map((_, i) => i).filter(i => i >= MAIN && result(i));
+  if(idx.length >= MAIN) idx.push(...bonus); // once the main event is done, every bonus game counts
   if(!idx.length) return null;
   const P = Object.fromEntries(PLAYERS.map(p => [p, { name:p, w:0, l:0, pf:0, pa:0, seq:[] }]));
   const pairs = {}; const games = [];
@@ -418,7 +420,15 @@ function stats(){
     tail:(() => { let n = 0; for(let k = p.seq.length - 1; k >= 0 && p.seq[k] === 'W'; k--) n++; return n; })() }))
     .sort((x,y) => y.w - x.w || y.diff - x.diff || y.pf - x.pf || x.name.localeCompare(y.name));
   list.forEach((p, k) => p.rank = k && list[k-1].w === p.w && list[k-1].diff === p.diff && list[k-1].pf === p.pf ? list[k-1].rank : k + 1);
-  return { sets, idx, list, pairs:Object.values(pairs), games, points:games.reduce((n,g) => n + g.a + g.b, 0) };
+  return { sets, idx, bonus, list, pairs:Object.values(pairs), games, points:games.reduce((n,g) => n + g.a + g.b, 0) };
+}
+// "everyone played 8", or "Kishan, Jishnu & Geeta played 10 · Mama & Rasheed played 9" after a partial bonus set
+function playedNote(st){
+  const by = {}; st.list.forEach(p => (by[p.played] ||= []).push(p.name));
+  const ks = Object.keys(by).map(Number).sort((a,b) => b - a);
+  if(ks.length === 1) return `everyone played ${ks[0]}`;
+  const and = a => a.length > 1 ? a.slice(0, -1).join(', ') + ' & ' + a[a.length-1] : a[0];
+  return ks.map(k => `${and(by[k])} played ${k}`).join(' · ');
 }
 function renderStandings(){
   const st = stats();
@@ -428,10 +438,14 @@ function renderStandings(){
     btn.disabled = true; return;
   }
   btn.disabled = false;
-  $('posterNote').textContent = st.sets.length === SETS.length
+  $('posterNote').textContent = st.idx.length === N
     ? 'All 15 rounds are in. Tap to build the results poster.'
+    : st.idx.length >= MAIN ? `Counts all ${st.idx.length} games played${st.bonus.length ? `, including ${st.bonus.length} bonus` : ''}. Tap to build the results poster.`
     : `Counts the ${st.idx.length} rounds in complete sets so far. Generate again later for the full night.`;
-  $('standSub').textContent = st.sets.length === SETS.length ? 'Final: all 15 rounds, bonus set included' : st.idx.length === MAIN ? 'Main event complete: 10 rounds, everyone played 8 and rested 2' : `After ${st.sets.length} complete set${st.sets.length > 1 ? 's' : ''} (${st.idx.length} rounds): everyone has played the same number of games`;
+  $('standSub').textContent = st.idx.length === N ? 'Final: all 15 rounds, bonus set included'
+    : st.bonus.length ? `Main event + ${st.bonus.length} bonus game${st.bonus.length > 1 ? 's' : ''}: ${playedNote(st)}`
+    : st.idx.length === MAIN ? 'Main event complete: 10 rounds, everyone played 8 and rested 2'
+    : `After ${st.sets.length} complete set${st.sets.length > 1 ? 's' : ''} (${st.idx.length} rounds): everyone has played the same number of games`;
   const sg = n => (n > 0 ? '+' : '') + n;
   $('stand').innerHTML = `<div class="table"><div class="tr h"><span>#</span><span>PLAYER</span><span>P</span><span>W–L</span><span>+/−</span></div>
     ${st.list.map((p, k) => `<div class="tr ${k === 0 ? 'first' : ''}"><span class="rk">${p.rank}</span><span class="nm">${esc(p.name)}</span><span>${p.played}</span><span>${p.w}–${p.l}</span><span>${sg(p.diff)}</span></div>`).join('')}
@@ -572,9 +586,10 @@ async function drawPoster(){
   font(700, 19); const widths = chips.map(c => x.measureText(c).width + 44); let cx = (W - widths.reduce((a, b) => a + b + 14, -14)) / 2;
   chips.forEach((c, n) => { x.save(); rr(cx, Y - 30, widths[n], 44, 22); x.fillStyle = chipBg[n]; x.globalAlpha = .7; x.fill(); x.restore();
     text(c, cx + widths[n] / 2, Y - 1, 'center', C.ink); cx += widths[n] + 14; });
-  font(500, 15); text(st.idx.length >= MAIN ? `${st.idx.length} rounds · everyone played ${st.idx.length * 4 / 5} and rested ${st.idx.length / 5} · ranked by wins, then points difference`
+  font(500, 15); text(st.bonus.length && st.idx.length < N ? `${MAIN} main rounds + ${st.bonus.length} bonus · ${playedNote(st)} · ranked by wins, then points difference`
+    : st.idx.length >= MAIN ? `${st.idx.length} rounds · everyone played ${st.idx.length * 4 / 5} and rested ${st.idx.length / 5} · ranked by wins, then points difference`
     : `${st.idx.length} rounds in ${st.sets.length} complete set${st.sets.length > 1 ? 's' : ''} · everyone played the same number of games`, W / 2, Y + 42, 'center', C.faint);
-  // bonus games played outside a complete set: shown for fun, not counted
+  // games outside the counted rounds (only possible before the main event is complete): shown, not counted
   const extra = rounds.map((r, i) => ({ r, i, res: result(i) })).filter(o => o.res && !st.idx.includes(o.i));
   if(extra.length){
     const line = extra.map(({ r, i, res }) => { const [w, l] = res.aWin ? [r.a, r.b] : [r.b, r.a];
